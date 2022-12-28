@@ -81,3 +81,29 @@ class UNITTests(unittest.TestCase):
         my_locks = []
 
         self.encode_and_decode_locks(my_locks)
+
+    def test_parse_lock_decoding_and_encoding_dup(self):
+        """
+        Test encoding and decoding with duplicates
+        """
+
+        my_locks = [
+            "AccessShareLock",
+            "AccessShareLock",
+            "AccessShareLock",
+            "ShareRowExclusiveLock",
+            "ShareRowExclusiveLock",
+        ]
+
+        my_locks_numeric = list(map(PostgreSQLLockHelper.lock_type_to_int, my_locks))
+
+        # Encode and decode into single value
+        single_value = PostgreSQLLockHelper.encode_locks_into_value(my_locks_numeric)
+        decoded_locks = PostgreSQLLockHelper.decode_locks_from_value(single_value)
+
+        decoded_my_locks = list(
+            map(PostgreSQLLockHelper.lock_type_to_str, decoded_locks)
+        )
+
+        # Only unique values are present
+        self.assertListEqual([my_locks[0], my_locks[4]], decoded_my_locks)

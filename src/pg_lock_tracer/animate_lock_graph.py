@@ -170,8 +170,9 @@ parser.add_argument(
 
 
 class DOTModel:
-    def __init__(self, input_file) -> None:
+    def __init__(self, input_file, verbose) -> None:
         self.input_file = input_file
+        self.verbose = verbose
         self.dot_graphs = []
         self.graph = igraph.Graph(directed=True)
         self.calculate_graphs()
@@ -196,7 +197,10 @@ class DOTModel:
             self.generate_graph()
             return
 
-        if event["event"] == "LOCK_RELATION_OID":
+        if event["event"] == "LOCK_GRANTED_LOCAL":
+            if self.verbose:
+                print(f"Processing {event}")
+
             tablename = event["table"]
             lock_type = event["lock_type"]
 
@@ -231,6 +235,9 @@ class DOTModel:
             return
 
         if event["event"] == "LOCK_UNGRANTED_LOCAL":
+            if self.verbose:
+                print(f"Processing {event}")
+
             tablename = event["table"]
             lock_type = event["lock_type"]
             lock_numeric_value = PostgreSQLLockHelper.lock_type_to_int(lock_type)
@@ -242,7 +249,12 @@ class DOTModel:
                 edge["lock_value"]
             )
 
-            decoded_lock_value.remove(lock_numeric_value)
+            if lock_numeric_value in decoded_lock_value:
+                decoded_lock_value.remove(lock_numeric_value)
+            else:
+                print(
+                    f"Lock {lock_numeric_value} for table {tablename} removed but not requested"
+                )
 
             edge["lock_value"] = PostgreSQLLockHelper.encode_locks_into_value(
                 decoded_lock_value
@@ -380,7 +392,7 @@ def main():
 
     # Create a new dot model, process the events in the input file
     # and generate the HTML output
-    dot_model_instance = DOTModel(args.input_file)
+    dot_model_instance = DOTModel(args.input_file, args.verbose)
 
     with open(args.output_file, "w", encoding="utf-8") as output:
         dots = dot_model_instance.get_html()

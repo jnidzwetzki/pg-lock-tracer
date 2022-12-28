@@ -36,10 +36,14 @@ pg_lock_tracer -x /home/jan/postgresql-sandbox/bin/REL_15_1_DEBUG/bin/postgres -
 
 # Show statistics about locks
 pg_lock_tracer -x /home/jan/postgresql-sandbox/bin/REL_15_1_DEBUG/bin/postgres -p 1234 --statistics
+
+# Create an animated lock graph
+animate_lock_graph -i create_table_trace.json -o create_table_trace.html
 ```
 
-## Output Examples
+## Usage Examples
 
+### Lock Traces
 CLI: `pg_lock_tracer -x /home/jan/postgresql-sandbox/bin/REL_14_2_DEBUG/bin/postgres -p 327578 -r 327578:sql://jan@localhost/test2 --statistics`
 
 SQL Query: `create table metrics(ts timestamptz NOT NULL, id int NOT NULL, value float);`
@@ -544,39 +548,47 @@ Lock statistics:
 ================
 
 Locks per oid
-+------------------------------------------------------------+----------+------------------------------+
-|                         Lock Name                          | Requests | Total Lock Request Time (ns) |
-+------------------------------------------------------------+----------+------------------------------+
-|            pg_catalog.pg_depend_reference_index            |    20    |           1365401            |
-|                    pg_catalog.pg_depend                    |    8     |            485963            |
-|                    pg_catalog.pg_class                     |    6     |            364095            |
-|                     pg_catalog.pg_type                     |    5     |            292628            |
-|            pg_catalog.pg_type_typname_nsp_index            |    4     |            274674            |
-|               pg_catalog.pg_class_oid_index                |    4     |            243751            |
-|                pg_catalog.pg_type_oid_index                |    4     |            524780            |
-|           pg_catalog.pg_class_relname_nsp_index            |    3     |            178783            |
-|            pg_catalog.pg_depend_depender_index             |    3     |            181756            |
-|                  pg_catalog.pg_extension                   |    2     |            143035            |
-|             pg_catalog.pg_extension_name_index             |    2     |            117994            |
-|                  pg_catalog.pg_attribute                   |    2     |            122550            |
-|         pg_catalog.pg_attribute_relid_attnum_index         |    2     |            166800            |
-|                       public.metrics                       |    2     |            182657            |
-|        pg_catalog.pg_class_tblspc_relfilenode_index        |    1     |            60070             |
-|         pg_catalog.pg_attribute_relid_attnam_index         |    1     |            62149             |
-|                   pg_catalog.pg_shdepend                   |    1     |            68778             |
-|           pg_catalog.pg_shdepend_reference_index           |    1     |            67183             |
-+------------------------------------------------------------+----------+------------------------------+
+Lock statistics:
+================
+
+Locks per oid
+
+Locks per oid
++----------------------------------------------+----------+------------------------------+
+|                  Lock Name                   | Requests | Total Lock Request Time (ns) |
++----------------------------------------------+----------+------------------------------+
+|     pg_catalog.pg_depend_reference_index     |    20    |           1174663            |
+|             pg_catalog.pg_depend             |    8     |            456525            |
+|              pg_catalog.pg_type              |    5     |            282986            |
+|     pg_catalog.pg_type_typname_nsp_index     |    4     |            229317            |
+|         pg_catalog.pg_type_oid_index         |    4     |            300239            |
+|             pg_catalog.pg_class              |    3     |            180540            |
+|        pg_catalog.pg_class_oid_index         |    3     |            172549            |
+|     pg_catalog.pg_depend_depender_index      |    3     |            171186            |
+|    pg_catalog.pg_class_relname_nsp_index     |    2     |            114311            |
+|           pg_catalog.pg_attribute            |    2     |            113041            |
+|  pg_catalog.pg_attribute_relid_attnum_index  |    2     |            113299            |
+|                public.metrics                |    2     |            223162            |
+| pg_catalog.pg_class_tblspc_relfilenode_index |    1     |            56426             |
+|  pg_catalog.pg_attribute_relid_attnam_index  |    1     |            57238             |
+|            pg_catalog.pg_shdepend            |    1     |            65878             |
+|    pg_catalog.pg_shdepend_reference_index    |    1     |            63127             |
++----------------------------------------------+----------+------------------------------+
 
 Lock types
 +---------------------+---------------------------+
 |      Lock Type      | Number of requested locks |
 +---------------------+---------------------------+
-|   AccessShareLock   |             47            |
-|   RowExclusiveLock  |             22            |
+|   AccessShareLock   |             32            |
+|   RowExclusiveLock  |             28            |
 | AccessExclusiveLock |             2             |
 +---------------------+---------------------------+
 ```
 </details>
+
+
+### Animated Lock Graphs
+See the content of the [examples](examples/) directory for examples.
 
 ## Installation
 

@@ -1,0 +1,419 @@
+{"timestamp": 746704676283500, "pid": 328192, "event": "QUERY_BEGIN", "query": "create table metrics(ts timestamptz NOT NULL, id int NOT NULL, value float);"}
+{"timestamp": 746704676333954, "pid": 328192, "event": "TRANSACTION_BEGIN"}
+{"timestamp": 746704676556338, "pid": 328192, "event": "TABLE_OPEN", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class", "oid": 1259}
+{"timestamp": 746704676573555, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class", "oid": 1259}
+{"timestamp": 746704676600930, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class", "oid": 1259}
+{"timestamp": 746704676620078, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class", "oid": 1259, "lock_local_hold": 0}
+{"timestamp": 746704676637798, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 64243}
+{"timestamp": 746704676676605, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class_relname_nsp_index", "oid": 2663}
+{"timestamp": 746704676700278, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class_relname_nsp_index", "oid": 2663}
+{"timestamp": 746704676718307, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class_relname_nsp_index", "oid": 2663, "lock_local_hold": 0}
+{"timestamp": 746704676734539, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 57934}
+{"timestamp": 746704676916162, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class_relname_nsp_index", "oid": 2663}
+{"timestamp": 746704676935994, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class_relname_nsp_index", "oid": 2663}
+{"timestamp": 746704676960477, "pid": 328192, "event": "TABLE_CLOSE", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class", "oid": 1259}
+{"timestamp": 746704676982335, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class", "oid": 1259}
+{"timestamp": 746704677000364, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class", "oid": 1259}
+{"timestamp": 746704677042533, "pid": 328192, "event": "LOCK_GRANTED", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_namespace", "oid": 2615}
+{"timestamp": 746704677059297, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_namespace", "oid": 2615, "lock_local_hold": 0}
+{"timestamp": 746704677130926, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_namespace", "oid": 2615, "lock_local_hold": 1}
+{"timestamp": 746704677224521, "pid": 328192, "event": "TABLE_OPEN", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_class", "oid": 1259}
+{"timestamp": 746704677241043, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_class", "oid": 1259}
+{"timestamp": 746704677265037, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_class", "oid": 1259}
+{"timestamp": 746704677282823, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_class", "oid": 1259, "lock_local_hold": 0}
+{"timestamp": 746704677299007, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 57964}
+{"timestamp": 746704677335168, "pid": 328192, "event": "TABLE_OPEN", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704677350916, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704677373795, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704677391585, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type", "oid": 1247, "lock_local_hold": 0}
+{"timestamp": 746704677407426, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56510}
+{"timestamp": 746704677430067, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type_typname_nsp_index", "oid": 2704}
+{"timestamp": 746704677453292, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type_typname_nsp_index", "oid": 2704}
+{"timestamp": 746704677470917, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type_typname_nsp_index", "oid": 2704, "lock_local_hold": 0}
+{"timestamp": 746704677486958, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56891}
+{"timestamp": 746704677654979, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type_typname_nsp_index", "oid": 2704}
+{"timestamp": 746704677673853, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type_typname_nsp_index", "oid": 2704}
+{"timestamp": 746704677697409, "pid": 328192, "event": "TABLE_CLOSE", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704677718980, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704677783328, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704677818632, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class_oid_index", "oid": 2662}
+{"timestamp": 746704677842706, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class_oid_index", "oid": 2662}
+{"timestamp": 746704677860846, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class_oid_index", "oid": 2662, "lock_local_hold": 0}
+{"timestamp": 746704677876838, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 58206}
+{"timestamp": 746704677954619, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class_oid_index", "oid": 2662}
+{"timestamp": 746704677973108, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class_oid_index", "oid": 2662}
+{"timestamp": 746704678328344, "pid": 328192, "event": "TABLE_OPEN", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704678345124, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704678367909, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704678385577, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type", "oid": 1247, "lock_local_hold": 0}
+{"timestamp": 746704678401548, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56424}
+{"timestamp": 746704678425073, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type_oid_index", "oid": 2703}
+{"timestamp": 746704678518530, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type_oid_index", "oid": 2703}
+{"timestamp": 746704678536627, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type_oid_index", "oid": 2703, "lock_local_hold": 0}
+{"timestamp": 746704678552723, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 127650}
+{"timestamp": 746704678630504, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type_oid_index", "oid": 2703}
+{"timestamp": 746704678649158, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type_oid_index", "oid": 2703}
+{"timestamp": 746704678671189, "pid": 328192, "event": "TABLE_CLOSE", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704678692375, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704678710119, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704678733846, "pid": 328192, "event": "TABLE_OPEN", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704678749716, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704678772331, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704678790185, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type", "oid": 1247, "lock_local_hold": 0}
+{"timestamp": 746704678806681, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56965}
+{"timestamp": 746704678834178, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type_oid_index", "oid": 2703}
+{"timestamp": 746704678857069, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type_oid_index", "oid": 2703}
+{"timestamp": 746704678874840, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type_oid_index", "oid": 2703, "lock_local_hold": 0}
+{"timestamp": 746704678890971, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56793}
+{"timestamp": 746704678960527, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type_oid_index", "oid": 2703}
+{"timestamp": 746704678979302, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type_oid_index", "oid": 2703}
+{"timestamp": 746704679016766, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type_oid_index", "oid": 2703}
+{"timestamp": 746704679040320, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type_oid_index", "oid": 2703}
+{"timestamp": 746704679058271, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type_oid_index", "oid": 2703, "lock_local_hold": 0}
+{"timestamp": 746704679074562, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 57796}
+{"timestamp": 746704679100293, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type_typname_nsp_index", "oid": 2704}
+{"timestamp": 746704679123512, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type_typname_nsp_index", "oid": 2704}
+{"timestamp": 746704679141251, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type_typname_nsp_index", "oid": 2704, "lock_local_hold": 0}
+{"timestamp": 746704679157310, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 57017}
+{"timestamp": 746704679402113, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type_oid_index", "oid": 2703}
+{"timestamp": 746704679421747, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type_oid_index", "oid": 2703}
+{"timestamp": 746704679446017, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type_typname_nsp_index", "oid": 2704}
+{"timestamp": 746704679464279, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type_typname_nsp_index", "oid": 2704}
+{"timestamp": 746704679493790, "pid": 328192, "event": "TABLE_OPEN", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704679510271, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704679533670, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704679552280, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608, "lock_local_hold": 0}
+{"timestamp": 746704679568587, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 58316}
+{"timestamp": 746704679594742, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704679618295, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704679636182, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674, "lock_local_hold": 0}
+{"timestamp": 746704679652110, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 57368}
+{"timestamp": 746704679752050, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704679770865, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704679795403, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704679818254, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704679836029, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674, "lock_local_hold": 0}
+{"timestamp": 746704679852212, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56809}
+{"timestamp": 746704679940788, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704679959228, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704679983803, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704680006618, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704680024575, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674, "lock_local_hold": 0}
+{"timestamp": 746704680040606, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56803}
+{"timestamp": 746704680131786, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704680150220, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704680174890, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704680197309, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704680214981, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674, "lock_local_hold": 0}
+{"timestamp": 746704680231071, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56181}
+{"timestamp": 746704680317312, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704680336323, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704680359602, "pid": 328192, "event": "TABLE_CLOSE", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704680381513, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704680399519, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704680421854, "pid": 328192, "event": "TABLE_OPEN", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704680437476, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704680459915, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704680477484, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608, "lock_local_hold": 0}
+{"timestamp": 746704680493479, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56003}
+{"timestamp": 746704680516046, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704680539000, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704680556426, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674, "lock_local_hold": 0}
+{"timestamp": 746704680572353, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56307}
+{"timestamp": 746704680659789, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704680678134, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704680708322, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_depender_index", "oid": 2673}
+{"timestamp": 746704680731675, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_depender_index", "oid": 2673}
+{"timestamp": 746704680749555, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_depender_index", "oid": 2673, "lock_local_hold": 0}
+{"timestamp": 746704680765842, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 57520}
+{"timestamp": 746704680790981, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704680813999, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704680831675, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674, "lock_local_hold": 0}
+{"timestamp": 746704680847806, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56825}
+{"timestamp": 746704680989448, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_depender_index", "oid": 2673}
+{"timestamp": 746704681010372, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_depender_index", "oid": 2673}
+{"timestamp": 746704681034018, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704681052346, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704681073720, "pid": 328192, "event": "TABLE_CLOSE", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704681095005, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704681112656, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704681137265, "pid": 328192, "event": "TABLE_CLOSE", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704681158209, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704681175907, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704681201239, "pid": 328192, "event": "TABLE_OPEN", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704681217273, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704681240163, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704681257962, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type", "oid": 1247, "lock_local_hold": 0}
+{"timestamp": 746704681273940, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56667}
+{"timestamp": 746704681294500, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type_typname_nsp_index", "oid": 2704}
+{"timestamp": 746704681317288, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type_typname_nsp_index", "oid": 2704}
+{"timestamp": 746704681334828, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type_typname_nsp_index", "oid": 2704, "lock_local_hold": 0}
+{"timestamp": 746704681350835, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56335}
+{"timestamp": 746704681457495, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type_typname_nsp_index", "oid": 2704}
+{"timestamp": 746704681475984, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type_typname_nsp_index", "oid": 2704}
+{"timestamp": 746704681499135, "pid": 328192, "event": "TABLE_CLOSE", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704681520310, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704681537949, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704681565426, "pid": 328192, "event": "TABLE_OPEN", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704681581218, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704681603947, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704681621646, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type", "oid": 1247, "lock_local_hold": 0}
+{"timestamp": 746704681637638, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56420}
+{"timestamp": 746704681674028, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type_oid_index", "oid": 2703}
+{"timestamp": 746704681697804, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type_oid_index", "oid": 2703}
+{"timestamp": 746704681715696, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type_oid_index", "oid": 2703, "lock_local_hold": 0}
+{"timestamp": 746704681732028, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 58000}
+{"timestamp": 746704681789261, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type_typname_nsp_index", "oid": 2704}
+{"timestamp": 746704681813741, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type_typname_nsp_index", "oid": 2704}
+{"timestamp": 746704681831950, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type_typname_nsp_index", "oid": 2704, "lock_local_hold": 0}
+{"timestamp": 746704681848335, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 59074}
+{"timestamp": 746704681986220, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type_oid_index", "oid": 2703}
+{"timestamp": 746704682005166, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type_oid_index", "oid": 2703}
+{"timestamp": 746704682029300, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type_typname_nsp_index", "oid": 2704}
+{"timestamp": 746704682047617, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type_typname_nsp_index", "oid": 2704}
+{"timestamp": 746704682078008, "pid": 328192, "event": "TABLE_OPEN", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704682094093, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704682117111, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704682134832, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608, "lock_local_hold": 0}
+{"timestamp": 746704682151056, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56963}
+{"timestamp": 746704682174084, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704682196843, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704682214674, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674, "lock_local_hold": 0}
+{"timestamp": 746704682230736, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56652}
+{"timestamp": 746704682323576, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704682342453, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704682367129, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704682390600, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704682409007, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674, "lock_local_hold": 0}
+{"timestamp": 746704682424956, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 57827}
+{"timestamp": 746704682826824, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704682845721, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704682870818, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704682894489, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704682912369, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674, "lock_local_hold": 0}
+{"timestamp": 746704682929015, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 58197}
+{"timestamp": 746704683015112, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704683033858, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704683057951, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704683080989, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704683098619, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674, "lock_local_hold": 0}
+{"timestamp": 746704683114669, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56718}
+{"timestamp": 746704683203101, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704683221927, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704683245965, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704683269041, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704683286719, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674, "lock_local_hold": 0}
+{"timestamp": 746704683302827, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56862}
+{"timestamp": 746704683395707, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704683414442, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704683438595, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704683496427, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704683514717, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674, "lock_local_hold": 0}
+{"timestamp": 746704683531225, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 92630}
+{"timestamp": 746704683616675, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704683635066, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704683658102, "pid": 328192, "event": "TABLE_CLOSE", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704683679540, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704683697497, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704683719389, "pid": 328192, "event": "TABLE_OPEN", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704683735158, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704683758064, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704683775755, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608, "lock_local_hold": 0}
+{"timestamp": 746704683791860, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56702}
+{"timestamp": 746704683814656, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704683837597, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704683855313, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674, "lock_local_hold": 0}
+{"timestamp": 746704683871469, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56813}
+{"timestamp": 746704683953051, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704683971689, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704684000333, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_depender_index", "oid": 2673}
+{"timestamp": 746704684023429, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_depender_index", "oid": 2673}
+{"timestamp": 746704684040973, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_depender_index", "oid": 2673, "lock_local_hold": 0}
+{"timestamp": 746704684057015, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56682}
+{"timestamp": 746704684080689, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704684103803, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704684121274, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674, "lock_local_hold": 0}
+{"timestamp": 746704684137207, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56518}
+{"timestamp": 746704684268675, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_depender_index", "oid": 2673}
+{"timestamp": 746704684287973, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_depender_index", "oid": 2673}
+{"timestamp": 746704684311853, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704684329708, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704684353666, "pid": 328192, "event": "TABLE_CLOSE", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704684375030, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704684392997, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704684417335, "pid": 328192, "event": "TABLE_CLOSE", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704684438750, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704684456447, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_type", "oid": 1247}
+{"timestamp": 746704684493136, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_class_oid_index", "oid": 2662}
+{"timestamp": 746704684516615, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_class_oid_index", "oid": 2662}
+{"timestamp": 746704684534434, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_class_oid_index", "oid": 2662, "lock_local_hold": 0}
+{"timestamp": 746704684550823, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 57687}
+{"timestamp": 746704684574481, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_class_relname_nsp_index", "oid": 2663}
+{"timestamp": 746704684596862, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_class_relname_nsp_index", "oid": 2663}
+{"timestamp": 746704684614532, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_class_relname_nsp_index", "oid": 2663, "lock_local_hold": 0}
+{"timestamp": 746704684630858, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56377}
+{"timestamp": 746704684655806, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_class_tblspc_relfilenode_index", "oid": 3455}
+{"timestamp": 746704684678566, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_class_tblspc_relfilenode_index", "oid": 3455}
+{"timestamp": 746704684696029, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_class_tblspc_relfilenode_index", "oid": 3455, "lock_local_hold": 0}
+{"timestamp": 746704684712232, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56426}
+{"timestamp": 746704684891052, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_class_oid_index", "oid": 2662}
+{"timestamp": 746704684910356, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_class_oid_index", "oid": 2662}
+{"timestamp": 746704684934496, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_class_relname_nsp_index", "oid": 2663}
+{"timestamp": 746704684952910, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_class_relname_nsp_index", "oid": 2663}
+{"timestamp": 746704684976724, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_class_tblspc_relfilenode_index", "oid": 3455}
+{"timestamp": 746704684995182, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_class_tblspc_relfilenode_index", "oid": 3455}
+{"timestamp": 746704685017751, "pid": 328192, "event": "TABLE_OPEN", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_attribute", "oid": 1249}
+{"timestamp": 746704685033785, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_attribute", "oid": 1249}
+{"timestamp": 746704685056178, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_attribute", "oid": 1249}
+{"timestamp": 746704685073827, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_attribute", "oid": 1249, "lock_local_hold": 0}
+{"timestamp": 746704685089841, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56056}
+{"timestamp": 746704685115419, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_attribute_relid_attnam_index", "oid": 2658}
+{"timestamp": 746704685138626, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_attribute_relid_attnam_index", "oid": 2658}
+{"timestamp": 746704685156409, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_attribute_relid_attnam_index", "oid": 2658, "lock_local_hold": 0}
+{"timestamp": 746704685172657, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 57238}
+{"timestamp": 746704685198120, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_attribute_relid_attnum_index", "oid": 2659}
+{"timestamp": 746704685220872, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_attribute_relid_attnum_index", "oid": 2659}
+{"timestamp": 746704685238463, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_attribute_relid_attnum_index", "oid": 2659, "lock_local_hold": 0}
+{"timestamp": 746704685254553, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56433}
+{"timestamp": 746704685806308, "pid": 328192, "event": "TABLE_OPEN", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704685822934, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704685846226, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704685864348, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608, "lock_local_hold": 0}
+{"timestamp": 746704685880703, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 57769}
+{"timestamp": 746704685904218, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704685927560, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704685945300, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674, "lock_local_hold": 0}
+{"timestamp": 746704685962114, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 57896}
+{"timestamp": 746704686056103, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704686074625, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704686098054, "pid": 328192, "event": "TABLE_CLOSE", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704686119932, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704686139591, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704686161273, "pid": 328192, "event": "TABLE_OPEN", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704686176771, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704686199544, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704686217503, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608, "lock_local_hold": 0}
+{"timestamp": 746704686233510, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56739}
+{"timestamp": 746704686256109, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704686278939, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704686296774, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674, "lock_local_hold": 0}
+{"timestamp": 746704686312823, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56714}
+{"timestamp": 746704686401528, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704686420177, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704686487864, "pid": 328192, "event": "TABLE_CLOSE", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704686510017, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704686527884, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704686549434, "pid": 328192, "event": "TABLE_OPEN", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704686565046, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704686587786, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704686605722, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608, "lock_local_hold": 0}
+{"timestamp": 746704686621830, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56784}
+{"timestamp": 746704686644498, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704686667282, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704686685041, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674, "lock_local_hold": 0}
+{"timestamp": 746704686701211, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56713}
+{"timestamp": 746704686788616, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704686806947, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704686830285, "pid": 328192, "event": "TABLE_CLOSE", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704686851804, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704686869782, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704687352765, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_attribute_relid_attnam_index", "oid": 2658}
+{"timestamp": 746704687371651, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_attribute_relid_attnam_index", "oid": 2658}
+{"timestamp": 746704687395545, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_attribute_relid_attnum_index", "oid": 2659}
+{"timestamp": 746704687413756, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_attribute_relid_attnum_index", "oid": 2659}
+{"timestamp": 746704687435363, "pid": 328192, "event": "TABLE_CLOSE", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_attribute", "oid": 1249}
+{"timestamp": 746704687456973, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_attribute", "oid": 1249}
+{"timestamp": 746704687474838, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_attribute", "oid": 1249}
+{"timestamp": 746704687496452, "pid": 328192, "event": "TABLE_OPEN", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_shdepend", "oid": 1214}
+{"timestamp": 746704687512662, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_shdepend", "oid": 1214}
+{"timestamp": 746704687544183, "pid": 328192, "event": "LOCK_GRANTED", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_shdepend", "oid": 1214}
+{"timestamp": 746704687560878, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_shdepend", "oid": 1214, "lock_local_hold": 0}
+{"timestamp": 746704687578540, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 65878}
+{"timestamp": 746704687602868, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_shdepend_reference_index", "oid": 1233}
+{"timestamp": 746704687632025, "pid": 328192, "event": "LOCK_GRANTED", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_shdepend_reference_index", "oid": 1233}
+{"timestamp": 746704687648452, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_shdepend_reference_index", "oid": 1233, "lock_local_hold": 0}
+{"timestamp": 746704687665995, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 63127}
+{"timestamp": 746704687750816, "pid": 328192, "event": "LOCK_UNGRANTED", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_shdepend_reference_index", "oid": 1233}
+{"timestamp": 746704687773201, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_shdepend_reference_index", "oid": 1233}
+{"timestamp": 746704687796972, "pid": 328192, "event": "TABLE_CLOSE", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_shdepend", "oid": 1214}
+{"timestamp": 746704687819103, "pid": 328192, "event": "LOCK_UNGRANTED", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_shdepend", "oid": 1214}
+{"timestamp": 746704687839622, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_shdepend", "oid": 1214}
+{"timestamp": 746704687864038, "pid": 328192, "event": "TABLE_OPEN", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704687880413, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704687903277, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704687921449, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608, "lock_local_hold": 0}
+{"timestamp": 746704687937662, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 57249}
+{"timestamp": 746704687960911, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704687983767, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704688001903, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674, "lock_local_hold": 0}
+{"timestamp": 746704688018077, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 57166}
+{"timestamp": 746704688155154, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704688173690, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704688200496, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704688223459, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704688241210, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674, "lock_local_hold": 0}
+{"timestamp": 746704688257544, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 57048}
+{"timestamp": 746704688345993, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704688364398, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704688391430, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_depender_index", "oid": 2673}
+{"timestamp": 746704688414429, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_depender_index", "oid": 2673}
+{"timestamp": 746704688432343, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_depender_index", "oid": 2673, "lock_local_hold": 0}
+{"timestamp": 746704688448414, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56984}
+{"timestamp": 746704688472121, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704688494705, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704688512407, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674, "lock_local_hold": 0}
+{"timestamp": 746704688528737, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56616}
+{"timestamp": 746704688665251, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_depender_index", "oid": 2673}
+{"timestamp": 746704688684168, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_depender_index", "oid": 2673}
+{"timestamp": 746704688708032, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704688726163, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend_reference_index", "oid": 2674}
+{"timestamp": 746704688747719, "pid": 328192, "event": "TABLE_CLOSE", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704688768970, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704688786812, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_depend", "oid": 2608}
+{"timestamp": 746704688812704, "pid": 328192, "event": "TABLE_CLOSE", "lock_type": "NoLock", "table": "public.metrics", "oid": 328345}
+{"timestamp": 746704688830423, "pid": 328192, "event": "TABLE_CLOSE", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_class", "oid": 1259}
+{"timestamp": 746704688851604, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_class", "oid": 1259}
+{"timestamp": 746704688869376, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "RowExclusiveLock", "table": "pg_catalog.pg_class", "oid": 1259}
+{"timestamp": 746704688912604, "pid": 328192, "event": "TABLE_OPEN", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class", "oid": 1259}
+{"timestamp": 746704688928682, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class", "oid": 1259}
+{"timestamp": 746704688952151, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class", "oid": 1259}
+{"timestamp": 746704688970901, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class", "oid": 1259, "lock_local_hold": 0}
+{"timestamp": 746704688987015, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 58333}
+{"timestamp": 746704689009486, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class_oid_index", "oid": 2662}
+{"timestamp": 746704689032310, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class_oid_index", "oid": 2662}
+{"timestamp": 746704689050044, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class_oid_index", "oid": 2662, "lock_local_hold": 0}
+{"timestamp": 746704689066142, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56656}
+{"timestamp": 746704689153458, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class_oid_index", "oid": 2662}
+{"timestamp": 746704689171818, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class_oid_index", "oid": 2662}
+{"timestamp": 746704689194876, "pid": 328192, "event": "TABLE_CLOSE", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class", "oid": 1259}
+{"timestamp": 746704689216684, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class", "oid": 1259}
+{"timestamp": 746704689234574, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_class", "oid": 1259}
+{"timestamp": 746704689277572, "pid": 328192, "event": "TABLE_OPEN", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_attribute", "oid": 1249}
+{"timestamp": 746704689294145, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_attribute", "oid": 1249}
+{"timestamp": 746704689316974, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_attribute", "oid": 1249}
+{"timestamp": 746704689334868, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_attribute", "oid": 1249, "lock_local_hold": 0}
+{"timestamp": 746704689351130, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56985}
+{"timestamp": 746704689371726, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_attribute_relid_attnum_index", "oid": 2659}
+{"timestamp": 746704689394701, "pid": 328192, "event": "LOCK_GRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_attribute_relid_attnum_index", "oid": 2659}
+{"timestamp": 746704689412360, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_attribute_relid_attnum_index", "oid": 2659, "lock_local_hold": 0}
+{"timestamp": 746704689428592, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 56866}
+{"timestamp": 746704689658305, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_attribute_relid_attnum_index", "oid": 2659}
+{"timestamp": 746704689677092, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_attribute_relid_attnum_index", "oid": 2659}
+{"timestamp": 746704689699954, "pid": 328192, "event": "TABLE_CLOSE", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_attribute", "oid": 1249}
+{"timestamp": 746704689721716, "pid": 328192, "event": "LOCK_UNGRANTED_FASTPATH", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_attribute", "oid": 1249}
+{"timestamp": 746704689768652, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_attribute", "oid": 1249}
+{"timestamp": 746704689815332, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessExclusiveLock", "table": "public.metrics", "oid": 328345}
+{"timestamp": 746704689959625, "pid": 328192, "event": "LOCK_GRANTED", "lock_type": "AccessExclusiveLock", "table": "public.metrics", "oid": 328345}
+{"timestamp": 746704689976218, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessExclusiveLock", "table": "public.metrics", "oid": 328345, "lock_local_hold": 0}
+{"timestamp": 746704690002386, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 187054}
+{"timestamp": 746704690056281, "pid": 328192, "event": "TABLE_OPEN", "lock_type": "AccessExclusiveLock", "table": "public.metrics", "oid": 328345}
+{"timestamp": 746704690072336, "pid": 328192, "event": "LOCK_RELATION_OID", "lock_type": "AccessExclusiveLock", "table": "public.metrics", "oid": 328345}
+{"timestamp": 746704690093376, "pid": 328192, "event": "LOCK_GRANTED_LOCAL", "lock_type": "AccessExclusiveLock", "table": "public.metrics", "oid": 328345, "lock_local_hold": 1}
+{"timestamp": 746704690108444, "pid": 328192, "event": "LOCK_RELATION_OID_END", "lock_time": 36108}
+{"timestamp": 746704690131202, "pid": 328192, "event": "TABLE_CLOSE", "lock_type": "NoLock", "table": "public.metrics", "oid": 328345}
+{"timestamp": 746704690193553, "pid": 328192, "event": "TRANSACTION_COMMIT"}
+{"timestamp": 746704694233743, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_namespace", "oid": 2615}
+{"timestamp": 746704694257757, "pid": 328192, "event": "LOCK_UNGRANTED_LOCAL", "lock_type": "AccessExclusiveLock", "table": "public.metrics", "oid": 328345}
+{"timestamp": 746704694313884, "pid": 328192, "event": "LOCK_UNGRANTED", "lock_type": "AccessExclusiveLock", "table": "public.metrics", "oid": 328345}
+{"timestamp": 746704694337362, "pid": 328192, "event": "LOCK_UNGRANTED", "lock_type": "AccessShareLock", "table": "pg_catalog.pg_namespace", "oid": 2615}
+{"timestamp": 746704694803804, "pid": 328192, "event": "QUERY_END"}
