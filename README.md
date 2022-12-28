@@ -13,5 +13,6 @@ cp -av /usr/lib/python3/dist-packages/bcc* .venv/lib/python3.9/site-packages/
 
 ## Run tests
 ```shell
+pytest
 python -m unittest discover
 ```
