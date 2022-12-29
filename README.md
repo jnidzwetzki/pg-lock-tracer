@@ -1,4 +1,10 @@
 # PostgreSQL Lock Tracer
+<a href="https://github.com/jnidzwetzki/pg-lock-tracer/actions/workflows/tests.yaml">
+  <img alt="Build Status" src="https://github.com/jnidzwetzki/pg-lock-tracer/actions/workflows/tests.yaml/badge.svg">
+</a>
+<a href="http://makeapullrequest.com">
+ <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" />
+</a>
 
 This project provides a BPF (_Berkeley Packet Filter_) based lock tracer for PostgreSQL called `pg_lock_trace`. The lock tracker connects to a PostgreSQL process (using _UProbes_) and shows all taken locks by PostgreSQL. The tool is useful for debugging locking problems within PostgreSQL or PostgreSQL extensions.
 
