@@ -35,6 +35,9 @@ class OIDResolver:
             )
 
             self.cur = self.connection.cursor()
+
+            # Warmup cache
+            self.fetch_all_oids()
         except psycopg2.OperationalError as error:
             print(f"Unable to connect to the database {self.connection_url}")
             print(f"{error}")
@@ -42,7 +45,7 @@ class OIDResolver:
 
     def disconnect(self):
         """
-        Close the databsae connection.
+        Close the database connection.
         """
         if self.cur:
             self.cur.close()
@@ -52,14 +55,45 @@ class OIDResolver:
             self.connection.close()
             self.connection = None
 
-    def fetch_oid_from_db(self, oid):
-        """Resolve the given OID into a name"""
+    def fetch_all_oids(self):
+        """
+        Fetch all Oid mappings from the catalog and cache them. This
+        is done because:
+
+        (1) Cache Oid cache lookups have to be fast and we want
+            a warm cache.
+
+        (2) Operations such as DROP delete objects from the database.
+            Fetching the oid mapping afterwards is not possible.
+        """
+
         select_stmt = """
-        SELECT n.nspname AS schema_name, c.relname AS table_name
+        SELECT n.nspname, c.relname, c.oid 
+        FROM pg_namespace n
+        JOIN pg_class c ON n.oid = c.relnamespace
+        """
+
+        self.cur.execute(select_stmt)
+
+        oids = self.cur.fetchall()
+
+        for result_row in oids:
+            oid = result_row[2]
+            name = f"{result_row[0]}.{result_row[1]}"
+            self.cache[oid] = name
+
+    def fetch_oid_from_db(self, oid):
+        """
+        Resolve the given OID into a name
+        """
+
+        select_stmt = """
+        SELECT n.nspname, c.relname
         FROM pg_namespace n
         JOIN pg_class c ON n.oid = c.relnamespace
         WHERE c.oid = %s;
         """
+
         oid = str(oid)
 
         try:
@@ -73,10 +107,15 @@ class OIDResolver:
 
             result_row = self.cur.fetchone()
 
+            # Unable to get name, return Oid instead
             if result_row is None:
-                return ""
+                return f"Oid {oid}"
 
             name = f"{result_row[0]}.{result_row[1]}"
+
+            # Cache result
+            self.cache[oid] = name
+
             return name
         except psycopg2.Error as error:
             print(f"Error while executing SQL statement: {error}")
@@ -85,11 +124,13 @@ class OIDResolver:
             return ""
 
     def resolve_oid(self, oid):
+        """
+        Resolve the given OID into a name.
+        """
+
+        # OID cache hit
         if oid in self.cache:
             return self.cache[oid]
 
-        name = self.fetch_oid_from_db(oid)
-
-        self.cache[oid] = name
-
-        return name
+        # OID cache miss
+        return self.fetch_oid_from_db(oid)
