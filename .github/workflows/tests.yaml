@@ -26,11 +26,16 @@ jobs:
         run: pytest
 
   linter:
-    name: Run Linter and formatting
+    name: Run Linter and check formatting
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Install needed tools
+        run: |
+          apt update
+          apt install clang-format python3-bpfcc
 
       - name: Install development requirements
         run: python -m pip install -r requirements_dev.txt
@@ -40,11 +45,6 @@ jobs:
   
       - name: Check code format with black
         run: black --check --diff src tests
-
-      - name: Install clang-format
-        run: |
-          sudo apt-get update
-          sudo apt-get install clang-format
       
       - name: Run clang-format
         run: clang-format --dry-run --Werror src/pg_lock_tracer/bpf/*.c
