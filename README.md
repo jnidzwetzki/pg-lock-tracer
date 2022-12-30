@@ -605,7 +605,7 @@ pip install -r requirements.txt
 
 # Use distribution packages for BCC. BCC Python packages are not provided via pip at the moment.
 apt install python3-bpfcc
-cp -av /usr/lib/python3/dist-packages/bcc* .venv/lib/python3.9/site-packages/
+cp -av /usr/lib/python3/dist-packages/bcc* $(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")
 ```
 
 ## Development

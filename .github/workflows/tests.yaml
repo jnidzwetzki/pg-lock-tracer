@@ -13,13 +13,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Install needed tools
+        run: |
+          sudo apt update
+          sudo apt install python3-bpfcc
+
       - name: Setup python 3.10
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
+      - name: Copy distribution BPF packages
+        run: cp -av /usr/lib/python3/dist-packages/bcc* $(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")
+
       - name: Install package
         run: python -m pip install .
+      
+      - name: Check that pg_lock_tracer can be executed
+        run: pg_lock_tracer -h
 
       - name: Install development requirements
         run: python -m pip install -r requirements_dev.txt
