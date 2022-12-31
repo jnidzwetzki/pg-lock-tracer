@@ -28,9 +28,6 @@ jobs:
 
       - name: Install package
         run: python -m pip install .
-      
-      - name: Check that pg_lock_tracer can be executed
-        run: pg_lock_tracer -h
 
       - name: Install development requirements
         run: python -m pip install -r requirements_dev.txt

@@ -141,6 +141,12 @@ parser.add_argument(
     help="write the trace into output file",
 )
 parser.add_argument("--statistics", action="store_true", help="print lock statistics")
+parser.add_argument(
+    "-d",
+    "--dry-run",
+    action="store_true",
+    help="compile and load the BPF program but exit afterward",
+)
 
 
 class Events(IntEnum):
@@ -674,6 +680,9 @@ class PGLockTracer:
             self.args.path, function_regex
         )
 
+        if not func_and_addr:
+            raise Exception(f"Unable to locate function {function_regex}")
+
         # Handle address duplicates
         for function, address in func_and_addr:
             if address in addresses:
@@ -685,13 +694,13 @@ class PGLockTracer:
                     name=self.args.path, sym=function, fn_name=bpf_fn_name
                 )
                 if self.args.verbose:
-                    print(f"Attaching to {function} on {address} on enter")
+                    print(f"Attaching to {function} at address {address} on enter")
             else:
                 self.bpf_instance.attach_uretprobe(
                     name=self.args.path, sym=function, fn_name=bpf_fn_name
                 )
                 if self.args.verbose:
-                    print(f"Attaching to {function} on {address} on return")
+                    print(f"Attaching to {function} at address {address} on return")
 
     def attach_probes(self):
         """
@@ -763,7 +772,9 @@ def main():
 
     pg_lock_tracer = PGLockTracer(args)
     pg_lock_tracer.init()
-    pg_lock_tracer.run()
+
+    if not args.dry_run:
+        pg_lock_tracer.run()
 
 
 if __name__ == "__main__":

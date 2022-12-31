@@ -1,0 +1,75 @@
+name: Basic Integration Tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  config:
+    strategy:
+      fail-fast: false
+      matrix:
+        psql_version: [14.4, 15.1]
+
+    name: Integration test for PostgreSQL ${{ matrix.psql_version }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Install needed tools
+        run: |
+          sudo apt install python3-bpfcc flex bison lcov build-essential libxml2-dev libssl-dev zlib1g-dev libreadline-dev
+
+      - name: Cache PostgreSQL build ${{ matrix.psql_version }}
+        id: postgresql-cache
+        uses: actions/cache@v3
+        with:
+          path: ~/postgresql
+          key: postgresql-${{ matrix.psql_version }}-${{ hashFiles('.github/workflows/*') }}
+
+      - name: Build PostgreSQL
+        if: steps.postgresql-cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ~/postgresql
+          mkdir -p ~/postgresql/src/${{ matrix.psql_version }}
+          mkdir -p ~/postgresql/bin/${{ matrix.psql_version }}
+
+          # Data dir is not part of the cache
+          mkdir -p ~/postgresql_data/${{ matrix.psql_version }}
+
+          cd ~/postgresql/src/${{ matrix.psql_version }}
+          wget -q -O postgresql.tar.bz2 https://ftp.postgresql.org/pub/source/v${{ matrix.psql_version }}/postgresql-${{ matrix.psql_version }}.tar.bz2
+          
+          tar jxf postgresql.tar.bz2 --strip-components 1 -C .
+
+          CFLAGS="-ggdb -Og -g3 -fno-omit-frame-pointer" ./configure --prefix=$HOME/postgresql/bin/${{ matrix.psql_version }} --with-openssl --with-readline --with-zlib --with-libxml
+          make -j 8
+
+      - name: Install PostgreSQL
+        run: | 
+          cd ~/postgresql/src/${{ matrix.psql_version }}
+
+          make install
+
+          ~/postgresql/bin/${{ matrix.psql_version }}/bin/initdb -D ~/postgresql_data/${{ matrix.psql_version }}
+          ~/postgresql/bin/${{ matrix.psql_version }}/bin/pg_ctl -D ~/postgresql_data/${{ matrix.psql_version }} start
+
+          #sudo apt install curl ca-certificates gnupg
+          #sudo curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg >/dev/null
+          #sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+          #sudo apt update
+          #sudo apt install postgresql-${{ matrix.psql_version }} postgresql-${{ matrix.psql_version }}-dbgsym
+          #sudo /etc/init.d/postgresql start ${{ matrix.psql_version }}
+          #dpkg -L postgresql-${{ matrix.psql_version }}-dbgsym
+          #readelf --string-dump=.gnu_debuglink /usr/lib/postgresql/${{ matrix.psql_version }}/bin/postgres
+          #objdump -TC /usr/lib/postgresql/${{ matrix.psql_version }}/bin/postgres
+
+      - name: Install package
+        run: sudo python -m pip install .
+      
+      - name: Check that pg_lock_tracer can be executed
+        run: sudo pg_lock_tracer -x ~/postgresql/bin/${{ matrix.psql_version }}/bin/postgres -v -p $(pidof postgres) --statistics --dry-run
