@@ -615,6 +615,21 @@ class PGLockTracer:
             oid_resolver = OIDResolver(database_url)
             self.oid_resolvers[resolver_pid] = oid_resolver
 
+        # Belong the processes to the binary?
+        for pid in self.args.pids:
+
+            if not os.path.isdir(f"/proc/{pid}"):
+                raise Exception(
+                    f"/proc entry for pid {pid} not found, does the process exist?"
+                )
+
+            binary = os.readlink(f"/proc/{pid}/exe")
+
+            if binary != self.args.path:
+                raise Exception(
+                    f"Pid {pid} does not belong to binary {self.args.path}. Executable is {binary}"
+                )
+
         # Does the output file already exists?
         if self.args.output_file and os.path.exists(self.args.output_file):
             raise Exception(f"Output file {self.args.output_file} already exists")
