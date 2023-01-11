@@ -344,7 +344,7 @@ class PGLockTraceOutput(ABC):
         print("\nLock statistics:\n================")
 
         # Oid lock statistics
-        print("\nLocks per oid")
+        print("\nLocks per OID")
         table = PrettyTable(["Lock Name", "Requests", "Total Lock Request Time (ns)"])
 
         sorted_keys = sorted(
