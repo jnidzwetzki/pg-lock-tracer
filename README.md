@@ -6,9 +6,11 @@
  <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" />
 </a>
 
-This project provides a BPF (_Berkeley Packet Filter_) based lock tracer for PostgreSQL called `pg_lock_trace`. The lock tracker connects to a PostgreSQL process (using _UProbes_) and shows all taken locks by PostgreSQL. The tool is useful for debugging locking problems within PostgreSQL or PostgreSQL extensions.
+This project provides a BPF (_Berkeley Packet Filter_) based lock tracer for PostgreSQL, called `pg_lock_trace`. At the moment, PostgreSQL 14 and 15 are supported (see additional information below).
 
-The output can be dumped in JSON encoding, which allows further processing with other tools. This project also contains the script `animate_lock_graph`, which provides an animated version of the taken looks.
+The lock tracer can be used to attach to a running PostgreSQL process  (using _UProbes_). Afterward, `pg_lock_trace` shows all taken locks by PostgreSQL. The tool is useful for debugging locking problems within PostgreSQL or PostgreSQL extensions.
+
+`pg_lock_trace` also allows dumping the output as JSON formatted lines, which allows further processing with additional tools. This repository also contains the script `animate_lock_graph`, which provides an animated version of the taken looks.
 
 
 ## Usage Examples
@@ -47,7 +49,7 @@ pg_lock_tracer -x /home/jan/postgresql-sandbox/bin/REL_15_1_DEBUG/bin/postgres -
 animate_lock_graph -i create_table_trace.json -o create_table_trace.html
 ```
 
-## Usage Examples
+## Example Output
 
 ### Lock Traces
 CLI: `pg_lock_tracer -x /home/jan/postgresql-sandbox/bin/REL_14_2_DEBUG/bin/postgres -p 327578 -r 327578:sql://jan@localhost/test2 --statistics`
