@@ -404,9 +404,6 @@ class PGLockTraceOutputHuman(PGLockTraceOutput):
 
         print_prefix = f"{event.timestamp} [Pid {event.pid}]"
 
-        # Resolve the lock type to a string
-        lock_type = PostgreSQLLockHelper.lock_type_to_str(event.mode)
-
         # Resolve the OID to a name
         if event.object > 0:
             tablename = event.object
@@ -422,36 +419,46 @@ class PGLockTraceOutputHuman(PGLockTraceOutput):
 
         output = None
         if event.event_type == Events.TABLE_OPEN:
+            lock_type = PostgreSQLLockHelper.lock_type_to_str(event.mode)
             output = f"{print_prefix} Table open {tablename} {lock_type}"
         elif event.event_type == Events.TABLE_CLOSE:
+            lock_type = PostgreSQLLockHelper.lock_type_to_str(event.mode)
             output = f"{print_prefix} Table close {tablename} {lock_type}"
         elif event.event_type == Events.LOCK_RELATION_OID:
+            lock_type = PostgreSQLLockHelper.lock_type_to_str(event.mode)
             output = f"{print_prefix} Lock object {tablename} {lock_type}"
         elif event.event_type == Events.LOCK_RELATION_OID_END:
             lock_time = self.get_lock_wait_time(event)
             output = f"{print_prefix} Lock was acquired in {lock_time} ns"
         elif event.event_type == Events.UNLOCK_RELATION_OID:
+            lock_type = PostgreSQLLockHelper.lock_type_to_str(event.mode)
             output = f"{print_prefix} Unlock relation {tablename} {lock_type}"
         elif event.event_type == Events.LOCK_GRANTED:
+            lock_type = PostgreSQLLockHelper.lock_type_to_str(event.mode)
             output = (
                 f"{print_prefix} Lock granted {tablename} {lock_type} "
                 f"(Requested locks {event.requested})"
             )
         elif event.event_type == Events.LOCK_GRANTED_FASTPATH:
+            lock_type = PostgreSQLLockHelper.lock_type_to_str(event.mode)
             output = f"{print_prefix} Lock granted (fastpath) {tablename} {lock_type}"
         elif event.event_type == Events.LOCK_GRANTED_LOCAL:
+            lock_type = PostgreSQLLockHelper.lock_type_to_str(event.mode)
             output = (
                 f"{print_prefix} Lock granted (local) {tablename} {lock_type} "
                 f"(Already hold local {event.lock_local_hold})"
             )
         elif event.event_type == Events.LOCK_UNGRANTED:
+            lock_type = PostgreSQLLockHelper.lock_type_to_str(event.mode)
             output = (
                 f"{print_prefix} Lock ungranted {tablename} {lock_type} "
                 f"(Requested locks {event.requested})"
             )
         elif event.event_type == Events.LOCK_UNGRANTED_FASTPATH:
+            lock_type = PostgreSQLLockHelper.lock_type_to_str(event.mode)
             output = f"{print_prefix} Lock ungranted (fastpath) {tablename} {lock_type}"
         elif event.event_type == Events.LOCK_UNGRANTED_LOCAL:
+            lock_type = PostgreSQLLockHelper.lock_type_to_str(event.mode)
             output = (
                 f"{print_prefix} Lock ungranted (local) {tablename} {lock_type} "
                 f"(Hold local {event.lock_local_hold})"

@@ -62,8 +62,8 @@ int bpf_table_open(struct pt_regs *ctx) {
 int bpf_table_close(struct pt_regs *ctx) {
   PostgreSQLEvent event = {.event_type = EVENT_TABLE_CLOSE};
 
-  // A bit ugly but works, Param 1 is a Relation struct
-  // Field Oid rd_id is stored at byte 72 (PG 15.1)
+  // Param 1 is a Relation struct
+  // The Oid rd_id is stored at byte 72 (PG 15.1)
 
   // gdb: ptype /o Relation
   //
@@ -139,9 +139,11 @@ int bpf_errstart(struct pt_regs *ctx) {
   fill_basic_data(&event);
   bpf_probe_read_kernel(&event.mode, sizeof(event.mode),
                         (void *)&(PT_REGS_PARM1(ctx)));
+
   if (event.mode >= PGERROR_ERROR) {
     lockevents.perf_submit(ctx, &event, sizeof(PostgreSQLEvent));
   }
+
   return 0;
 }
 
