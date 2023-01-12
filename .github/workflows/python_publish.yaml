@@ -28,11 +28,11 @@ jobs:
     - name: Upload to test.pypi
       run: 'twine upload --non-interactive --repository testpypi dist/*'
       env:
-        TWINE_USERNAME: 'jnidzwetzki'
+        TWINE_USERNAME: '__token__'
         TWINE_PASSWORD: '${{ secrets.TWINE_PASSWORD_TEST }}'
 
     - name: Upload to pypi
       run: 'twine upload --non-interactive dist/*'
       env:
-        TWINE_USERNAME: 'jnidzwetzki'
+        TWINE_USERNAME: '__token__'
         TWINE_PASSWORD: '${{ secrets.TWINE_PASSWORD }}'
