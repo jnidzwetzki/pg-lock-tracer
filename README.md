@@ -6,11 +6,11 @@
  <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" />
 </a>
 
-This project provides a BPF (_Berkeley Packet Filter_) based lock tracer for PostgreSQL, called `pg_lock_trace`. At the moment, PostgreSQL 14 and 15 are supported (see additional information below).
+This project provides a BPF (_Berkeley Packet Filter_) based lock tracer for PostgreSQL, called `pg_lock_tracer`. At the moment, PostgreSQL 14 and 15 are supported (see additional information below).
 
-The lock tracer can be used to attach to a running PostgreSQL process  (using _UProbes_). Afterward, `pg_lock_trace` shows all taken locks by PostgreSQL. The tool is useful for debugging locking problems within PostgreSQL or PostgreSQL extensions.
+The lock tracer can be used to attach to a running PostgreSQL process  (using _UProbes_). Afterward, `pg_lock_tracer` shows all taken locks by PostgreSQL. The tool is useful for debugging locking problems within PostgreSQL or PostgreSQL extensions.
 
-`pg_lock_trace` also allows dumping the output as JSON formatted lines, which allows further processing with additional tools. This repository also contains the script `animate_lock_graph`, which provides an animated version of the taken looks.
+`pg_lock_tracer` also allows dumping the output as JSON formatted lines, which allows further processing with additional tools. This repository also contains the script `animate_lock_graph`, which provides an animated version of the taken looks.
 
 
 ## Usage Examples
@@ -605,7 +605,7 @@ cp -av /usr/lib/python3/dist-packages/bcc* $(python -c "from distutils.sysconfig
 ```
 
 ## PostgreSQL Build
-The software is tested with PostgreSQL 14 and PostgreSQL 15. In order to be able to attach the _uprobes_ to the functions, they should not to be optimized away (e.g., inlined) during the compilation of PostgreSQL. Otherwise errors like `Unable to locate function XXX` will occur when `pg_lock_trace` is started.
+The software is tested with PostgreSQL 14 and PostgreSQL 15. In order to be able to attach the _uprobes_ to the functions, they should not to be optimized away (e.g., inlined) during the compilation of PostgreSQL. Otherwise errors like `Unable to locate function XXX` will occur when `pg_lock_tracer` is started.
 
 It is recommended to compile PostgreSQL with following CFLAGS: `CFLAGS="-ggdb -Og -g3 -fno-omit-frame-pointer"`.
 
