@@ -1,4 +1,4 @@
-astroid==2.11.7
+astroid==2.13.2
 attrs==22.2.0
 black==22.3.0
 click==8.1.3
