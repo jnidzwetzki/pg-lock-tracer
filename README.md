@@ -8,7 +8,7 @@
 
 This project provides a few BPF (_Berkeley Packet Filter_) based tools to trace locks in PostgreSQL.
 
-* `pg_lock_tracer` - is a BPF based lock tracer for PostgreSQL.
+* `pg_lock_tracer` - is a lock tracer for PostgreSQL.
 * `pg_lw_lock_tracer` -  is a tracer for PostgreSQL lightweight locks (LWLocks).
 * `animate_lock_graph` - creates animated locks graphs based on the `pg_lock_tracer` output.
 
