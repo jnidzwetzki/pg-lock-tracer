@@ -22,7 +22,7 @@ jobs:
 
       - name: Install needed tools
         run: |
-          sudo apt install python3-bpfcc flex bison lcov build-essential libxml2-dev libssl-dev zlib1g-dev libreadline-dev
+          sudo apt install python3-bpfcc systemtap-sdt-dev flex bison lcov build-essential libxml2-dev libssl-dev zlib1g-dev libreadline-dev
 
       - name: Cache PostgreSQL build ${{ matrix.psql_version }}
         id: postgresql-cache
@@ -46,7 +46,7 @@ jobs:
           
           tar jxf postgresql.tar.bz2 --strip-components 1 -C .
 
-          CFLAGS="-ggdb -Og -g3 -fno-omit-frame-pointer" ./configure --prefix=$HOME/postgresql/bin/${{ matrix.psql_version }} --with-openssl --with-readline --with-zlib --with-libxml
+          CFLAGS="-ggdb -Og -g3 -fno-omit-frame-pointer" ./configure --prefix=$HOME/postgresql/bin/${{ matrix.psql_version }} --with-openssl --with-readline --with-zlib --with-libxml --enable-dtrace
           make -j 8
 
       - name: Install PostgreSQL
@@ -73,3 +73,6 @@ jobs:
       
       - name: Check that pg_lock_tracer can be executed
         run: sudo pg_lock_tracer -x ~/postgresql/bin/${{ matrix.psql_version }}/bin/postgres -v -p $(pidof postgres) --statistics --dry-run
+
+      - name: Check that pg_lw_lock_tracer can be executed
+        run: sudo pg_lw_lock_tracer -p $(pidof postgres) --dry-run

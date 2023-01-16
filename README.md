@@ -6,12 +6,18 @@
  <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" />
 </a>
 
-This project provides a BPF (_Berkeley Packet Filter_) based lock tracer for PostgreSQL, called `pg_lock_tracer`. At the moment, PostgreSQL 14 and 15 are supported (see additional information below).
+This project provides a few BPF (_Berkeley Packet Filter_) based tools to trace locks in PostgreSQL.
 
-The lock tracer can be used to attach to a running PostgreSQL process  (using _UProbes_). Afterward, `pg_lock_tracer` shows all taken locks by PostgreSQL. The tool is useful for debugging locking problems within PostgreSQL or PostgreSQL extensions.
+* `pg_lock_tracer` - is a BPF based lock tracer for PostgreSQL.
+* `pg_lw_lock_tracer` -  is a tracer for PostgreSQL lightweight locks (LWLocks).
+* `animate_lock_graph` - creates animated locks graphs based on the `pg_lock_tracer` output.
 
-`pg_lock_tracer` also allows dumping the output as JSON formatted lines, which allows further processing with additional tools. This repository also contains the script `animate_lock_graph`, which provides an animated version of the taken looks.
+__Note:__ At the moment, PostgreSQL 14 and 15 are supported (see additional information below).
 
+# pg_lock_tracer
+`pg_lock_tracer` can be used to attach to a running PostgreSQL process  (using _UProbes_). Afterward, `pg_lock_tracer` shows all taken locks by PostgreSQL. The tool is useful for debugging locking problems within PostgreSQL or PostgreSQL extensions.
+
+The tracer also allows dumping the output as JSON formatted lines, which allows further processing with additional tools. This repository also contains the script `animate_lock_graph`, which provides an animated version of the taken looks.
 
 ## Usage Examples
 ```
@@ -604,15 +610,74 @@ apt install python3-bpfcc
 cp -av /usr/lib/python3/dist-packages/bcc* $(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")
 ```
 
+# pg_lw_lock_trace
+
+`pg_lw_lock_trace` allows to trace lightweight locks (LWLocks) in a PostgreSQL process via Userland Statically Defined Tracing (USDT).
+
+## Usage Examples
+```
+# Trace the LWLocks of PID 1234
+pg_lw_lock_tracer -p 1234
+```
+
+## Example output
+
+SQL Query: `insert into test values(2);`
+
+CLI: `sudo pg_lw_lock_tracer -p 2057969`
+
+<details>
+  <summary>Full Output</summary>
+
+```
+[2057969] Locking 23077 / mode LW_EXCLUSIVE
+[2057969] Unlocking 23077
+[2057969] Locking 24302 / mode LW_SHARED
+[2057969] Unlocking 24302
+[2057969] Locking 23077 / mode LW_EXCLUSIVE
+[2057969] Unlocking 23077
+[2057969] Locking 24302 / mode LW_SHARED
+[2057969] Unlocking 24302
+[2057969] Locking 24295 / mode LW_EXCLUSIVE
+[2057969] Unlocking 24295
+[2057969] Locking 23104 / mode LW_EXCLUSIVE
+[2057969] Unlocking 23104
+[2057969] Locking 23090 / mode LW_SHARED
+[2057969] Unlocking 23090
+[2057969] Locking 23022 / mode LW_EXCLUSIVE
+[2057969] Locking 23012 / mode LW_EXCLUSIVE
+[2057969] Unlocking 23012
+[2057969] Unlocking 23022
+[2057969] Locking 23012 / mode LW_EXCLUSIVE
+[2057969] Unlocking 23012
+[2057969] Unlocking 24349
+[2057969] Unlocking 24386
+[2057969] Unlocking 24302
+[2057969] Locking 23077 / mode LW_EXCLUSIVE
+[2057969] Unlocking 23077
+[2057969] Locking 23077 / mode LW_EXCLUSIVE
+[2057969] Unlocking 23077
+[2057969] Locking 23104 / mode LW_EXCLUSIVE
+[2057969] Unlocking 23104
+[2057969] Unlocking 23321
+[2057969] Unlocking 23321
+[2057969] Unlocking 23321
+[2057969] Unlocking 23321
+```
+</details>
+
+# Additional Information
+
 ## PostgreSQL Build
 The software is tested with PostgreSQL 14 and PostgreSQL 15. In order to be able to attach the _uprobes_ to the functions, they should not to be optimized away (e.g., inlined) during the compilation of PostgreSQL. Otherwise errors like `Unable to locate function XXX` will occur when `pg_lock_tracer` is started.
 
-It is recommended to compile PostgreSQL with following CFLAGS: `CFLAGS="-ggdb -Og -g3 -fno-omit-frame-pointer"`.
+It is recommended to compile PostgreSQL with following CFLAGS: `CFLAGS="-ggdb -Og -g3 -fno-omit-frame-pointer"`. 
+
+`pg_lw_lock_trace` uses [USDT probes](https://www.postgresql.org/docs/current/dynamic-trace.html). Therefore, PostgreSQL has to be compiled with `--enable-dtrace` to use this script. 
 
 ## Development
 
 ### Run tests
 ```shell
 pytest
-python -m unittest discover
 ```
