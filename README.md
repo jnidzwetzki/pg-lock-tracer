@@ -616,15 +616,24 @@ cp -av /usr/lib/python3/dist-packages/bcc* $(python -c "from distutils.sysconfig
 
 ## Usage Examples
 ```
-# Trace the LWLocks of PID 1234
+# Trace the LW locks of the PID 1234
 pg_lw_lock_tracer -p 1234
+
+# Trace the LW locks of the PIDs 1234 and 5678
+pg_lw_lock_tracer -p 1234 -p 5678
+
+# Trace the LW locks of the PID 1234 and be verbose
+pg_lw_lock_tracer -p 1234 -v
+
+# Trace the LW locks of the PID 1234 and collect statistics
+pg_lw_lock_tracer -p 1234 -v --statistics
 ```
 
 ## Example output
 
 SQL Query: `insert into test values(2);`
 
-CLI: `sudo pg_lw_lock_tracer -p 2057969`
+CLI: `sudo pg_lw_lock_tracer -p 2057969 --statistics`
 
 <details>
   <summary>Full Output</summary>
@@ -663,6 +672,37 @@ CLI: `sudo pg_lw_lock_tracer -p 2057969`
 [2057969] Unlocking 23321
 [2057969] Unlocking 23321
 [2057969] Unlocking 23321
+```
+</details>
+
+
+<details>
+  <summary>Statistics</summary>
+
+```
+Lock statistics:
+================
+
+Locks per tranche
++--------------+----------+
+| Tranche Name | Requests |
++--------------+----------+
+|    43492     |    2     |
+|    43502     |    1     |
+|    43557     |    4     |
+|    43570     |    1     |
+|    43584     |    2     |
+|    44775     |    1     |
+|    44782     |    2     |
++--------------+----------+
+
+Locks per type
++--------------+----------+
+|  Lock type   | Requests |
++--------------+----------+
+| LW_EXCLUSIVE |    10    |
+|  LW_SHARED   |    3     |
++--------------+----------+
 ```
 </details>
 
