@@ -13,11 +13,20 @@ import sys
 import argparse
 
 from bcc import BPF, USDT
+from prettytable import PrettyTable
 
 EXAMPLES = """examples:
+# Trace the LW locks of the PID 1234
 pg_lw_lock_tracer -p 1234
+
+# Trace the LW locks of the PIDs 1234 and 5678
 pg_lw_lock_tracer -p 1234 -p 5678
+
+# Trace the LW locks of the PID 1234 and be verbose
 pg_lw_lock_tracer -p 1234 -v
+
+# Trace the LW locks of the PID 1234 and collect statistics
+pg_lw_lock_tracer -p 1234 -v --statistics
 """
 
 parser = argparse.ArgumentParser(
@@ -42,9 +51,9 @@ parser.add_argument(
     action="store_true",
     help="compile and load the BPF program but exit afterward",
 )
+parser.add_argument("--statistics", action="store_true", help="print lock statistics")
 
 BPF_PROGRAM = """
-
 // https://github.com/postgres/postgres/blob/a4adc31f6902f6fc29d74868e8969412fc590da9/src/include/storage/lwlock.h#L39
 struct LWLock_t
 {
@@ -58,8 +67,8 @@ typedef enum LWLockMode
      LW_EXCLUSIVE,
      LW_SHARED,
      LW_WAIT_UNTIL_FREE          /* A special mode used in PGPROC->lwWaitMode,
-                                  * when waiting for lock to become free. Not
-                                  * to be used as LWLockAcquire argument */
+                                  * when waiting for lock to become free. Not
+                                  * to be used as LWLockAcquire argument */
 } LWLockMode;
 
 #define LOCK_EVENT 0
@@ -111,9 +120,8 @@ int lwlock_release(struct pt_regs *ctx) {
     event.event_type = UNLOCK_EVENT;
 
     // sudo cat /sys/kernel/debug/tracing/trace_pipe
-    //bpf_trace_printk("Unlock: %d %d\\n", data.tranche, data.state);
+    // bpf_trace_printk("Unlock: %d %d\\n", data.tranche, data.state);
     
-    //bpf_probe_read_user(&data.name, sizeof(data.name), name);
     lockevents.perf_submit(ctx, &event, sizeof(event));
     return 0;
 }
@@ -123,7 +131,10 @@ int lwlock_release(struct pt_regs *ctx) {
 class PGLWLockTracer:
     def __init__(self, prog_args):
         self.bpf_instance = None
+        self.usdts = None
         self.prog_args = prog_args
+        self.locks_per_tranche = {}
+        self.lock_types = {}
 
     def print_lock_event(self, _cpu, data, _size):
         """
@@ -142,6 +153,17 @@ class PGLWLockTracer:
             else:
                 raise Exception(f"Unknown event type {event.event_type}")
             print(f"[{event.pid}] Locking {event.tranche} / mode {lock_mode}")
+
+            # Update lock tranche statistics
+            locks = self.locks_per_tranche.get(event.tranche, 0)
+            locks += 1
+            self.locks_per_tranche[event.tranche] = locks
+
+            # Update lock type statistics
+            locks = self.lock_types.get(lock_mode, 0)
+            locks += 1
+            self.lock_types[lock_mode] = locks
+
         elif event.event_type == 1:
             print(f"[{event.pid}] Unlocking {event.tranche}")
         else:
@@ -151,29 +173,64 @@ class PGLWLockTracer:
         """
         Compile and load the BPF program
         """
-        usdts = list(map(lambda pid: USDT(pid=pid), self.prog_args.pids))
+        print(f"==> Attaching to PIDs {self.prog_args.pids}")
+        self.usdts = list(map(lambda pid: USDT(pid=pid), self.prog_args.pids))
 
-        for usdt in usdts:
+        for usdt in self.usdts:
             usdt.enable_probe("lwlock__acquire", "lwlock_acquire")
             usdt.enable_probe("lwlock__release", "lwlock_release")
-        if self.prog_args.verbose:
-            print("\n".join(map(lambda u: u.get_text(), usdts)))
 
-        self.bpf_instance = BPF(text=BPF_PROGRAM, usdt_contexts=usdts)
+        if self.prog_args.verbose:
+            print("=======")
+            print("\n".join(map(lambda u: u.get_text(), self.usdts)))
+            print("=======")
+
+        if self.prog_args.verbose:
+            print(BPF_PROGRAM)
+
+        self.bpf_instance = BPF(text=BPF_PROGRAM, usdt_contexts=self.usdts)
 
         self.bpf_instance["lockevents"].open_perf_buffer(
             self.print_lock_event, page_cnt=64
         )
 
+    def print_statistics(self):
+        """
+        Print lock statistics
+        """
+        print("\nLock statistics:\n================")
+
+        # Tranche lock statistics
+        print("\nLocks per tranche")
+        table = PrettyTable(["Tranche Name", "Requests"])
+
+        for key in sorted(self.locks_per_tranche):
+            locks = self.locks_per_tranche[key]
+            table.add_row([key, locks])
+
+        print(table)
+
+        # Type lock statistics
+        print("\nLocks per type")
+        table = PrettyTable(["Lock type", "Requests"])
+
+        for key in sorted(self.lock_types):
+            locks = self.lock_types[key]
+            table.add_row([key, locks])
+
+        print(table)
+
     def run(self):
         """
         Run the BPF program and read results
         """
-
+        print("===> Ready to trace")
         while True:
             try:
                 self.bpf_instance.perf_buffer_poll()
             except KeyboardInterrupt:
+                if self.prog_args.statistics:
+                    self.print_statistics()
                 sys.exit(0)
 
 
