@@ -1,13 +1,18 @@
 # PostgreSQL Lock Tracer
+<div>
+<a href="http://makeapullrequest.com">
+ <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" />
+</a>
 <a href="https://github.com/jnidzwetzki/pg-lock-tracer/actions/workflows/tests.yaml">
   <img alt="Build Status" src="https://github.com/jnidzwetzki/pg-lock-tracer/actions/workflows/tests.yaml/badge.svg">
 </a>
 <a href="https://pypi.org/project/pg-lock-tracer/">
    <img alt="PyPI" src="https://img.shields.io/pypi/v/pg-lock-tracer?color=green">
+   <img alt="PyPI - Downloads" src="https://img.shields.io/pypi/dm/pg-lock-tracer">
 </a>
-<a href="http://makeapullrequest.com">
- <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" />
-</a>
+<img alt="GitHub Release Date" src="https://img.shields.io/github/release-date/jnidzwetzki/pg-lock-tracer">
+<img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/jnidzwetzki/pg-lock-tracer?style=social">
+</div>
 
 This project provides a few tools to trace and analyze locks in PostgreSQL:
 
