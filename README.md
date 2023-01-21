@@ -9,13 +9,13 @@
  <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" />
 </a>
 
-This project provides a few BPF (_Berkeley Packet Filter_) based tools to trace locks in PostgreSQL.
+This project provides a few tools to trace and analyze locks in PostgreSQL:
 
 * `pg_lock_tracer` - is a lock tracer for PostgreSQL.
 * `pg_lw_lock_tracer` -  is a tracer for PostgreSQL lightweight locks (LWLocks).
 * `animate_lock_graph` - creates animated locks graphs based on the `pg_lock_tracer` output.
 
-__Note:__ At the moment, PostgreSQL 14 and 15 are supported (see additional information below).
+__Note:__ Most of these tools are using the BPF (_Berkeley Packet Filter_) to observe a PostgreSQL process. At the moment, PostgreSQL 14 and 15 are supported (see additional information below).
 
 # pg_lock_tracer
 `pg_lock_tracer` can be used to attach to a running PostgreSQL process  (using _UProbes_). Afterward, `pg_lock_tracer` shows all taken locks by PostgreSQL. The tool is useful for debugging locking problems within PostgreSQL or PostgreSQL extensions.
@@ -615,7 +615,7 @@ cp -av /usr/lib/python3/dist-packages/bcc* $(python -c "from distutils.sysconfig
 
 # pg_lw_lock_trace
 
-`pg_lw_lock_trace` allows to trace lightweight locks (LWLocks) in a PostgreSQL process via Userland Statically Defined Tracing (USDT).
+`pg_lw_lock_trace` allows to trace lightweight locks ([LWLocks](https://github.com/postgres/postgres/blob/c8e1ba736b2b9e8c98d37a5b77c4ed31baf94147/src/backend/storage/lmgr/lwlock.c)) in a PostgreSQL process via Userland Statically Defined Tracing (USDT).
 
 ## Usage Examples
 ```
