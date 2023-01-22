@@ -2,6 +2,10 @@
 Helper classes
 """
 
+import os
+
+from pathlib import Path
+
 
 class PostgreSQLLockHelper:
 
@@ -84,3 +88,30 @@ class PostgreSQLLockHelper:
             raise Exception(f"Unknown lock type {lock_name}")
 
         return PostgreSQLLockHelper.locks[lock_name]
+
+
+class BPFHelper:
+    @staticmethod
+    def enum_to_defines(enum_instance, prefix):
+        """
+        Convert a IntEnum into C '#define' statements
+        """
+        result = ""
+
+        for instance in enum_instance:
+            result += f"#define {prefix}_{instance.name} {instance.value}\n"
+
+        return result
+
+    @staticmethod
+    def read_bpf_program(program_name):
+        """
+        Load the BPF program from a file and return it as a string.
+        """
+        program_file = Path(__file__).parent / "bpf" / program_name
+
+        if not os.path.exists(program_file):
+            raise Exception(f"BPF program file not found {program_file}")
+
+        with program_file.open("r") as bpf_program:
+            return bpf_program.read()

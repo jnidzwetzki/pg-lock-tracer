@@ -15,13 +15,12 @@ import json
 import argparse
 
 from abc import ABC
-from pathlib import Path
 from enum import IntEnum
 from bcc import BPF
 from prettytable import PrettyTable
 
 from pg_lock_tracer.oid_resolver import OIDResolver
-from pg_lock_tracer.helper import PostgreSQLLockHelper
+from pg_lock_tracer.helper import PostgreSQLLockHelper, BPFHelper
 
 EXAMPLES = """
 
@@ -177,62 +176,6 @@ class PGError(IntEnum):
     ERROR = 21
     FATAL = 22
     PANIC = 23
-
-
-class BPFHelper:
-    @staticmethod
-    def enum_to_defines(enum_instance, prefix):
-        """
-        Convert a IntEnum into C '#define' statements
-        """
-        result = ""
-
-        for instance in enum_instance:
-            result += f"#define {prefix}_{instance.name} {instance.value}\n"
-
-        return result
-
-    @staticmethod
-    def load_bpf_program():
-        """
-        Load the BPF program from a file and return it as a string.
-        """
-        program_file = Path(__file__).parent / "bpf" / "pg_lock_tracer.c"
-
-        if not os.path.exists(program_file):
-            raise Exception(f"BPF program file not found {program_file}")
-
-        with program_file.open("r") as bpf_program:
-            return bpf_program.read()
-
-    @staticmethod
-    def generate_c_defines(stacktrace_events, verbose):
-        """
-        Create C defines from python enums
-        """
-        enum_defines = BPFHelper.enum_to_defines(Events, "EVENT")
-        error_defines = BPFHelper.enum_to_defines(PGError, "PGERROR")
-        defines = enum_defines + error_defines
-
-        # Print stacktrace for each lock
-        if stacktrace_events and "LOCK" in stacktrace_events:
-            defines += "#define STACKTRACE_LOCK\n"
-            if verbose:
-                print("Print stacktrace on each lock event")
-
-        # Print stacktrace for each unlock
-        if stacktrace_events and "UNLOCK" in stacktrace_events:
-            defines += "#define STACKTRACE_UNLOCK\n"
-            if verbose:
-                print("Print stacktrace on each unlock event")
-
-        # Print stacktrace on deadlock
-        if stacktrace_events and "DEADLOCK" in stacktrace_events:
-            defines += "#define STACKTRACE_DEADLOCK\n"
-            if verbose:
-                print("Print stacktrace on each deadlock")
-
-        return defines
 
 
 class LockStatisticsEntry:
@@ -641,13 +584,44 @@ class PGLockTracer:
         if self.args.output_file and os.path.exists(self.args.output_file):
             raise Exception(f"Output file {self.args.output_file} already exists")
 
+    @staticmethod
+    def generate_c_defines(stacktrace_events, verbose):
+        """
+        Create C defines from python enums
+        """
+        enum_defines = BPFHelper.enum_to_defines(Events, "EVENT")
+        error_defines = BPFHelper.enum_to_defines(PGError, "PGERROR")
+        defines = enum_defines + error_defines
+
+        # Print stacktrace for each lock
+        if stacktrace_events and "LOCK" in stacktrace_events:
+            defines += "#define STACKTRACE_LOCK\n"
+            if verbose:
+                print("Print stacktrace on each lock event")
+
+        # Print stacktrace for each unlock
+        if stacktrace_events and "UNLOCK" in stacktrace_events:
+            defines += "#define STACKTRACE_UNLOCK\n"
+            if verbose:
+                print("Print stacktrace on each unlock event")
+
+        # Print stacktrace on deadlock
+        if stacktrace_events and "DEADLOCK" in stacktrace_events:
+            defines += "#define STACKTRACE_DEADLOCK\n"
+            if verbose:
+                print("Print stacktrace on each deadlock")
+
+        return defines
+
     def init(self):
         """
         Init the PostgreSQL lock tracer
         """
 
-        defines = BPFHelper.generate_c_defines(self.args.stacktrace, self.args.verbose)
-        bpf_program = BPFHelper.load_bpf_program()
+        defines = PGLockTracer.generate_c_defines(
+            self.args.stacktrace, self.args.verbose
+        )
+        bpf_program = BPFHelper.read_bpf_program("pg_lock_tracer.c")
         bpf_program_final = bpf_program.replace("__DEFINES__", defines)
 
         if self.args.verbose:
