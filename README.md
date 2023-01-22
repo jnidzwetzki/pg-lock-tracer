@@ -562,8 +562,7 @@ SQL Query: `create table metrics(ts timestamptz NOT NULL, id int NOT NULL, value
 </details>
 
 
-<details>
-  <summary>Statistics</summary>
+Statistics
 
 ```
 Lock statistics:
@@ -600,7 +599,6 @@ Lock types
 | AccessExclusiveLock |             2             |
 +---------------------+---------------------------+
 ```
-</details>
 
 
 ### Animated Lock Graphs
@@ -641,80 +639,80 @@ pg_lw_lock_tracer -p 1234 -v --statistics
 
 SQL Query: `insert into test values(2);`
 
-CLI: `sudo pg_lw_lock_tracer -p 2057969 --statistics`
+CLI: `sudo pg_lw_lock_tracer -p 1698108 --statistics`
 
 <details>
   <summary>Full Output</summary>
 
 ```
-[1698108] Locking LockFastPath / mode LW_EXCLUSIVE
-[1698108] Unlocking LockFastPath
-[1698108] Locking ProcArray / mode LW_SHARED
-[1698108] Unlocking ProcArray
-[1698108] Locking LockFastPath / mode LW_EXCLUSIVE
-[1698108] Unlocking LockFastPath
-[1698108] Locking ProcArray / mode LW_SHARED
-[1698108] Unlocking ProcArray
-[1698108] Locking XidGen / mode LW_EXCLUSIVE
-[1698108] Unlocking XidGen
-[1698108] Locking LockManager / mode LW_EXCLUSIVE
-[1698108] Unlocking LockManager
-[1698108] Locking BufferMapping / mode LW_SHARED
-[1698108] Unlocking BufferMapping
-[1698108] Locking BufferContent / mode LW_EXCLUSIVE
-[1698108] Locking WALInsert / mode LW_EXCLUSIVE
-[1698108] Unlocking WALInsert
-[1698108] Locking WALInsert / mode LW_EXCLUSIVE
-[1698108] Unlocking WALInsert
-[1698108] Unlocking BufferContent
-[1698108] Locking WALInsert / mode LW_EXCLUSIVE
-[1698108] Unlocking WALInsert
-[1698108] Unlocking WALWrite
-[1698108] Unlocking XactSLRU
-[1698108] Unlocking ProcArray
-[1698108] Locking LockFastPath / mode LW_EXCLUSIVE
-[1698108] Unlocking LockFastPath
-[1698108] Locking LockFastPath / mode LW_EXCLUSIVE
-[1698108] Unlocking LockFastPath
-[1698108] Locking LockManager / mode LW_EXCLUSIVE
-[1698108] Unlocking LockManager
-[1698108] Unlocking PgStatsData
-[1698108] Unlocking PgStatsData
-[1698108] Unlocking PgStatsData
-[1698108] Unlocking PgStatsData
+2893442978058668 [Pid 1698108] Locking LockFastPath / mode LW_EXCLUSIVE
+2893442978105987 [Pid 1698108] Unlocking LockFastPath
+2893442978236610 [Pid 1698108] Locking ProcArray / mode LW_SHARED
+2893442978257685 [Pid 1698108] Unlocking ProcArray
+2893442978318499 [Pid 1698108] Locking LockFastPath / mode LW_EXCLUSIVE
+2893442978337171 [Pid 1698108] Unlocking LockFastPath
+2893442978623668 [Pid 1698108] Locking ProcArray / mode LW_SHARED
+2893442978643411 [Pid 1698108] Unlocking ProcArray
+2893442978755800 [Pid 1698108] Locking XidGen / mode LW_EXCLUSIVE
+2893442978776986 [Pid 1698108] Unlocking XidGen
+2893442978801282 [Pid 1698108] Locking LockManager / mode LW_EXCLUSIVE
+2893442978828661 [Pid 1698108] Unlocking LockManager
+2893442978868272 [Pid 1698108] Locking BufferMapping / mode LW_SHARED
+2893442978891632 [Pid 1698108] Unlocking BufferMapping
+2893442978913350 [Pid 1698108] Locking BufferContent / mode LW_EXCLUSIVE
+2893442978947722 [Pid 1698108] Locking WALInsert / mode LW_EXCLUSIVE
+2893442978971584 [Pid 1698108] Unlocking WALInsert
+2893442978990777 [Pid 1698108] Unlocking BufferContent
+2893442979113613 [Pid 1698108] Locking WALInsert / mode LW_EXCLUSIVE
+2893442979135033 [Pid 1698108] Unlocking WALInsert
+2893442979161490 [Pid 1698108] Wait for WALWrite
+2893444602631050 [Pid 1698108] Lock for WALWrite was acquired in 1623469560 ns
+2893444606691072 [Pid 1698108] Unlocking WALWrite
+2893444606734934 [Pid 1698108] Unlocking XactSLRU
+2893444606761313 [Pid 1698108] Unlocking ProcArray
+2893444606791480 [Pid 1698108] Locking LockFastPath / mode LW_EXCLUSIVE
+2893444606808490 [Pid 1698108] Unlocking LockFastPath
+2893444606839083 [Pid 1698108] Locking LockFastPath / mode LW_EXCLUSIVE
+2893444606861973 [Pid 1698108] Unlocking LockFastPath
+2893444606881282 [Pid 1698108] Locking LockManager / mode LW_EXCLUSIVE
+2893444606907896 [Pid 1698108] Unlocking LockManager
+2893444607377661 [Pid 1698108] Unlocking PgStatsData
+2893444607400462 [Pid 1698108] Unlocking PgStatsData
+2893444607420958 [Pid 1698108] Unlocking PgStatsData
+2893444607437797 [Pid 1698108] Unlocking PgStatsData
 ```
 </details>
 
-
-<details>
-  <summary>Statistics</summary>
+Statistics
 
 ```
 Lock statistics:
 ================
 
 Locks per tranche
-+---------------+----------+
-|  Tranche Name | Requests |
-+---------------+----------+
-| BufferContent |    1     |
-| BufferMapping |    1     |
-|  LockFastPath |    4     |
-|  LockManager  |    2     |
-|   ProcArray   |    2     |
-|   WALInsert   |    3     |
-|     XidGen    |    1     |
-+---------------+----------+
++---------------+---------------+-------+----------------+
+|  Tranche Name | Direct grants | Waits | Wait time (ns) |
++---------------+---------------+-------+----------------+
+| BufferContent |       1       |   0   |       0        |
+| BufferMapping |       1       |   0   |       0        |
+|  LockFastPath |       4       |   0   |       0        |
+|  LockManager  |       2       |   0   |       0        |
+|  PgStatsData  |       0       |   0   |       0        |
+|   ProcArray   |       2       |   0   |       0        |
+|   WALInsert   |       2       |   0   |       0        |
+|    WALWrite   |       0       |   1   |   1623469560   |
+|    XactSLRU   |       0       |   0   |       0        |
+|     XidGen    |       1       |   0   |       0        |
++---------------+---------------+-------+----------------+
 
 Locks per type
 +--------------+----------+
 |  Lock type   | Requests |
 +--------------+----------+
-| LW_EXCLUSIVE |    11    |
+| LW_EXCLUSIVE |    10    |
 |  LW_SHARED   |    3     |
 +--------------+----------+
 ```
-</details>
 
 # Additional Information
 
