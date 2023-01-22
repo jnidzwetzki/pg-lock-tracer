@@ -60,9 +60,13 @@ parser.add_argument("--statistics", action="store_true", help="print lock statis
 
 class Events(IntEnum):
     LOCK = 0
-    UNLOCK = 1
-    WAIT_START = 2
-    WAIT_DONE = 3
+    LOCK_OR_WAIT = 1
+    LOCK_OR_WAIT_FAIL = 2
+    UNLOCK = 3
+    WAIT_START = 4
+    WAIT_DONE = 5
+    COND_ACQUIRE = 6
+    COND_ACQUIRE_FAIL = 7
 
 
 class LockStatisticsEntry:
@@ -71,8 +75,17 @@ class LockStatisticsEntry:
         # The number of non-waited requested locks
         self._direct_lock_count = 0
 
+        # The number of lock or wait calls
+        self._direct_lock_or_wait_count = 0
+
         # The number of lock waits
         self._wait_lock_count = 0
+
+        # The number of locks with condition
+        self._lock_cond_count = 0
+
+        # The number of failed lock with condition
+        self._lock_cond_failed_count = 0
 
         # The total time spend for lock wait requests
         self._lock_wait_time_ns = 0
@@ -89,12 +102,12 @@ class LockStatisticsEntry:
         self._direct_lock_count = value
 
     @property
-    def lock_wait_time_ns(self):
-        return self._lock_wait_time_ns
+    def direct_lock_or_wait_count(self):
+        return self._direct_lock_or_wait_count
 
-    @lock_wait_time_ns.setter
-    def lock_wait_time_ns(self, value):
-        self._lock_wait_time_ns = value
+    @direct_lock_or_wait_count.setter
+    def direct_lock_or_wait_count(self, value):
+        self._direct_lock_or_wait_count = value
 
     @property
     def wait_lock_count(self):
@@ -103,6 +116,30 @@ class LockStatisticsEntry:
     @wait_lock_count.setter
     def wait_lock_count(self, value):
         self._wait_lock_count = value
+
+    @property
+    def lock_cond_count(self):
+        return self._lock_cond_count
+
+    @lock_cond_count.setter
+    def lock_cond_count(self, value):
+        self._lock_cond_count = value
+
+    @property
+    def lock_cond_failed_count(self):
+        return self._lock_cond_failed_count
+
+    @lock_cond_failed_count.setter
+    def lock_cond_failed_count(self, value):
+        self._lock_cond_failed_count = value
+
+    @property
+    def lock_wait_time_ns(self):
+        return self._lock_wait_time_ns
+
+    @lock_wait_time_ns.setter
+    def lock_wait_time_ns(self, value):
+        self._lock_wait_time_ns = value
 
     @property
     def requested_locks(self):
@@ -139,15 +176,35 @@ class PGLWLockTracer:
             statistics_entry.requested_locks = lock_mode
             return
 
+        # Direct lock or wait
+        if event.event_type == Events.LOCK_OR_WAIT:
+            statistics_entry.direct_lock_or_wait_count += 1
+            statistics_entry.requested_locks = lock_mode
+            return
+
         # Wait for lock
         if event.event_type == Events.WAIT_START:
             statistics_entry.wait_lock_count += 1
             self.last_lock_request_time[event.pid] = event.timestamp
+            return
 
         # Wait for lock done
         if event.event_type == Events.WAIT_DONE:
             wait_time = self.get_lock_wait_time(event)
             statistics_entry.lock_wait_time_ns += wait_time
+            return
+
+        # Acquire with condition
+        if event.event_type == Events.COND_ACQUIRE:
+            statistics_entry.lock_cond_count += 1
+            statistics_entry.requested_locks = lock_mode
+            return
+
+        # Acquire with condition not possible
+        if event.event_type == Events.COND_ACQUIRE_FAIL:
+            statistics_entry.lock_cond_failed_count += 1
+            statistics_entry.requested_locks = lock_mode
+            return
 
     def get_lock_wait_time(self, event):
         """
@@ -192,16 +249,26 @@ class PGLWLockTracer:
         self.update_statistics(event, tranche, lock_mode)
 
         if event.event_type == Events.LOCK:
-            print(f"{print_prefix} Locking {tranche} / mode {lock_mode}")
+            print(f"{print_prefix} Lock {tranche} / mode {lock_mode}")
+        elif event.event_type == Events.LOCK_OR_WAIT:
+            print(f"{print_prefix} Lock or wait {tranche} / mode {lock_mode}")
+        elif event.event_type == Events.LOCK_OR_WAIT_FAIL:
+            print(f"{print_prefix} Lock or wait FAILED {tranche} / mode {lock_mode}")
         elif event.event_type == Events.UNLOCK:
-            print(f"{print_prefix} Unlocking {tranche}")
+            print(f"{print_prefix} Unlock {tranche}")
         elif event.event_type == Events.WAIT_START:
             print(f"{print_prefix} Wait for {tranche}")
         elif event.event_type == Events.WAIT_DONE:
             lock_time = self.get_lock_wait_time(event)
             print(f"{print_prefix} Lock for {tranche} was acquired in {lock_time} ns")
+        elif event.event_type == Events.COND_ACQUIRE:
+            print(f"{print_prefix} Lock {tranche} with condition / mode {lock_mode}")
+        elif event.event_type == Events.COND_ACQUIRE_FAIL:
+            print(
+                f"{print_prefix} Lock {tranche} with condition failed / mode {lock_mode}"
+            )
         else:
-            raise Exception("Unknown event type {event.event_type}")
+            raise Exception(f"Unknown event type {event.event_type}")
 
     def init(self):
         """
@@ -213,9 +280,15 @@ class PGLWLockTracer:
         # See https://www.postgresql.org/docs/15/dynamic-trace.html
         for usdt in self.usdts:
             usdt.enable_probe("lwlock__acquire", "lwlock_acquire")
+            usdt.enable_probe("lwlock__acquire__or__wait", "lwlock_acquire_or_wait")
+            usdt.enable_probe(
+                "lwlock__acquire__or__wait__fail", "lwlock_acquire_or_wait_fail"
+            )
             usdt.enable_probe("lwlock__release", "lwlock_release")
             usdt.enable_probe("lwlock__wait__start", "lwlock_wait_start")
             usdt.enable_probe("lwlock__wait__done", "lwlock_wait_done")
+            usdt.enable_probe("lwlock__condacquire", "lwlock_condacquire")
+            usdt.enable_probe("lwlock__condacquire__fail", "lwlock_condacquire_fail")
 
         if self.prog_args.verbose:
             print("=======")
@@ -244,7 +317,15 @@ class PGLWLockTracer:
         # Tranche lock statistics
         print("\nLocks per tranche")
         table = PrettyTable(
-            ["Tranche Name", "Direct grants", "Waits", "Wait time (ns)"]
+            [
+                "Tranche Name",
+                "Direct Grant",
+                "Grant or wait until free",
+                "With condition",
+                "Failed conditions",
+                "Waits",
+                "Wait time (ns)",
+            ]
         )
 
         for key in sorted(self.statistics):
@@ -253,6 +334,9 @@ class PGLWLockTracer:
                 [
                     key,
                     statistics.direct_lock_count,
+                    statistics.direct_lock_or_wait_count,
+                    statistics.lock_cond_count,
+                    statistics.lock_cond_failed_count,
                     statistics.wait_lock_count,
                     statistics.lock_wait_time_ns,
                 ]
