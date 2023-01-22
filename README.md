@@ -647,39 +647,41 @@ CLI: `sudo pg_lw_lock_tracer -p 2057969 --statistics`
   <summary>Full Output</summary>
 
 ```
-[2057969] Locking 23077 / mode LW_EXCLUSIVE
-[2057969] Unlocking 23077
-[2057969] Locking 24302 / mode LW_SHARED
-[2057969] Unlocking 24302
-[2057969] Locking 23077 / mode LW_EXCLUSIVE
-[2057969] Unlocking 23077
-[2057969] Locking 24302 / mode LW_SHARED
-[2057969] Unlocking 24302
-[2057969] Locking 24295 / mode LW_EXCLUSIVE
-[2057969] Unlocking 24295
-[2057969] Locking 23104 / mode LW_EXCLUSIVE
-[2057969] Unlocking 23104
-[2057969] Locking 23090 / mode LW_SHARED
-[2057969] Unlocking 23090
-[2057969] Locking 23022 / mode LW_EXCLUSIVE
-[2057969] Locking 23012 / mode LW_EXCLUSIVE
-[2057969] Unlocking 23012
-[2057969] Unlocking 23022
-[2057969] Locking 23012 / mode LW_EXCLUSIVE
-[2057969] Unlocking 23012
-[2057969] Unlocking 24349
-[2057969] Unlocking 24386
-[2057969] Unlocking 24302
-[2057969] Locking 23077 / mode LW_EXCLUSIVE
-[2057969] Unlocking 23077
-[2057969] Locking 23077 / mode LW_EXCLUSIVE
-[2057969] Unlocking 23077
-[2057969] Locking 23104 / mode LW_EXCLUSIVE
-[2057969] Unlocking 23104
-[2057969] Unlocking 23321
-[2057969] Unlocking 23321
-[2057969] Unlocking 23321
-[2057969] Unlocking 23321
+[1698108] Locking LockFastPath / mode LW_EXCLUSIVE
+[1698108] Unlocking LockFastPath
+[1698108] Locking ProcArray / mode LW_SHARED
+[1698108] Unlocking ProcArray
+[1698108] Locking LockFastPath / mode LW_EXCLUSIVE
+[1698108] Unlocking LockFastPath
+[1698108] Locking ProcArray / mode LW_SHARED
+[1698108] Unlocking ProcArray
+[1698108] Locking XidGen / mode LW_EXCLUSIVE
+[1698108] Unlocking XidGen
+[1698108] Locking LockManager / mode LW_EXCLUSIVE
+[1698108] Unlocking LockManager
+[1698108] Locking BufferMapping / mode LW_SHARED
+[1698108] Unlocking BufferMapping
+[1698108] Locking BufferContent / mode LW_EXCLUSIVE
+[1698108] Locking WALInsert / mode LW_EXCLUSIVE
+[1698108] Unlocking WALInsert
+[1698108] Locking WALInsert / mode LW_EXCLUSIVE
+[1698108] Unlocking WALInsert
+[1698108] Unlocking BufferContent
+[1698108] Locking WALInsert / mode LW_EXCLUSIVE
+[1698108] Unlocking WALInsert
+[1698108] Unlocking WALWrite
+[1698108] Unlocking XactSLRU
+[1698108] Unlocking ProcArray
+[1698108] Locking LockFastPath / mode LW_EXCLUSIVE
+[1698108] Unlocking LockFastPath
+[1698108] Locking LockFastPath / mode LW_EXCLUSIVE
+[1698108] Unlocking LockFastPath
+[1698108] Locking LockManager / mode LW_EXCLUSIVE
+[1698108] Unlocking LockManager
+[1698108] Unlocking PgStatsData
+[1698108] Unlocking PgStatsData
+[1698108] Unlocking PgStatsData
+[1698108] Unlocking PgStatsData
 ```
 </details>
 
@@ -692,23 +694,23 @@ Lock statistics:
 ================
 
 Locks per tranche
-+--------------+----------+
-| Tranche Name | Requests |
-+--------------+----------+
-|    43492     |    2     |
-|    43502     |    1     |
-|    43557     |    4     |
-|    43570     |    1     |
-|    43584     |    2     |
-|    44775     |    1     |
-|    44782     |    2     |
-+--------------+----------+
++---------------+----------+
+|  Tranche Name | Requests |
++---------------+----------+
+| BufferContent |    1     |
+| BufferMapping |    1     |
+|  LockFastPath |    4     |
+|  LockManager  |    2     |
+|   ProcArray   |    2     |
+|   WALInsert   |    3     |
+|     XidGen    |    1     |
++---------------+----------+
 
 Locks per type
 +--------------+----------+
 |  Lock type   | Requests |
 +--------------+----------+
-| LW_EXCLUSIVE |    10    |
+| LW_EXCLUSIVE |    11    |
 |  LW_SHARED   |    3     |
 +--------------+----------+
 ```

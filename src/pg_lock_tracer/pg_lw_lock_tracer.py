@@ -54,12 +54,6 @@ parser.add_argument(
 parser.add_argument("--statistics", action="store_true", help="print lock statistics")
 
 BPF_PROGRAM = """
-// https://github.com/postgres/postgres/blob/a4adc31f6902f6fc29d74868e8969412fc590da9/src/include/storage/lwlock.h#L39
-struct LWLock_t
-{
-	u16 tranche;		/* tranche ID */
-	u32 state;		/* state of exclusive/nonexclusive lockers */
-};
 
 // https://github.com/postgres/postgres/blob/a4adc31f6902f6fc29d74868e8969412fc590da9/src/include/storage/lwlock.h#L110
 typedef enum LWLockMode
@@ -80,9 +74,9 @@ struct LockEvent_t
         u64 timestamp;
         u32 event_type;
 
-        /* LWLock_t fields */
-        u16 tranche;
-        u32 state;
+        /* LWLock tranche name (see T_NAME / GetLWTrancheName() 
+         * in lwlock.c) */
+        char tranche[255];
 
         /* LWLockMode */
         u32 mode;
@@ -90,17 +84,21 @@ struct LockEvent_t
 
 BPF_PERF_OUTPUT(lockevents);
 
+/*
+ * Arguments: TRACE_POSTGRESQL_LWLOCK_ACQUIRE(T_NAME(lock), mode)
+ */
 int lwlock_acquire(struct pt_regs *ctx) {
-    struct LWLock_t data = {};
-    struct LockEvent_t event = {};
+    uint64_t tranche_addr;
+    char tranche[255];
     LWLockMode mode;
-    bpf_usdt_readarg(1, ctx, &data);
+
+    bpf_usdt_readarg(1, ctx, &tranche_addr);
     bpf_usdt_readarg(2, ctx, &mode);
 
+    struct LockEvent_t event = {};
+    bpf_probe_read_user(&event.tranche, sizeof(event.tranche), (void *)tranche_addr);
     event.pid = bpf_get_current_pid_tgid();
     event.timestamp = bpf_ktime_get_ns();
-    event.tranche = data.tranche;
-    event.state = data.state;
     event.event_type = LOCK_EVENT;
     event.mode = mode;
 
@@ -108,15 +106,18 @@ int lwlock_acquire(struct pt_regs *ctx) {
     return 0;
 }
 
+/*
+ * Arguments: TRACE_POSTGRESQL_LWLOCK_RELEASE(T_NAME(lock))
+ */
 int lwlock_release(struct pt_regs *ctx) {
-    struct LWLock_t data = {};
-    struct LockEvent_t event = {};
-    bpf_usdt_readarg(1, ctx, &data);
+    uint64_t tranche_addr;
+    char tranche[255];
+    bpf_usdt_readarg(1, ctx, &tranche_addr);
 
+    struct LockEvent_t event = {};
+    bpf_probe_read_user(&event.tranche, sizeof(event.tranche), (void *)tranche_addr);
     event.pid = bpf_get_current_pid_tgid();
     event.timestamp = bpf_ktime_get_ns();
-    event.tranche = data.tranche;
-    event.state = data.state;
     event.event_type = UNLOCK_EVENT;
 
     // sudo cat /sys/kernel/debug/tracing/trace_pipe
@@ -141,6 +142,7 @@ class PGLWLockTracer:
         Print a new lock event.
         """
         event = self.bpf_instance["lockevents"].event(data)
+        tranche = event.tranche.decode("utf-8")
 
         if event.event_type == 0:
             lock_mode = ""
@@ -152,12 +154,12 @@ class PGLWLockTracer:
                 lock_mode = "LW_WAIT_UNTIL_FREE"
             else:
                 raise Exception(f"Unknown event type {event.event_type}")
-            print(f"[{event.pid}] Locking {event.tranche} / mode {lock_mode}")
+            print(f"[{event.pid}] Locking {tranche} / mode {lock_mode}")
 
             # Update lock tranche statistics
-            locks = self.locks_per_tranche.get(event.tranche, 0)
+            locks = self.locks_per_tranche.get(tranche, 0)
             locks += 1
-            self.locks_per_tranche[event.tranche] = locks
+            self.locks_per_tranche[tranche] = locks
 
             # Update lock type statistics
             locks = self.lock_types.get(lock_mode, 0)
@@ -165,7 +167,7 @@ class PGLWLockTracer:
             self.lock_types[lock_mode] = locks
 
         elif event.event_type == 1:
-            print(f"[{event.pid}] Unlocking {event.tranche}")
+            print(f"[{event.pid}] Unlocking {tranche}")
         else:
             raise Exception("Unknown event type {event.event_type}")
 
