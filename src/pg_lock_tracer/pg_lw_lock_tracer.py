@@ -285,7 +285,7 @@ class PGLWLockTracer:
             print(f"{print_prefix} Wait for {tranche}")
         elif event.event_type == Events.WAIT_DONE:
             lock_time = self.get_lock_wait_time(event)
-            print(f"{print_prefix} Lock for {tranche} was acquired in {lock_time} ns")
+            print(f"{print_prefix} Wait for {tranche} lock took {lock_time} ns")
         elif event.event_type == Events.COND_ACQUIRE:
             print(
                 f"{print_prefix} Acquired lock {tranche} (mode) {lock_mode} "

@@ -667,7 +667,7 @@ CLI: `sudo pg_lw_lock_tracer -p 1698108 --statistics`
 2904552882590752 [Pid 1704367] Acquired lock WALInsert (mode) LW_EXCLUSIVE / LWLockAcquire()
 2904552882611656 [Pid 1704367] Unlock WALInsert
 2904552882638194 [Pid 1704367] Wait for WALWrite
-2904554401202251 [Pid 1704367] Lock for WALWrite was acquired in 1518564057 ns
+2904554401202251 [Pid 1704367] Wait for WALWrite lock took 1518564057 ns
 2904554401222926 [Pid 1704367] Waited but not acquired WALWrite (mode LW_EXCLUSIVE) / LWLockConditionalAcquire()
 2904554401234504 [Pid 1704367] Acquired lock WALWrite (mode LW_EXCLUSIVE) / LWLockConditionalAcquire()
 2904554404873664 [Pid 1704367] Unlock WALWrite
