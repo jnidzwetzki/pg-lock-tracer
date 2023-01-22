@@ -114,3 +114,79 @@ int lwlock_wait_done(struct pt_regs *ctx) {
   fill_and_submit(ctx, &event, tranche_addr);
   return 0;
 }
+
+/*
+ * LWLock was successfully acquired when the caller specified no waiting
+ * Arguments: TRACE_POSTGRESQL_LWLOCK_CONDACQUIRE(T_NAME(lock), mode)
+ */
+int lwlock_condacquire(struct pt_regs *ctx) {
+  uint64_t tranche_addr = 0;
+  LWLockMode mode;
+
+  LockEvent event = {.event_type = EVENT_COND_ACQUIRE};
+
+  bpf_usdt_readarg(1, ctx, &tranche_addr);
+  bpf_usdt_readarg(2, ctx, &mode);
+
+  event.mode = mode;
+
+  fill_and_submit(ctx, &event, tranche_addr);
+  return 0;
+}
+
+/*
+ * LWLock was successfully acquired when the caller specified no waiting
+ * Arguments: TRACE_POSTGRESQL_LWLOCK_CONDACQUIRE_FAIL(T_NAME(lock), mode)
+ */
+int lwlock_condacquire_fail(struct pt_regs *ctx) {
+  uint64_t tranche_addr = 0;
+  LWLockMode mode;
+
+  LockEvent event = {.event_type = EVENT_COND_ACQUIRE_FAIL};
+
+  bpf_usdt_readarg(1, ctx, &tranche_addr);
+  bpf_usdt_readarg(2, ctx, &mode);
+
+  event.mode = mode;
+
+  fill_and_submit(ctx, &event, tranche_addr);
+  return 0;
+}
+
+/*
+ * Acquire a LWLock or wait if already locked
+ * Arguments: TRACE_POSTGRESQL_LWLOCK_ACQUIRE_OR_WAIT(T_NAME(lock), mode);
+ */
+int lwlock_acquire_or_wait(struct pt_regs *ctx) {
+  uint64_t tranche_addr = 0;
+  LWLockMode mode;
+
+  LockEvent event = {.event_type = EVENT_LOCK_OR_WAIT};
+
+  bpf_usdt_readarg(1, ctx, &tranche_addr);
+  bpf_usdt_readarg(2, ctx, &mode);
+
+  event.mode = mode;
+
+  fill_and_submit(ctx, &event, tranche_addr);
+  return 0;
+}
+
+/*
+ * Acquire a LWLock or wait if already locked (failed)
+ * Arguments: TRACE_POSTGRESQL_LWLOCK_ACQUIRE_OR_WAIT_FAIL(T_NAME(lock), mode);
+ */
+int lwlock_acquire_or_wait_fail(struct pt_regs *ctx) {
+  uint64_t tranche_addr = 0;
+  LWLockMode mode;
+
+  LockEvent event = {.event_type = EVENT_LOCK_OR_WAIT_FAIL};
+
+  bpf_usdt_readarg(1, ctx, &tranche_addr);
+  bpf_usdt_readarg(2, ctx, &mode);
+
+  event.mode = mode;
+
+  fill_and_submit(ctx, &event, tranche_addr);
+  return 0;
+}
