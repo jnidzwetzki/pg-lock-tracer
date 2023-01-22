@@ -646,48 +646,48 @@ CLI: `sudo pg_lw_lock_tracer -p 1698108 --statistics`
 
 ```
 ===> Ready to trace
-2904552881615298 [Pid 1704367] Acquired lock LockFastPath (mode) LW_EXCLUSIVE / LWLockAcquire()
+2904552881615298 [Pid 1704367] Acquired lock LockFastPath (mode LW_EXCLUSIVE) / LWLockAcquire()
 2904552881673849 [Pid 1704367] Unlock LockFastPath
-2904552881782910 [Pid 1704367] Acquired lock ProcArray (mode) LW_SHARED / LWLockAcquire()
+2904552881782910 [Pid 1704367] Acquired lock ProcArray (mode LW_SHARED) / LWLockAcquire()
 2904552881803614 [Pid 1704367] Unlock ProcArray
-2904552881865272 [Pid 1704367] Acquired lock LockFastPath (mode) LW_EXCLUSIVE / LWLockAcquire()
+2904552881865272 [Pid 1704367] Acquired lock LockFastPath (mode LW_EXCLUSIVE) / LWLockAcquire()
 2904552881883641 [Pid 1704367] Unlock LockFastPath
-2904552882095131 [Pid 1704367] Acquired lock ProcArray (mode) LW_SHARED / LWLockAcquire()
+2904552882095131 [Pid 1704367] Acquired lock ProcArray (mode LW_SHARED) / LWLockAcquire()
 2904552882114171 [Pid 1704367] Unlock ProcArray
-2904552882225372 [Pid 1704367] Acquired lock XidGen (mode) LW_EXCLUSIVE / LWLockAcquire()
+2904552882225372 [Pid 1704367] Acquired lock XidGen (mode LW_EXCLUSIVE) / LWLockAcquire()
 2904552882246673 [Pid 1704367] Unlock XidGen
-2904552882270279 [Pid 1704367] Acquired lock LockManager (mode) LW_EXCLUSIVE / LWLockAcquire()
+2904552882270279 [Pid 1704367] Acquired lock LockManager (mode LW_EXCLUSIVE) / LWLockAcquire()
 2904552882296782 [Pid 1704367] Unlock LockManager
-2904552882335466 [Pid 1704367] Acquired lock BufferMapping (mode) LW_SHARED / LWLockAcquire()
+2904552882335466 [Pid 1704367] Acquired lock BufferMapping (mode LW_SHARED) / LWLockAcquire()
 2904552882358198 [Pid 1704367] Unlock BufferMapping
-2904552882379951 [Pid 1704367] Acquired lock BufferContent (mode) LW_EXCLUSIVE / LWLockAcquire()
-2904552882415333 [Pid 1704367] Acquired lock WALInsert (mode) LW_EXCLUSIVE / LWLockAcquire()
+2904552882379951 [Pid 1704367] Acquired lock BufferContent (mode LW_EXCLUSIVE) / LWLockAcquire()
+2904552882415333 [Pid 1704367] Acquired lock WALInsert (mode LW_EXCLUSIVE) / LWLockAcquire()
 2904552882485459 [Pid 1704367] Unlock WALInsert
 2904552882506167 [Pid 1704367] Unlock BufferContent
-2904552882590752 [Pid 1704367] Acquired lock WALInsert (mode) LW_EXCLUSIVE / LWLockAcquire()
+2904552882590752 [Pid 1704367] Acquired lock WALInsert (mode LW_EXCLUSIVE) / LWLockAcquire()
 2904552882611656 [Pid 1704367] Unlock WALInsert
 2904552882638194 [Pid 1704367] Wait for WALWrite
 2904554401202251 [Pid 1704367] Wait for WALWrite lock took 1518564057 ns
 2904554401222926 [Pid 1704367] Waited but not acquired WALWrite (mode LW_EXCLUSIVE) / LWLockConditionalAcquire()
 2904554401234504 [Pid 1704367] Acquired lock WALWrite (mode LW_EXCLUSIVE) / LWLockConditionalAcquire()
 2904554404873664 [Pid 1704367] Unlock WALWrite
-2904554404928035 [Pid 1704367] Acquired lock XactSLRU (mode) LW_EXCLUSIVE / LWLockConditionalAcquire()
+2904554404928035 [Pid 1704367] Acquired lock XactSLRU (mode LW_EXCLUSIVE) / LWLockConditionalAcquire()
 2904554404950334 [Pid 1704367] Unlock XactSLRU
-2904554404972224 [Pid 1704367] Acquired lock ProcArray (mode) LW_EXCLUSIVE / LWLockConditionalAcquire()
+2904554404972224 [Pid 1704367] Acquired lock ProcArray (mode LW_EXCLUSIVE) / LWLockConditionalAcquire()
 2904554404993887 [Pid 1704367] Unlock ProcArray
-2904554405022734 [Pid 1704367] Acquired lock LockFastPath (mode) LW_EXCLUSIVE / LWLockAcquire()
+2904554405022734 [Pid 1704367] Acquired lock LockFastPath (mode LW_EXCLUSIVE) / LWLockAcquire()
 2904554405038888 [Pid 1704367] Unlock LockFastPath
-2904554405059788 [Pid 1704367] Acquired lock LockFastPath (mode) LW_EXCLUSIVE / LWLockAcquire()
+2904554405059788 [Pid 1704367] Acquired lock LockFastPath (mode LW_EXCLUSIVE) / LWLockAcquire()
 2904554405088143 [Pid 1704367] Unlock LockFastPath
-2904554405106194 [Pid 1704367] Acquired lock LockManager (mode) LW_EXCLUSIVE / LWLockAcquire()
+2904554405106194 [Pid 1704367] Acquired lock LockManager (mode LW_EXCLUSIVE) / LWLockAcquire()
 2904554405145780 [Pid 1704367] Unlock LockManager
-2904554405622791 [Pid 1704367] Acquired lock PgStatsData (mode) LW_EXCLUSIVE / LWLockConditionalAcquire()
+2904554405622791 [Pid 1704367] Acquired lock PgStatsData (mode LW_EXCLUSIVE) / LWLockConditionalAcquire()
 2904554405640885 [Pid 1704367] Unlock PgStatsData
-2904554405665146 [Pid 1704367] Acquired lock PgStatsData (mode) LW_EXCLUSIVE / LWLockConditionalAcquire()
+2904554405665146 [Pid 1704367] Acquired lock PgStatsData (mode LW_EXCLUSIVE) / LWLockConditionalAcquire()
 2904554405682599 [Pid 1704367] Unlock PgStatsData
-2904554405704514 [Pid 1704367] Acquired lock PgStatsData (mode) LW_EXCLUSIVE / LWLockConditionalAcquire()
+2904554405704514 [Pid 1704367] Acquired lock PgStatsData (mode LW_EXCLUSIVE) / LWLockConditionalAcquire()
 2904554405720734 [Pid 1704367] Unlock PgStatsData
-2904554405737937 [Pid 1704367] Acquired lock PgStatsData (mode) LW_EXCLUSIVE / LWLockConditionalAcquire()
+2904554405737937 [Pid 1704367] Acquired lock PgStatsData (mode LW_EXCLUSIVE) / LWLockConditionalAcquire()
 2904554405755387 [Pid 1704367] Unlock PgStatsData
 ```
 </details>

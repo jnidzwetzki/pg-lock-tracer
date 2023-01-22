@@ -267,7 +267,7 @@ class PGLWLockTracer:
 
         if event.event_type == Events.LOCK:
             print(
-                f"{print_prefix} Acquired lock {tranche} (mode) {lock_mode} / LWLockAcquire()"
+                f"{print_prefix} Acquired lock {tranche} (mode {lock_mode}) / LWLockAcquire()"
             )
         elif event.event_type == Events.LOCK_OR_WAIT:
             print(
@@ -288,12 +288,12 @@ class PGLWLockTracer:
             print(f"{print_prefix} Wait for {tranche} lock took {lock_time} ns")
         elif event.event_type == Events.COND_ACQUIRE:
             print(
-                f"{print_prefix} Acquired lock {tranche} (mode) {lock_mode} "
+                f"{print_prefix} Acquired lock {tranche} (mode {lock_mode}) "
                 "/ LWLockConditionalAcquire()"
             )
         elif event.event_type == Events.COND_ACQUIRE_FAIL:
             print(
-                f"{print_prefix} Failed to acquire lock {tranche} (mode) {lock_mode} "
+                f"{print_prefix} Failed to acquire lock {tranche} (mode {lock_mode}) "
                 "/ LWLockConditionalAcquire()"
             )
         else:
