@@ -3,7 +3,7 @@
 <a href="http://makeapullrequest.com">
  <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" />
 </a>
-<a href="https://github.com/jnidzwetzki/pg-lock-tracer/actions/workflows/tests.yaml">
+<a href="https://github.com/jnidzwetzki/pg-lock-tracer/actions/workflows/tests.yml">
   <img alt="Build Status" src="https://github.com/jnidzwetzki/pg-lock-tracer/actions/workflows/tests.yaml/badge.svg">
 </a>
 <a href="https://pypi.org/project/pg-lock-tracer/">
