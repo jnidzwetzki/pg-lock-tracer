@@ -154,7 +154,7 @@ int lwlock_condacquire_fail(struct pt_regs *ctx) {
 }
 
 /*
- * Acquire a LWLock or wait if already locked
+ * Acquire a LWLock or wait if already locked see LWLockAcquireOrWait
  * Arguments: TRACE_POSTGRESQL_LWLOCK_ACQUIRE_OR_WAIT(T_NAME(lock), mode);
  */
 int lwlock_acquire_or_wait(struct pt_regs *ctx) {
@@ -173,7 +173,7 @@ int lwlock_acquire_or_wait(struct pt_regs *ctx) {
 }
 
 /*
- * Acquire a LWLock or wait if already locked (failed)
+ * Acquire a LWLock or wait if already locked (failed) see LWLockAcquireOrWait
  * Arguments: TRACE_POSTGRESQL_LWLOCK_ACQUIRE_OR_WAIT_FAIL(T_NAME(lock), mode);
  */
 int lwlock_acquire_or_wait_fail(struct pt_regs *ctx) {

@@ -646,49 +646,49 @@ CLI: `sudo pg_lw_lock_tracer -p 1698108 --statistics`
 
 ```
 ===> Ready to trace
-2900159444029895 [Pid 1704367] Lock LockFastPath / mode LW_EXCLUSIVE
-2900159444076368 [Pid 1704367] Unlock LockFastPath
-2900159444236977 [Pid 1704367] Lock ProcArray / mode LW_SHARED
-2900159444257840 [Pid 1704367] Unlock ProcArray
-2900159444320435 [Pid 1704367] Lock LockFastPath / mode LW_EXCLUSIVE
-2900159444338597 [Pid 1704367] Unlock LockFastPath
-2900159444548179 [Pid 1704367] Lock ProcArray / mode LW_SHARED
-2900159444566912 [Pid 1704367] Unlock ProcArray
-2900159444681139 [Pid 1704367] Lock XidGen / mode LW_EXCLUSIVE
-2900159444702045 [Pid 1704367] Unlock XidGen
-2900159444725929 [Pid 1704367] Lock LockManager / mode LW_EXCLUSIVE
-2900159444753300 [Pid 1704367] Unlock LockManager
-2900159444793436 [Pid 1704367] Lock BufferMapping / mode LW_SHARED
-2900159444817102 [Pid 1704367] Unlock BufferMapping
-2900159444838499 [Pid 1704367] Lock BufferContent / mode LW_EXCLUSIVE
-2900159444874512 [Pid 1704367] Lock WALInsert / mode LW_EXCLUSIVE
-2900159444898304 [Pid 1704367] Unlock WALInsert
-2900159444917408 [Pid 1704367] Unlock BufferContent
-2900159445004220 [Pid 1704367] Lock WALInsert / mode LW_EXCLUSIVE
-2900159445025137 [Pid 1704367] Unlock WALInsert
-2900159445051455 [Pid 1704367] Wait for WALWrite
-2900161928603586 [Pid 1704367] Lock for WALWrite was acquired in 2483552131 ns
-2900161928647403 [Pid 1704367] Lock or wait FAILED WALWrite / mode LW_EXCLUSIVE
-2900161928670325 [Pid 1704367] Lock or wait WALWrite / mode LW_EXCLUSIVE
-2900161930913736 [Pid 1704367] Unlock WALWrite
-2900161930966594 [Pid 1704367] Lock XactSLRU with condition / mode LW_EXCLUSIVE
-2900161930997495 [Pid 1704367] Unlock XactSLRU
-2900161931016694 [Pid 1704367] Lock ProcArray with condition / mode LW_EXCLUSIVE
-2900161931036016 [Pid 1704367] Unlock ProcArray
-2900161931062009 [Pid 1704367] Lock LockFastPath / mode LW_EXCLUSIVE
-2900161931076423 [Pid 1704367] Unlock LockFastPath
-2900161931102990 [Pid 1704367] Lock LockFastPath / mode LW_EXCLUSIVE
-2900161931122756 [Pid 1704367] Unlock LockFastPath
-2900161931138763 [Pid 1704367] Lock LockManager / mode LW_EXCLUSIVE
-2900161931174429 [Pid 1704367] Unlock LockManager
-2900161931624292 [Pid 1704367] Lock PgStatsData with condition / mode LW_EXCLUSIVE
-2900161931640465 [Pid 1704367] Unlock PgStatsData
-2900161931661444 [Pid 1704367] Lock PgStatsData with condition / mode LW_EXCLUSIVE
-2900161931676814 [Pid 1704367] Unlock PgStatsData
-2900161931696491 [Pid 1704367] Lock PgStatsData with condition / mode LW_EXCLUSIVE
-2900161931710838 [Pid 1704367] Unlock PgStatsData
-2900161931726711 [Pid 1704367] Lock PgStatsData with condition / mode LW_EXCLUSIVE
-2900161931742931 [Pid 1704367] Unlock PgStatsData
+2904552881615298 [Pid 1704367] Acquired lock LockFastPath (mode) LW_EXCLUSIVE / LWLockAcquire()
+2904552881673849 [Pid 1704367] Unlock LockFastPath
+2904552881782910 [Pid 1704367] Acquired lock ProcArray (mode) LW_SHARED / LWLockAcquire()
+2904552881803614 [Pid 1704367] Unlock ProcArray
+2904552881865272 [Pid 1704367] Acquired lock LockFastPath (mode) LW_EXCLUSIVE / LWLockAcquire()
+2904552881883641 [Pid 1704367] Unlock LockFastPath
+2904552882095131 [Pid 1704367] Acquired lock ProcArray (mode) LW_SHARED / LWLockAcquire()
+2904552882114171 [Pid 1704367] Unlock ProcArray
+2904552882225372 [Pid 1704367] Acquired lock XidGen (mode) LW_EXCLUSIVE / LWLockAcquire()
+2904552882246673 [Pid 1704367] Unlock XidGen
+2904552882270279 [Pid 1704367] Acquired lock LockManager (mode) LW_EXCLUSIVE / LWLockAcquire()
+2904552882296782 [Pid 1704367] Unlock LockManager
+2904552882335466 [Pid 1704367] Acquired lock BufferMapping (mode) LW_SHARED / LWLockAcquire()
+2904552882358198 [Pid 1704367] Unlock BufferMapping
+2904552882379951 [Pid 1704367] Acquired lock BufferContent (mode) LW_EXCLUSIVE / LWLockAcquire()
+2904552882415333 [Pid 1704367] Acquired lock WALInsert (mode) LW_EXCLUSIVE / LWLockAcquire()
+2904552882485459 [Pid 1704367] Unlock WALInsert
+2904552882506167 [Pid 1704367] Unlock BufferContent
+2904552882590752 [Pid 1704367] Acquired lock WALInsert (mode) LW_EXCLUSIVE / LWLockAcquire()
+2904552882611656 [Pid 1704367] Unlock WALInsert
+2904552882638194 [Pid 1704367] Wait for WALWrite
+2904554401202251 [Pid 1704367] Lock for WALWrite was acquired in 1518564057 ns
+2904554401222926 [Pid 1704367] Waited but not acquired WALWrite (mode LW_EXCLUSIVE) / LWLockConditionalAcquire()
+2904554401234504 [Pid 1704367] Acquired lock WALWrite (mode LW_EXCLUSIVE) / LWLockConditionalAcquire()
+2904554404873664 [Pid 1704367] Unlock WALWrite
+2904554404928035 [Pid 1704367] Acquired lock XactSLRU (mode) LW_EXCLUSIVE / LWLockConditionalAcquire()
+2904554404950334 [Pid 1704367] Unlock XactSLRU
+2904554404972224 [Pid 1704367] Acquired lock ProcArray (mode) LW_EXCLUSIVE / LWLockConditionalAcquire()
+2904554404993887 [Pid 1704367] Unlock ProcArray
+2904554405022734 [Pid 1704367] Acquired lock LockFastPath (mode) LW_EXCLUSIVE / LWLockAcquire()
+2904554405038888 [Pid 1704367] Unlock LockFastPath
+2904554405059788 [Pid 1704367] Acquired lock LockFastPath (mode) LW_EXCLUSIVE / LWLockAcquire()
+2904554405088143 [Pid 1704367] Unlock LockFastPath
+2904554405106194 [Pid 1704367] Acquired lock LockManager (mode) LW_EXCLUSIVE / LWLockAcquire()
+2904554405145780 [Pid 1704367] Unlock LockManager
+2904554405622791 [Pid 1704367] Acquired lock PgStatsData (mode) LW_EXCLUSIVE / LWLockConditionalAcquire()
+2904554405640885 [Pid 1704367] Unlock PgStatsData
+2904554405665146 [Pid 1704367] Acquired lock PgStatsData (mode) LW_EXCLUSIVE / LWLockConditionalAcquire()
+2904554405682599 [Pid 1704367] Unlock PgStatsData
+2904554405704514 [Pid 1704367] Acquired lock PgStatsData (mode) LW_EXCLUSIVE / LWLockConditionalAcquire()
+2904554405720734 [Pid 1704367] Unlock PgStatsData
+2904554405737937 [Pid 1704367] Acquired lock PgStatsData (mode) LW_EXCLUSIVE / LWLockConditionalAcquire()
+2904554405755387 [Pid 1704367] Unlock PgStatsData
 ```
 </details>
 
@@ -699,26 +699,26 @@ Lock statistics:
 ================
 
 Locks per tranche
-+---------------+--------------+--------------------------+----------------+-------------------+-------+----------------+
-|  Tranche Name | Direct Grant | Grant or wait until free | With condition | Failed conditions | Waits | Wait time (ns) |
-+---------------+--------------+--------------------------+----------------+-------------------+-------+----------------+
-| BufferContent |      1       |            0             |       0        |         0         |   0   |       0        |
-| BufferMapping |      1       |            0             |       0        |         0         |   0   |       0        |
-|  LockFastPath |      4       |            0             |       0        |         0         |   0   |       0        |
-|  LockManager  |      2       |            0             |       0        |         0         |   0   |       0        |
-|  PgStatsData  |      0       |            0             |       4        |         0         |   0   |       0        |
-|   ProcArray   |      2       |            0             |       1        |         0         |   0   |       0        |
-|   WALInsert   |      2       |            0             |       0        |         0         |   0   |       0        |
-|    WALWrite   |      0       |            1             |       0        |         0         |   1   |   2483552131   |
-|    XactSLRU   |      0       |            0             |       1        |         0         |   0   |       0        |
-|     XidGen    |      1       |            0             |       0        |         0         |   0   |       0        |
-+---------------+--------------+--------------------------+----------------+-------------------+-------+----------------+
++---------------+----------+--------------------------+------------------------+-------------------------------+-----------------------------+-------+----------------+
+|    Tranche    | Acquired | AcquireOrWait (Acquired) | AcquireOrWait (Waited) | ConditionalAcquire (Acquired) | ConditionalAcquire (Failed) | Waits | Wait time (ns) |
++---------------+----------+--------------------------+------------------------+-------------------------------+-----------------------------+-------+----------------+
+| BufferContent |    1     |            0             |           0            |               0               |              0              |   0   |       0        |
+| BufferMapping |    1     |            0             |           0            |               0               |              0              |   0   |       0        |
+|  LockFastPath |    4     |            0             |           0            |               0               |              0              |   0   |       0        |
+|  LockManager  |    2     |            0             |           0            |               0               |              0              |   0   |       0        |
+|  PgStatsData  |    0     |            0             |           0            |               4               |              0              |   0   |       0        |
+|   ProcArray   |    2     |            0             |           0            |               1               |              0              |   0   |       0        |
+|   WALInsert   |    2     |            0             |           0            |               0               |              0              |   0   |       0        |
+|    WALWrite   |    0     |            1             |           1            |               0               |              0              |   1   |   1518564057   |
+|    XactSLRU   |    0     |            0             |           0            |               1               |              0              |   0   |       0        |
+|     XidGen    |    1     |            0             |           0            |               0               |              0              |   0   |       0        |
++---------------+----------+--------------------------+------------------------+-------------------------------+-----------------------------+-------+----------------+
 
 Locks per type
 +--------------+----------+
 |  Lock type   | Requests |
 +--------------+----------+
-| LW_EXCLUSIVE |    17    |
+| LW_EXCLUSIVE |    18    |
 |  LW_SHARED   |    3     |
 +--------------+----------+
 ```

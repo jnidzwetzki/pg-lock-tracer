@@ -75,17 +75,20 @@ class LockStatisticsEntry:
         # The number of non-waited requested locks
         self._direct_lock_count = 0
 
-        # The number of lock or wait calls
-        self._direct_lock_or_wait_count = 0
+        # The number of acquire lock or wait calls
+        self._acquire_or_wait_count = 0
 
-        # The number of lock waits
-        self._wait_lock_count = 0
+        # The number of failed acquire lock or wait calls
+        self._acquire_or_wait_failed_count = 0
 
         # The number of locks with condition
         self._lock_cond_count = 0
 
         # The number of failed lock with condition
         self._lock_cond_failed_count = 0
+
+        # The number of lock waits
+        self._wait_lock_count = 0
 
         # The total time spend for lock wait requests
         self._lock_wait_time_ns = 0
@@ -102,12 +105,20 @@ class LockStatisticsEntry:
         self._direct_lock_count = value
 
     @property
-    def direct_lock_or_wait_count(self):
-        return self._direct_lock_or_wait_count
+    def acquire_or_wait_count(self):
+        return self._acquire_or_wait_count
 
-    @direct_lock_or_wait_count.setter
-    def direct_lock_or_wait_count(self, value):
-        self._direct_lock_or_wait_count = value
+    @acquire_or_wait_count.setter
+    def acquire_or_wait_count(self, value):
+        self._acquire_or_wait_count = value
+
+    @property
+    def acquire_or_wait_failed_count(self):
+        return self._acquire_or_wait_failed_count
+
+    @acquire_or_wait_failed_count.setter
+    def acquire_or_wait_failed_count(self, value):
+        self._acquire_or_wait_failed_count = value
 
     @property
     def wait_lock_count(self):
@@ -176,9 +187,15 @@ class PGLWLockTracer:
             statistics_entry.requested_locks = lock_mode
             return
 
-        # Direct lock or wait
+        # LWLockAcquireOrWait - Acquired
         if event.event_type == Events.LOCK_OR_WAIT:
-            statistics_entry.direct_lock_or_wait_count += 1
+            statistics_entry.acquire_or_wait_count += 1
+            statistics_entry.requested_locks = lock_mode
+            return
+
+        # LWLockAcquireOrWait - Waited
+        if event.event_type == Events.LOCK_OR_WAIT_FAIL:
+            statistics_entry.acquire_or_wait_failed_count += 1
             statistics_entry.requested_locks = lock_mode
             return
 
@@ -194,13 +211,13 @@ class PGLWLockTracer:
             statistics_entry.lock_wait_time_ns += wait_time
             return
 
-        # Acquire with condition
+        # LWLockConditionalAcquire - Acquire with condition
         if event.event_type == Events.COND_ACQUIRE:
             statistics_entry.lock_cond_count += 1
             statistics_entry.requested_locks = lock_mode
             return
 
-        # Acquire with condition not possible
+        # LWLockConditionalAcquire - Condition not possible
         if event.event_type == Events.COND_ACQUIRE_FAIL:
             statistics_entry.lock_cond_failed_count += 1
             statistics_entry.requested_locks = lock_mode
@@ -249,11 +266,19 @@ class PGLWLockTracer:
         self.update_statistics(event, tranche, lock_mode)
 
         if event.event_type == Events.LOCK:
-            print(f"{print_prefix} Lock {tranche} / mode {lock_mode}")
+            print(
+                f"{print_prefix} Acquired lock {tranche} (mode) {lock_mode} / LWLockAcquire()"
+            )
         elif event.event_type == Events.LOCK_OR_WAIT:
-            print(f"{print_prefix} Lock or wait {tranche} / mode {lock_mode}")
+            print(
+                f"{print_prefix} Acquired lock {tranche} (mode {lock_mode}) "
+                "/ LWLockConditionalAcquire()"
+            )
         elif event.event_type == Events.LOCK_OR_WAIT_FAIL:
-            print(f"{print_prefix} Lock or wait FAILED {tranche} / mode {lock_mode}")
+            print(
+                f"{print_prefix} Waited but not acquired {tranche} (mode {lock_mode}) "
+                "/ LWLockConditionalAcquire()"
+            )
         elif event.event_type == Events.UNLOCK:
             print(f"{print_prefix} Unlock {tranche}")
         elif event.event_type == Events.WAIT_START:
@@ -262,10 +287,14 @@ class PGLWLockTracer:
             lock_time = self.get_lock_wait_time(event)
             print(f"{print_prefix} Lock for {tranche} was acquired in {lock_time} ns")
         elif event.event_type == Events.COND_ACQUIRE:
-            print(f"{print_prefix} Lock {tranche} with condition / mode {lock_mode}")
+            print(
+                f"{print_prefix} Acquired lock {tranche} (mode) {lock_mode} "
+                "/ LWLockConditionalAcquire()"
+            )
         elif event.event_type == Events.COND_ACQUIRE_FAIL:
             print(
-                f"{print_prefix} Lock {tranche} with condition failed / mode {lock_mode}"
+                f"{print_prefix} Failed to acquire lock {tranche} (mode) {lock_mode} "
+                "/ LWLockConditionalAcquire()"
             )
         else:
             raise Exception(f"Unknown event type {event.event_type}")
@@ -318,11 +347,12 @@ class PGLWLockTracer:
         print("\nLocks per tranche")
         table = PrettyTable(
             [
-                "Tranche Name",
-                "Direct Grant",
-                "Grant or wait until free",
-                "With condition",
-                "Failed conditions",
+                "Tranche",
+                "Acquired",
+                "AcquireOrWait (Acquired)",
+                "AcquireOrWait (Waited)",
+                "ConditionalAcquire (Acquired)",
+                "ConditionalAcquire (Failed)",
                 "Waits",
                 "Wait time (ns)",
             ]
@@ -334,7 +364,8 @@ class PGLWLockTracer:
                 [
                     key,
                     statistics.direct_lock_count,
-                    statistics.direct_lock_or_wait_count,
+                    statistics.acquire_or_wait_count,
+                    statistics.acquire_or_wait_failed_count,
                     statistics.lock_cond_count,
                     statistics.lock_cond_failed_count,
                     statistics.wait_lock_count,
