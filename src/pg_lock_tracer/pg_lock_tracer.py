@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# PostgreSQL lock tracker
+# PostgreSQL lock tracer
 #
 # This tool traces the lock operations that PostgreSQL performs.
 #
