@@ -6,18 +6,16 @@
 [![Release date](https://img.shields.io/github/release-date/jnidzwetzki/pg-lock-tracer)](https://github.com/jnidzwetzki/pg-lock-tracer/)
 [![GitHub Repo stars](https://img.shields.io/github/stars/jnidzwetzki/pg-lock-tracer?style=social)](https://github.com/jnidzwetzki/pg-lock-tracer/)
 
-This repository provides a few tools to trace and analyze locks of a PostgreSQL server:
+This project provides tools that allow you to gain deep insights into PostgreSQL's locking activities and troubleshoot locking-related issues (e.g., performance problems or deadlocks).
 
 * `pg_lock_tracer` - is a lock tracer for PostgreSQL.
 * `pg_lw_lock_tracer` -  is a tracer for PostgreSQL lightweight locks (LWLocks).
 * `animate_lock_graph` - creates animated locks graphs based on the `pg_lock_tracer` output.
 
-These tools are designed to gain deep insights into PostgreSQL's locking activities and troubleshoot performance-related issues.
-
 __Note:__ Most of these tools employ the [BPF / eBPF](https://ebpf.io/) (_Extended Berkeley Packet Filter_) technology. At the moment, PostgreSQL 14 and 15 are supported (see additional information below).
 
 # pg_lock_tracer
-`pg_lock_tracer` can be used to attach to a running PostgreSQL process  (using _UProbes_). Afterward, `pg_lock_tracer` shows all taken locks by PostgreSQL. The tool is useful for debugging locking problems within PostgreSQL or PostgreSQL extensions.
+`pg_lock_tracer` observes the locking activity of a running PostgreSQL process (using _eBPF_ and _UProbes_). In contrast to the information that is present in the table `pg_locks` (which provides information about which locks are _currently_ requested), `pg_lock_tracer` gives you a continuous view of the locking activity and collects statistics and timings.
 
 The tracer also allows dumping the output as JSON formatted lines, which allows further processing with additional tools. This repository also contains the script `animate_lock_graph`, which provides an animated version of the taken looks.
 
@@ -626,7 +624,7 @@ cp -av /usr/lib/python3/dist-packages/bcc* $(python -c "from distutils.sysconfig
 
 # pg_lw_lock_trace
 
-`pg_lw_lock_trace` allows to trace lightweight locks ([LWLocks](https://github.com/postgres/postgres/blob/c8e1ba736b2b9e8c98d37a5b77c4ed31baf94147/src/backend/storage/lmgr/lwlock.c)) in a PostgreSQL process via Userland Statically Defined Tracing (USDT).
+`pg_lw_lock_trace` allows to trace lightweight locks ([LWLocks](https://github.com/postgres/postgres/blob/c8e1ba736b2b9e8c98d37a5b77c4ed31baf94147/src/backend/storage/lmgr/lwlock.c)) in a PostgreSQL process via _Userland Statically Defined Tracing_ (USDT).
 
 ## Usage Examples
 ```
