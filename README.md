@@ -62,6 +62,20 @@ CLI: `pg_lock_tracer -x /home/jan/postgresql-sandbox/bin/REL_14_2_DEBUG/bin/post
 
 SQL Query: `create table metrics(ts timestamptz NOT NULL, id int NOT NULL, value float);`
 
+
+Tracer Output:
+
+```
+745064333930117 [Pid 327578] Query begin 'create table metrics(ts timestamptz NOT NULL, id int NOT NULL, value float);'
+745064333965769 [Pid 327578] Transaction begin
+745064334157640 [Pid 327578] Table open 3079 (pg_catalog.pg_extension) AccessShareLock
+745064334176147 [Pid 327578] Lock object 3079 (pg_catalog.pg_extension) AccessShareLock
+745064334204453 [Pid 327578] Lock granted (fastpath) 3079 (pg_catalog.pg_extension) AccessShareLock
+745064334224361 [Pid 327578] Lock granted (local) 3079 (pg_catalog.pg_extension) AccessShareLock (Already hold local 0)
+745064334243659 [Pid 327578] Lock was acquired in 67512 ns
+[...]
+```
+
 <details>
   <summary>Full Output</summary>
 
@@ -632,6 +646,18 @@ pg_lw_lock_tracer -p 1234 -v --statistics
 SQL Query: `insert into test values(2);`
 
 CLI: `sudo pg_lw_lock_tracer -p 1698108 --statistics`
+
+Tracer output:
+
+```
+2904552881615298 [Pid 1704367] Acquired lock LockFastPath (mode LW_EXCLUSIVE) / LWLockAcquire()
+2904552881673849 [Pid 1704367] Unlock LockFastPath
+2904552881782910 [Pid 1704367] Acquired lock ProcArray (mode LW_SHARED) / LWLockAcquire()
+2904552881803614 [Pid 1704367] Unlock ProcArray
+2904552881865272 [Pid 1704367] Acquired lock LockFastPath (mode LW_EXCLUSIVE) / LWLockAcquire()
+2904552881883641 [Pid 1704367] Unlock LockFastPath
+[...]
+```
 
 <details>
   <summary>Full Output</summary>
