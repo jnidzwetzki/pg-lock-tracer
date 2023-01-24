@@ -12,6 +12,8 @@ This project provides a few tools to trace and analyze locks in PostgreSQL:
 * `pg_lw_lock_tracer` -  is a tracer for PostgreSQL lightweight locks (LWLocks).
 * `animate_lock_graph` - creates animated locks graphs based on the `pg_lock_tracer` output.
 
+These tools are intended to gain insight into PostgreSQL's locking activities and troubleshoot performance issues.
+
 __Note:__ Most of these tools are using the BPF (_Berkeley Packet Filter_) to observe a PostgreSQL process. At the moment, PostgreSQL 14 and 15 are supported (see additional information below).
 
 # pg_lock_tracer
@@ -749,10 +751,3 @@ The software is tested with PostgreSQL 14 and PostgreSQL 15. In order to be able
 It is recommended to compile PostgreSQL with following CFLAGS: `CFLAGS="-ggdb -Og -g3 -fno-omit-frame-pointer"`. 
 
 `pg_lw_lock_trace` uses [USDT probes](https://www.postgresql.org/docs/current/dynamic-trace.html). Therefore, PostgreSQL has to be compiled with `--enable-dtrace` to use this script. 
-
-## Development
-
-### Run tests
-```shell
-pytest
-```
