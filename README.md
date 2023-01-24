@@ -6,15 +6,15 @@
 [![Release date](https://img.shields.io/github/release-date/jnidzwetzki/pg-lock-tracer)](https://github.com/jnidzwetzki/pg-lock-tracer/)
 [![GitHub Repo stars](https://img.shields.io/github/stars/jnidzwetzki/pg-lock-tracer?style=social)](https://github.com/jnidzwetzki/pg-lock-tracer/)
 
-This project provides a few tools to trace and analyze locks in PostgreSQL:
+This repository provides a few tools to trace and analyze locks of a PostgreSQL server:
 
 * `pg_lock_tracer` - is a lock tracer for PostgreSQL.
 * `pg_lw_lock_tracer` -  is a tracer for PostgreSQL lightweight locks (LWLocks).
 * `animate_lock_graph` - creates animated locks graphs based on the `pg_lock_tracer` output.
 
-These tools are intended to gain insight into PostgreSQL's locking activities and troubleshoot performance issues.
+These tools are designed to gain deep insights into PostgreSQL's locking activities and troubleshoot performance issues.
 
-__Note:__ Most of these tools employ the [BPF / eBPF](https://ebpf.io/) (_Extended Berkeley Packet Filter_) technology to observe a PostgreSQL process. At the moment, PostgreSQL 14 and 15 are supported (see additional information below).
+__Note:__ Most of these tools employ the [BPF / eBPF](https://ebpf.io/) (_Extended Berkeley Packet Filter_) technology. At the moment, PostgreSQL 14 and 15 are supported (see additional information below).
 
 # pg_lock_tracer
 `pg_lock_tracer` can be used to attach to a running PostgreSQL process  (using _UProbes_). Afterward, `pg_lock_tracer` shows all taken locks by PostgreSQL. The tool is useful for debugging locking problems within PostgreSQL or PostgreSQL extensions.
