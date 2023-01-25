@@ -610,18 +610,6 @@ Lock types
 ### Animated Lock Graphs
 See the content of the [examples](examples/) directory for examples.
 
-## Installation
-
-```shell
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-
-# Use distribution packages for BCC. BCC Python packages are not provided via pip at the moment.
-apt install python3-bpfcc
-cp -av /usr/lib/python3/dist-packages/bcc* $(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")
-```
-
 # pg_lw_lock_trace
 
 `pg_lw_lock_trace` allows to trace lightweight locks ([LWLocks](https://github.com/postgres/postgres/blob/c8e1ba736b2b9e8c98d37a5b77c4ed31baf94147/src/backend/storage/lmgr/lwlock.c)) in a PostgreSQL process via _Userland Statically Defined Tracing_ (USDT).
@@ -742,6 +730,41 @@ Locks per type
 ```
 
 # Additional Information
+
+
+## Installation
+
+The PostgreSQL lock tracing tools are available as a Python package. These tools depend on the Python package for BPF. Unfortunately, this package is currently not available via `pip` (the Python package manager). Therefore, the package of the Linux distribution needs to be installed to provide this dependency. On Debian and Ubuntu, this can be done by executing the following command:
+
+```shell
+apt install python3-bpfcc
+```
+
+The tracing tools can be installed system-wide or in a dedicated [virtual environment](https://docs.python.org/3/library/venv.html). To create and install the tools in such a virtual environment, the following steps must be performed. To install the tools system-wide, these steps can be skipped.
+
+```shell
+cd <installation directory>
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Copy the distribution Python BCC packages into this environment
+cp -av /usr/lib/python3/dist-packages/bcc* $(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")
+```
+
+Now, the tracing tools can be installed directly via `pip` by executing:
+
+```shell
+pip install pg-lock-tracer
+```
+
+The tools are now installed and can be invoked by calling `pg_lock_tracer` or `pg_lw_lock_tracer`.
+
+If you want to install the latest development snapshot and development dependencies of the tools, the following commands need to be executed:
+
+```shell
+pip install -r requirements_dev.txt
+pip install git+https://github.com/jnidzwetzki/pg-lock-tracer
+```
 
 ## PostgreSQL Build
 The software is tested with PostgreSQL 14 and PostgreSQL 15. In order to be able to attach the _uprobes_ to the functions, they should not to be optimized away (e.g., inlined) during the compilation of PostgreSQL. Otherwise errors like `Unable to locate function XXX` will occur when `pg_lock_tracer` is started.
