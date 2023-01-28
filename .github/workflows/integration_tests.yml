@@ -12,13 +12,21 @@ jobs:
       fail-fast: false
       matrix:
         psql_version: [14.4, 15.1]
+        python_version: [3.8, 3.9, 3.10]
 
-    name: Integration test for PostgreSQL ${{ matrix.psql_version }}
+    name: Integration test for PostgreSQL ${{ matrix.psql_version }} and Python ${{ matrix.python_version }}
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python_version }}
+
+      - name: Show Pythin version
+        run: python --version
 
       - name: Install needed tools
         run: |
