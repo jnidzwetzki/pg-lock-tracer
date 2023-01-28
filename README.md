@@ -767,7 +767,7 @@ pip install git+https://github.com/jnidzwetzki/pg-lock-tracer
 ```
 
 ## PostgreSQL Build
-The software is tested with PostgreSQL 14 and PostgreSQL 15. In order to be able to attach the _uprobes_ to the functions, they should not to be optimized away (e.g., inlined) during the compilation of PostgreSQL. Otherwise errors like `Unable to locate function XXX` will occur when `pg_lock_tracer` is started.
+The software is tested with PostgreSQL versions 12, 13, 14 and 15. In order to be able to attach the _uprobes_ to the functions, they should not to be optimized away (e.g., inlined) during the compilation of PostgreSQL. Otherwise errors like `Unable to locate function XXX` will occur when `pg_lock_tracer` is started.
 
 It is recommended to compile PostgreSQL with following CFLAGS: `CFLAGS="-ggdb -Og -g3 -fno-omit-frame-pointer"`. 
 
