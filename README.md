@@ -606,6 +606,31 @@ Lock types
 +---------------------+---------------------------+
 ```
 
+### Stack traces
+
+It is sometimes necessary to determine where in the source code a particular lock is requested. For this purpose, the option `-S <Lock Event>` can be used. In addition to the traces, stack traces are now also shown.
+
+For example, by specifying `-s LOCK` a stack trace is generated and shown on each lock event. The following example shows where the lock for `pg_catalog.pg_extension` was requested.
+
+```
+pg_lock_tracer -x /home/jan/postgresql-sandbox/bin/REL_14_2_DEBUG/bin/postgres -p 1051967 -r 1051967:sql://jan@localhost/test2 -s LOCK
+[...]
+1990162746005798 [Pid 1051967] Lock object 3079 (pg_catalog.pg_extension) AccessShareLock
+	LockRelationOid+0x0 [postgres]
+	table_open+0x1d [postgres]
+	parse_analyze+0xed [postgres]
+	pg_analyze_and_rewrite+0x49 [postgres]
+	exec_simple_query+0x2db [postgres]
+	PostgresMain+0x833 [postgres]
+	ExitPostmaster+0x0 [postgres]
+	BackendStartup+0x1b1 [postgres]
+	ServerLoop+0x2d9 [postgres]
+	PostmasterMain+0x1286 [postgres]
+	startup_hacks+0x0 [postgres]
+	__libc_start_main+0xea [libc-2.31.so]
+	[unknown]
+[...]
+```
 
 ### Animated Lock Graphs
 See the content of the [examples](examples/) directory for examples.
