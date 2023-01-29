@@ -80,7 +80,11 @@ jobs:
         run: sudo python -m pip install .
       
       - name: Check that pg_lock_tracer can be executed
-        run: sudo pg_lock_tracer -x ~/postgresql/bin/${{ matrix.psql_version }}/bin/postgres -v -p $(pidof postgres) --statistics --dry-run
+        run: |
+           pg_lock_tracer --version
+           sudo pg_lock_tracer -x ~/postgresql/bin/${{ matrix.psql_version }}/bin/postgres -v -p $(pidof postgres) --statistics --dry-run
 
       - name: Check that pg_lw_lock_tracer can be executed
-        run: sudo pg_lw_lock_tracer -p $(pidof postgres) --dry-run
+        run: |
+           pg_lw_lock_tracer --version
+           sudo pg_lw_lock_tracer -p $(pidof postgres) --dry-run

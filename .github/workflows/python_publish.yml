@@ -26,6 +26,15 @@ jobs:
     - name: Show version based on git tag
       run: dunamai from git --style semver
 
+    - name: Ensure that program and tag version match
+      run: |
+        PACKAGE_VERSION=$(python -c "from pg_lock_tracer.__init__ import __version__; print(__version__)")
+        GIT_VERSION=$(dunamai from git --style semver)
+        if [[ "$PACKAGE_VERSION" != "$GIT_VERSION" ]]; then
+           echo "Version mismatch ${PACKAGE_VERSION} / ${GIT_VERSION}"
+           exit 1
+        fi
+
     - name: Build package
       run: python -m build
 
