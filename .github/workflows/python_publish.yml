@@ -28,7 +28,7 @@ jobs:
 
     - name: Ensure that program and tag version match
       run: |
-        PACKAGE_VERSION=$(python -c "from pg_lock_tracer.__init__ import __version__; print(__version__)")
+        PACKAGE_VERSION=$(python -c "from src.pg_lock_tracer.__init__ import __version__; print(__version__)")
         GIT_VERSION=$(dunamai from git --style semver)
         if [[ "$PACKAGE_VERSION" != "$GIT_VERSION" ]]; then
            echo "Version mismatch ${PACKAGE_VERSION} / ${GIT_VERSION}"
