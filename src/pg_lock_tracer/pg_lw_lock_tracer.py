@@ -17,6 +17,7 @@ from enum import IntEnum
 from bcc import BPF, USDT
 from prettytable import PrettyTable
 
+from pg_lock_tracer.__init__ import __version__
 from pg_lock_tracer.helper import BPFHelper
 
 EXAMPLES = """examples:
@@ -37,6 +38,12 @@ parser = argparse.ArgumentParser(
     description="",
     formatter_class=argparse.RawDescriptionHelpFormatter,
     epilog=EXAMPLES,
+)
+parser.add_argument(
+    "-V",
+    "--version",
+    action="version",
+    version=f"{parser.prog} ({__version__})",
 )
 parser.add_argument("-v", "--verbose", action="store_true", help="Be verbose")
 parser.add_argument(

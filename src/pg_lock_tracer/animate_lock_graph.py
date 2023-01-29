@@ -15,6 +15,7 @@ import argparse
 import igraph
 import graphviz
 
+from pg_lock_tracer.__init__ import __version__
 from pg_lock_tracer.helper import PostgreSQLLockHelper
 
 # See https://github.com/magjac/d3-graphviz/blob/master/examples/basic-unpkg-worker.html
@@ -141,7 +142,12 @@ parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     epilog=EXAMPLES,
 )
-
+parser.add_argument(
+    "-V",
+    "--version",
+    action="version",
+    version=f"{parser.prog} ({__version__})",
+)
 parser.add_argument("-v", "--verbose", action="store_true", help="be verbose")
 parser.add_argument(
     "-o",
