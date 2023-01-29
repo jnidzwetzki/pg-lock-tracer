@@ -19,7 +19,7 @@ from enum import IntEnum
 from bcc import BPF
 from prettytable import PrettyTable
 
-from pg_lock_tracer.__init__ import __version__
+from pg_lock_tracer import __version__
 from pg_lock_tracer.oid_resolver import OIDResolver
 from pg_lock_tracer.helper import PostgreSQLLockHelper, BPFHelper
 

@@ -17,7 +17,7 @@ from enum import IntEnum
 from bcc import BPF, USDT
 from prettytable import PrettyTable
 
-from pg_lock_tracer.__init__ import __version__
+from pg_lock_tracer import __version__
 from pg_lock_tracer.helper import BPFHelper
 
 EXAMPLES = """examples:

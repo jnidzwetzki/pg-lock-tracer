@@ -15,7 +15,7 @@ import argparse
 import igraph
 import graphviz
 
-from pg_lock_tracer.__init__ import __version__
+from pg_lock_tracer import __version__
 from pg_lock_tracer.helper import PostgreSQLLockHelper
 
 # See https://github.com/magjac/d3-graphviz/blob/master/examples/basic-unpkg-worker.html
