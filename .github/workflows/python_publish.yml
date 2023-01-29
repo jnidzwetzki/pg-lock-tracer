@@ -21,7 +21,11 @@ jobs:
         python -m pip install --upgrade pip
         pip install build
         pip install twine
+        pip install dunamai
     
+    - name: Show version based on git tag
+      run: dunamai from git --style semver
+
     - name: Build package
       run: python -m build
 
