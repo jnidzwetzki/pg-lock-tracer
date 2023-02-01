@@ -338,7 +338,14 @@ class PGLWLockTracer:
         if self.prog_args.verbose:
             print(bpf_program_final)
 
-        self.bpf_instance = BPF(text=bpf_program_final, usdt_contexts=self.usdts)
+        # Disable warnings like
+        # 'warning: '__HAVE_BUILTIN_BSWAP32__' macro redefined [-Wmacro-redefined]'
+        bpf_cflags = ["-Wno-macro-redefined"] if not self.prog_args.verbose else []
+
+        print("===> Compiling BPF program")
+        self.bpf_instance = BPF(
+            text=bpf_program_final, cflags=bpf_cflags, usdt_contexts=self.usdts
+        )
 
         self.bpf_instance["lockevents"].open_perf_buffer(
             self.print_lock_event, page_cnt=64
