@@ -15,7 +15,7 @@ import json
 import argparse
 
 from abc import ABC
-from enum import IntEnum
+from enum import IntEnum, auto
 from bcc import BPF
 from prettytable import PrettyTable
 
@@ -63,11 +63,12 @@ class TraceEvents(IntEnum):
     Events to trace
     """
 
-    TRANSACTION = 1
-    QUERY = 2
-    TABLE = 3
-    LOCK = 4
-    ERROR = 5
+    TRANSACTION = auto()
+    QUERY = auto()
+    TABLE = auto()
+    LOCK = auto()
+    INVALIDATION = auto()
+    ERROR = auto()
 
 
 parser = argparse.ArgumentParser(
@@ -173,6 +174,7 @@ class Events(IntEnum):
     TRANSACTION_BEGIN = 40
     TRANSACTION_COMMIT = 41
     TRANSACTION_ABORT = 42
+    INVALIDATION_MESSAGES_ACCEPT = 50
     # Events over 1000 are handled regardless of any pid filter
     GLOBAL = 1000
     DEADLOCK = 1001
@@ -413,6 +415,8 @@ class PGLockTraceOutputHuman(PGLockTraceOutput):
                 f"{print_prefix} Lock ungranted (local) {tablename} {lock_type} "
                 f"(Hold local {event.lock_local_hold})"
             )
+        elif event.event_type == Events.INVALIDATION_MESSAGES_ACCEPT:
+            output = f"{print_prefix} Accept invalidation messages"
         elif event.event_type == Events.ERROR:
             pgerror_value = PGError(event.mode).name
             output = f"{print_prefix} Error occurred servity: {pgerror_value}"
@@ -743,7 +747,13 @@ class PGLockTracer:
                 "^FastPathUnGrantRelationLock$",
                 "bpf_lock_fastpath_ungrant",
             )
-            self.register_probe("^RemoveLocalLock$", "bfp_local_local_ungrant")
+            self.register_probe("^RemoveLocalLock$", "bfp_local_lock_ungrant")
+
+        # Invalidation messages probes
+        if self.args.trace is None or TraceEvents.INVALIDATION.name in self.args.trace:
+            self.register_probe(
+                "^AcceptInvalidationMessages$", "bpf_accept_invalidation_messages"
+            )
 
         # Error probes
         if self.args.trace is None or TraceEvents.ERROR.name in self.args.trace:

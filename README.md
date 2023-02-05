@@ -57,11 +57,9 @@ animate_lock_graph -i create_table_trace.json -o create_table_trace.html
 
 ## Example Output
 
-### Lock Traces
 CLI: `pg_lock_tracer -x /home/jan/postgresql-sandbox/bin/REL_14_2_DEBUG/bin/postgres -p 327578 -r 327578:sql://jan@localhost/test2 --statistics`
 
 SQL Query: `create table metrics(ts timestamptz NOT NULL, id int NOT NULL, value float);`
-
 
 Tracer Output:
 
@@ -606,9 +604,21 @@ Lock types
 +---------------------+---------------------------+
 ```
 
-### Stack traces
+## Filter Trace Events
+`pg_lock_tracer` traces per default all supported events. However, often only certain events are required for the analysis (e.g., _which tables are opened?_). The event tracing can be restricted to certain events using the `-t <EVENT1> <EVENT2>` parameter. The following events are currently supported:
 
-It is sometimes necessary to determine where in the source code a particular lock is requested. For this purpose, the option `-S <Lock Event>` can be used. In addition to the traces, stack traces are now also shown.
+| Event          | Description                                                                                          |
+|----------------|------------------------------------------------------------------------------------------------------|
+| `TRANSACTION`  | Transactions related events (e.g., `StartTransaction`, `CommitTransaction`, `DeadLockReport`)        |
+| `QUERY`        | The executed queries (e.g., `exec_simple_query`)                                                     |
+| `TABLE`        | Table open and close events (e.g., `table_open`, `table_close`)                                      |
+| `LOCK`         | Lock events (e.g., `LockRelationOid`, `UnlockRelationOid`, `GrantLock`, `FastPathGrantRelationLock`) |
+| `INVALIDATION` | Processing of cache invalidation messages (e.g., `AcceptInvalidationMessages`)                       |
+| `ERROR`        | Error related events (e.g., `bpf_errstart`)                                                          |
+
+## Stack Traces
+
+It is sometimes necessary to determine where in the source code a particular lock is requested. For this purpose, the option `-s <Lock Event>` can be used. In addition to the traces, stack traces are now also shown.
 
 For example, by specifying `-s LOCK` a stack trace is generated and shown on each lock event. The following example shows where the lock for `pg_catalog.pg_extension` was requested.
 
