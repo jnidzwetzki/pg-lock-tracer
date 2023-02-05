@@ -354,7 +354,7 @@ int bpf_lock_fastpath_ungrant(struct pt_regs *ctx) {
  * PSQL: RemoveLocalLock
  * Parameter 1: LOCALLOCK
  */
-int bfp_local_local_ungrant(struct pt_regs *ctx) {
+int bfp_local_lock_ungrant(struct pt_regs *ctx) {
   PostgreSQLEvent event = {.event_type = EVENT_LOCK_UNGRANTED_LOCAL};
   fill_locallock_object(&event, (void *)PT_REGS_PARM1(ctx));
 
@@ -405,6 +405,17 @@ int bpf_transaction_commit(struct pt_regs *ctx) {
  */
 int bpf_transaction_abort(struct pt_regs *ctx) {
   PostgreSQLEvent event = {.event_type = EVENT_TRANSACTION_ABORT};
+  fill_basic_data_and_submit(&event, ctx);
+  return 0;
+}
+
+/*
+ * ====================================
+ * Process Invalidation Messages
+ * ====================================
+ */
+int bpf_accept_invalidation_messages(struct pt_regs *ctx) {
+  PostgreSQLEvent event = {.event_type = EVENT_INVALIDATION_MESSAGES_ACCEPT};
   fill_basic_data_and_submit(&event, ctx);
   return 0;
 }
