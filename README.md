@@ -611,7 +611,7 @@ Lock types
 |----------------|------------------------------------------------------------------------------------------------------|
 | `TRANSACTION`  | Transactions related events (e.g., `StartTransaction`, `CommitTransaction`, `DeadLockReport`)        |
 | `QUERY`        | The executed queries (e.g., `exec_simple_query`)                                                     |
-| `TABLE`        | Table open and close events (e.g., `table_open`, `table_close`)                                      |
+| `TABLE`        | Table open and close events (e.g., `table_open`, `table_openrv`, `table_close`)                      |
 | `LOCK`         | Lock events (e.g., `LockRelationOid`, `UnlockRelationOid`, `GrantLock`, `FastPathGrantRelationLock`) |
 | `INVALIDATION` | Processing of cache invalidation messages (e.g., `AcceptInvalidationMessages`)                       |
 | `ERROR`        | Error related events (e.g., `bpf_errstart`)                                                          |
@@ -619,6 +619,7 @@ Lock types
 ```
 pg_lock_tracer -x /home/jan/postgresql-sandbox/bin/REL_14_2_DEBUG/bin/postgres -p 2287921 -r 2287921:psql://jan@localhost/test2 --statistics -t TABLE
 [...]
+4111321097620311 [Pid 2290711] Table open (by range value) .metric_name_local AccessShareLock
 4111321097626817 [Pid 2287921] Table close 343035 (public.metric_name_local) NoLock
 4111321097722307 [Pid 2287921] Table open 3079 (pg_catalog.pg_extension) AccessShareLock
 4111321097877109 [Pid 2287921] Table close 3079 (pg_catalog.pg_extension) AccessShareLock
