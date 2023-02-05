@@ -15,7 +15,7 @@ import json
 import argparse
 
 from abc import ABC
-from enum import IntEnum, auto
+from enum import IntEnum, auto, unique
 from bcc import BPF
 from prettytable import PrettyTable
 
@@ -156,10 +156,13 @@ parser.add_argument(
 )
 
 
+@unique
 class Events(IntEnum):
-    TABLE_OPEN = 0
-    TABLE_CLOSE = 1
-    ERROR = 2
+    TABLE_OPEN = 1
+    TABLE_OPEN_RV = 2
+    TABLE_OPEN_RV_EXTENDED = 3
+    TABLE_CLOSE = 4
+    ERROR = 5
     QUERY_BEGIN = 20
     QUERY_END = 21
     LOCK_RELATION_OID = 30
@@ -181,6 +184,7 @@ class Events(IntEnum):
 
 
 # From elog.h
+@unique
 class PGError(IntEnum):
     ERROR = 21
     FATAL = 22
@@ -373,6 +377,15 @@ class PGLockTraceOutputHuman(PGLockTraceOutput):
         if event.event_type == Events.TABLE_OPEN:
             lock_type = PostgreSQLLockHelper.lock_type_to_str(event.mode)
             output = f"{print_prefix} Table open {tablename} {lock_type}"
+        elif event.event_type in (Events.TABLE_OPEN_RV, Events.TABLE_OPEN_RV_EXTENDED):
+            # Table is opened using a (string) range value
+            lock_type = PostgreSQLLockHelper.lock_type_to_str(event.mode)
+            schema = event.payload_str1.decode("utf-8")
+            table = event.payload_str2.decode("utf-8")
+            tablename = f"{schema}.{table}"
+            output = (
+                f"{print_prefix} Table open (by range value) {tablename} {lock_type}"
+            )
         elif event.event_type == Events.TABLE_CLOSE:
             lock_type = PostgreSQLLockHelper.lock_type_to_str(event.mode)
             output = f"{print_prefix} Table close {tablename} {lock_type}"
@@ -421,7 +434,7 @@ class PGLockTraceOutputHuman(PGLockTraceOutput):
             pgerror_value = PGError(event.mode).name
             output = f"{print_prefix} Error occurred servity: {pgerror_value}"
         elif event.event_type == Events.QUERY_BEGIN:
-            query = event.payload.decode("utf-8")
+            query = event.payload_str1.decode("utf-8")
             output = f"{print_prefix} Query begin '{query}'"
         elif event.event_type == Events.QUERY_END:
             output = f"{print_prefix} Query done\n"
@@ -477,6 +490,8 @@ class PGLockTraceOutputJSON(PGLockTraceOutput):
 
         if event.event_type in (
             Events.TABLE_OPEN,
+            Events.TABLE_OPEN_RV,
+            Events.TABLE_OPEN_RV_EXTENDED,
             Events.TABLE_CLOSE,
             Events.LOCK_RELATION_OID,
             Events.UNLOCK_RELATION_OID,
@@ -506,7 +521,12 @@ class PGLockTraceOutputJSON(PGLockTraceOutput):
             pgerror_value = PGError(event.mode).name
             output["servity"] = pgerror_value
         elif event.event_type == Events.QUERY_BEGIN:
-            output["query"] = event.payload.decode("utf-8")
+            output["query"] = event.payload_str1.decode("utf-8")
+        elif event.event_type in (Events.TABLE_OPEN_RV, Events.TABLE_OPEN_RV_EXTENDED):
+            # Table is opened using a (string) range value
+            schema = event.payload_str1.decode("utf-8")
+            table = event.payload_str2.decode("utf-8")
+            output["table"] = f"{schema}.{table}"
         elif event.event_type == Events.LOCK_GRANTED_LOCAL:
             output["lock_local_hold"] = event.lock_local_hold
         elif event.event_type == Events.LOCK_RELATION_OID_END:
@@ -729,6 +749,8 @@ class PGLockTracer:
         # Table probes
         if self.args.trace is None or TraceEvents.TABLE.name in self.args.trace:
             self.register_probe("^table_open$", "bpf_table_open")
+            self.register_probe("^table_openrv$", "bpf_table_openrv")
+            self.register_probe("^table_openrv_extended$", "bpf_table_openrv_extended")
             self.register_probe("^table_close$", "bpf_table_close")
 
         # Lock probes

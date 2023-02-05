@@ -19,8 +19,11 @@ typedef struct PostgreSQLEvent {
   u32 requested;        // Requested locks
   s64 lock_local_hold;  // Requested local locks
 
-  char payload[255];  // Generic payload data (e.g., the query)
-  int stackid;        // The id of the stack
+  char payload_str1[127];  // Generic payload string data 1 (e.g., a query / a
+                           // schema)
+  char payload_str2[127];  // Generic payload string data 2 (e.g., a table)
+
+  int stackid;  // The id of the stack
 } PostgreSQLEvent;
 
 BPF_PERF_OUTPUT(lockevents);
@@ -35,6 +38,12 @@ static void fill_basic_data(PostgreSQLEvent *event) {
   event->timestamp = bpf_ktime_get_ns();
 }
 
+/*
+ * ====================================
+ * Table handling
+ * ====================================
+ */
+
 static void handle_table_event(PostgreSQLEvent *event, struct pt_regs *ctx) {
   fill_basic_data(event);
 
@@ -47,15 +56,69 @@ static void handle_table_event(PostgreSQLEvent *event, struct pt_regs *ctx) {
 }
 
 /*
- * ====================================
- * Table handling
- * ====================================
+ * PostgreSQL: table_open
+ * Parameter 1: Oid relationId
+ * Parameter 2: LOCKMODE lockmode
  */
 int bpf_table_open(struct pt_regs *ctx) {
   PostgreSQLEvent event = {.event_type = EVENT_TABLE_OPEN};
   bpf_probe_read_kernel(&(event.object), sizeof(event.object),
                         &(PT_REGS_PARM1(ctx)));
   handle_table_event(&event, ctx);
+  return 0;
+}
+
+/*
+ *  ptype /o RangeVar
+ *  type = struct RangeVar {
+ *    0      |     4      NodeTag type;
+ * XXX  4-byte hole
+ *    8      |     8     char *catalogname;
+ *   16      |     8     char *schemaname;
+ *   24      |     8     char *relname;
+ *   [...]
+ */
+typedef struct RangeVar {
+  u8 enumvalue;
+  char *catalogname;
+  char *schemaname;
+  char *relname;
+} RangeVar;
+
+/*
+ * PostgreSQL: table_openrv
+ * Parameter 1: const RangeVar *relation
+ * Parameter 2: LOCKMODE lockmode
+ */
+int bpf_table_openrv(struct pt_regs *ctx, RangeVar *relation) {
+  PostgreSQLEvent event = {.event_type = EVENT_TABLE_OPEN_RV};
+
+  bpf_probe_read_user_str(event.payload_str1, sizeof(event.payload_str1),
+                          (void *)relation->schemaname);
+  bpf_probe_read_user_str(event.payload_str2, sizeof(event.payload_str2),
+                          (void *)relation->relname);
+
+  handle_table_event(&event, ctx);
+
+  return 0;
+}
+
+/*
+ * PostgreSQL: table_openrv_extended
+ * Parameter 1: const RangeVar *relation
+ * Parameter 2: LOCKMODE lockmode
+ * Parameter 3: bool missing_ok
+ */
+int bpf_table_openrv_extended(struct pt_regs *ctx, RangeVar *relation) {
+  PostgreSQLEvent event = {.event_type = EVENT_TABLE_OPEN_RV_EXTENDED};
+
+  bpf_probe_read_user_str(event.payload_str1, sizeof(event.payload_str1),
+                          (void *)relation->schemaname);
+  bpf_probe_read_user_str(event.payload_str2, sizeof(event.payload_str2),
+                          (void *)relation->relname);
+
+  handle_table_event(&event, ctx);
+
   return 0;
 }
 
@@ -114,7 +177,7 @@ static void fill_basic_data_and_submit(PostgreSQLEvent *event,
  */
 int bpf_query_begin(struct pt_regs *ctx) {
   PostgreSQLEvent event = {.event_type = EVENT_QUERY_BEGIN};
-  bpf_probe_read_user_str(event.payload, sizeof(event.payload),
+  bpf_probe_read_user_str(event.payload_str1, sizeof(event.payload_str1),
                           (void *)PT_REGS_PARM1(ctx));
   fill_basic_data_and_submit(&event, ctx);
   return 0;
