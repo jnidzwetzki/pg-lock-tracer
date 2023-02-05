@@ -616,6 +616,24 @@ Lock types
 | `INVALIDATION` | Processing of cache invalidation messages (e.g., `AcceptInvalidationMessages`)                       |
 | `ERROR`        | Error related events (e.g., `bpf_errstart`)                                                          |
 
+```
+pg_lock_tracer -x /home/jan/postgresql-sandbox/bin/REL_14_2_DEBUG/bin/postgres -p 2287921 -r 2287921:psql://jan@localhost/test2 --statistics -t TABLE
+[...]
+4111321097626817 [Pid 2287921] Table close 343035 (public.metric_name_local) NoLock
+4111321097722307 [Pid 2287921] Table open 3079 (pg_catalog.pg_extension) AccessShareLock
+4111321097877109 [Pid 2287921] Table close 3079 (pg_catalog.pg_extension) AccessShareLock
+4111321097904906 [Pid 2287921] Table open 3079 (pg_catalog.pg_extension) AccessShareLock
+4111321098012011 [Pid 2287921] Table close 3079 (pg_catalog.pg_extension) AccessShareLock
+4111321098049134 [Pid 2287921] Table open 343035 (public.metric_name_local) NoLock
+4111321098072567 [Pid 2287921] Table close 343035 (public.metric_name_local) NoLock
+4111321098089922 [Pid 2287921] Table open 343035 (public.metric_name_local) NoLock
+4111321098116394 [Pid 2287921] Table close 343035 (public.metric_name_local) NoLock
+4111321098350309 [Pid 2287921] Table open 343035 (public.metric_name_local) NoLock
+4111321098484761 [Pid 2287921] Table close 343035 (public.metric_name_local) NoLock
+4111321098795235 [Pid 2287921] Table open 343035 (public.metric_name_local) NoLock
+4111321098931302 [Pid 2287921] Table close 343035 (public.metric_name_local) NoLock
+```
+
 ## Stack Traces
 
 It is sometimes necessary to determine where in the source code a particular lock is requested. For this purpose, the option `-s <Lock Event>` can be used. In addition to the traces, stack traces are now also shown.
