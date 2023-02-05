@@ -414,6 +414,10 @@ int bpf_transaction_abort(struct pt_regs *ctx) {
  * Process Invalidation Messages
  * ====================================
  */
+
+/*
+ * PSQL: AcceptInvalidationMessages
+ */
 int bpf_accept_invalidation_messages(struct pt_regs *ctx) {
   PostgreSQLEvent event = {.event_type = EVENT_INVALIDATION_MESSAGES_ACCEPT};
   fill_basic_data_and_submit(&event, ctx);
