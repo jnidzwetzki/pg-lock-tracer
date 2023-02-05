@@ -88,3 +88,9 @@ jobs:
         run: |
            pg_lw_lock_tracer --version
            sudo pg_lw_lock_tracer -p $(pidof postgres) --dry-run
+
+      - name: Check that animate_lock_graph can be executed
+        run: |
+           animate_lock_graph --version
+           animate_lock_graph -o animation.html -i examples/create_table_trace.json
+           diff animation.html -i examples/create_table_trace.html
