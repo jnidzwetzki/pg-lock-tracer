@@ -391,10 +391,10 @@ def main():
     args = parser.parse_args()
 
     if not os.path.exists(args.input_file):
-        raise Exception(f"Input file does not exist {args.input_file}")
+        raise ValueError(f"Input file does not exist {args.input_file}")
 
     if os.path.exists(args.output_file) and not args.force:
-        raise Exception(f"Output file already exists {args.output_file}")
+        raise ValueError(f"Output file already exists {args.output_file}")
 
     # Create a new dot model, process the events in the input file
     # and generate the HTML output

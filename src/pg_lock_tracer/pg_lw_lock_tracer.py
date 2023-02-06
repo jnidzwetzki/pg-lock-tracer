@@ -78,7 +78,6 @@ class Events(IntEnum):
 
 class LockStatisticsEntry:
     def __init__(self) -> None:
-
         # The number of non-waited requested locks
         self._direct_lock_count = 0
 
@@ -254,7 +253,7 @@ class PGLWLockTracer:
         if event.mode == 2:  # LW_WAIT_UNTIL_FREE
             return "LW_WAIT_UNTIL_FREE"
 
-        raise Exception(f"Unknown event type {event.event_type}")
+        raise ValueError(f"Unknown event type {event.event_type}")
 
     def print_lock_event(self, _cpu, data, _size):
         """
@@ -304,7 +303,7 @@ class PGLWLockTracer:
                 "/ LWLockConditionalAcquire()"
             )
         else:
-            raise Exception(f"Unknown event type {event.event_type}")
+            raise ValueError(f"Unknown event type {event.event_type}")
 
     def init(self):
         """

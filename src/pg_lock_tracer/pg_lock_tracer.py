@@ -193,7 +193,6 @@ class PGError(IntEnum):
 
 class LockStatisticsEntry:
     def __init__(self) -> None:
-
         # The number of requested locks
         self._lock_count = 0
 
@@ -264,7 +263,6 @@ class PGLockTraceOutput(ABC):
         Add the lock call to the statistics and measure lock request time
         """
         if event.event_type == Events.LOCK_RELATION_OID:
-
             if oid_value not in self.statistics:
                 self.statistics[oid_value] = LockStatisticsEntry()
 
@@ -347,7 +345,6 @@ class PGLockTraceOutput(ABC):
 
 
 class PGLockTraceOutputHuman(PGLockTraceOutput):
-
     # pylint: disable=too-many-branches, too-many-statements
     def print_event(self, _cpu, data, _size):
         """
@@ -447,7 +444,7 @@ class PGLockTraceOutputHuman(PGLockTraceOutput):
         elif event.event_type == Events.DEADLOCK:
             output = f"{print_prefix} DEADLOCK DETECTED"
         else:
-            raise Exception(f"Unsupported event type {event.event_type}")
+            raise ValueError(f"Unsupported event type {event.event_type}")
 
         self.handle_output_line(output)
         self.print_stacktace_if_available(event)
@@ -574,9 +571,8 @@ class PGLockTracer:
         self.oid_resolvers = {}
 
         for oid_resolver_url in self.args.oid_resolver_urls:
-
             if ":" not in oid_resolver_url:
-                raise Exception(
+                raise ValueError(
                     f"Resolver URL has to be in format: 'PID:URL' ({oid_resolver_url} was provided)"
                 )
 
@@ -598,22 +594,21 @@ class PGLockTracer:
 
         # Belong the processes to the binary?
         for pid in self.args.pids:
-
             if not os.path.isdir(f"/proc/{pid}"):
-                raise Exception(
+                raise ValueError(
                     f"/proc entry for pid {pid} not found, does the process exist?"
                 )
 
             binary = os.readlink(f"/proc/{pid}/exe")
 
             if binary != self.args.path:
-                raise Exception(
+                raise ValueError(
                     f"Pid {pid} does not belong to binary {self.args.path}. Executable is {binary}"
                 )
 
         # Does the output file already exists?
         if self.args.output_file and os.path.exists(self.args.output_file):
-            raise Exception(f"Output file {self.args.output_file} already exists")
+            raise ValueError(f"Output file {self.args.output_file} already exists")
 
     @staticmethod
     def generate_c_defines(stacktrace_events, verbose):
@@ -677,7 +672,9 @@ class PGLockTracer:
             # pylint: disable=consider-using-with
             self.output_file = open(self.args.output_file, "w", encoding="utf-8")
             if not self.output_file.writable():
-                raise Exception(f"Output file {self.args.output_file} is not writeable")
+                raise ValueError(
+                    f"Output file {self.args.output_file} is not writeable"
+                )
 
         # Output as human readable text or as json?
         self.output_class = (
@@ -708,7 +705,7 @@ class PGLockTracer:
         )
 
         if not func_and_addr:
-            raise Exception(f"Unable to locate function {function_regex}")
+            raise ValueError(f"Unable to locate function {function_regex}")
 
         # Handle address duplicates
         for function, address in func_and_addr:

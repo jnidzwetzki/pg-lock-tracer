@@ -97,7 +97,6 @@ class OIDResolver:
         oid = str(oid)
 
         try:
-
             self.cur.execute(
                 select_stmt,
                 [

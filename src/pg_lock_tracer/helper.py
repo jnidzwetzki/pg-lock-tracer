@@ -76,7 +76,7 @@ class PostgreSQLLockHelper:
             if lock_numeric_value == lock_type:
                 return lock_name
 
-        raise Exception(f"Unsupported lock type {lock_type}")
+        raise ValueError(f"Unsupported lock type {lock_type}")
 
     @staticmethod
     def lock_type_to_int(lock_name):
@@ -85,7 +85,7 @@ class PostgreSQLLockHelper:
         """
 
         if lock_name not in PostgreSQLLockHelper.locks:
-            raise Exception(f"Unknown lock type {lock_name}")
+            raise ValueError(f"Unknown lock type {lock_name}")
 
         return PostgreSQLLockHelper.locks[lock_name]
 
@@ -111,7 +111,7 @@ class BPFHelper:
         program_file = Path(__file__).parent / "bpf" / program_name
 
         if not os.path.exists(program_file):
-            raise Exception(f"BPF program file not found {program_file}")
+            raise ValueError(f"BPF program file not found {program_file}")
 
         with program_file.open("r") as bpf_program:
             return bpf_program.read()
