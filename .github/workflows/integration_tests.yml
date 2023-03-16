@@ -12,10 +12,12 @@ jobs:
       fail-fast: false
       matrix:
         psql_version: ['12.13', '13.9', '14.4', '15.1']
-        python_version: ['3.8', '3.9', '3.10']
+        python_version: ['3.6', '3.8', '3.9', '3.10']
 
+    # Python 3.6 is not available on ubuntu-22.04
+    # see: https://raw.githubusercontent.com/actions/python-versions/main/versions-manifest.json
     name: PostgreSQL ${{ matrix.psql_version }} and Python ${{ matrix.python_version }} integration test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
       - name: Checkout source code
