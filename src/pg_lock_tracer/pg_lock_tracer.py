@@ -352,9 +352,6 @@ class PGLockTraceOutputHuman(PGLockTraceOutput):
         """
         event = self.bpf_instance["lockevents"].event(data)
 
-        if event.pid not in self.pids and event.event_type < Events.GLOBAL:
-            return
-
         print_prefix = f"{event.timestamp} [Pid {event.pid}]"
 
         # Resolve the OID to a name
