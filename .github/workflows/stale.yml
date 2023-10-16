@@ -22,3 +22,5 @@ jobs:
 
           # Process only issues that contain the label 'waiting-for-author'
           only-labels: 'need-more-info'
+
+          close-issue-message: 'This issue was closed because it has been stalled for several weeks with no activity.'
