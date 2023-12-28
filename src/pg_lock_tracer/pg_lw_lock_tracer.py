@@ -347,7 +347,7 @@ class PGLWLockTracer:
         )
 
         self.bpf_instance["lockevents"].open_perf_buffer(
-            self.print_lock_event, page_cnt=64
+            self.print_lock_event, page_cnt=BPFHelper.page_cnt
         )
 
     def print_statistics(self):
