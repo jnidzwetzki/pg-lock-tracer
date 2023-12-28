@@ -12,7 +12,7 @@
 import sys
 import argparse
 
-from enum import IntEnum
+from enum import IntEnum, unique
 
 from bcc import BPF, USDT
 from prettytable import PrettyTable
@@ -65,6 +65,7 @@ parser.add_argument(
 parser.add_argument("--statistics", action="store_true", help="print lock statistics")
 
 
+@unique
 class Events(IntEnum):
     LOCK = 0
     LOCK_OR_WAIT = 1
@@ -74,6 +75,13 @@ class Events(IntEnum):
     WAIT_DONE = 5
     COND_ACQUIRE = 6
     COND_ACQUIRE_FAIL = 7
+
+
+@unique
+class LWLockMode(IntEnum):
+    LW_EXCLUSIVE = 0
+    LW_SHARED = 1
+    LW_WAIT_UNTIL_FREE = 2
 
 
 class LockStatisticsEntry:
@@ -239,22 +247,6 @@ class PGLWLockTracer:
 
         return event.timestamp - self.last_lock_request_time[event.pid]
 
-    @staticmethod
-    def resolve_lock_mode(event):
-        """
-        Resolve the LW Lock modes
-        """
-        if event.mode == 0:  # LW_EXCLUSIVE,
-            return "LW_EXCLUSIVE"
-
-        if event.mode == 1:  # LW_SHARED
-            return "LW_SHARED"
-
-        if event.mode == 2:  # LW_WAIT_UNTIL_FREE
-            return "LW_WAIT_UNTIL_FREE"
-
-        raise ValueError(f"Unknown event type {event.event_type}")
-
     def print_lock_event(self, _cpu, data, _size):
         """
         Print a new lock event.
@@ -267,7 +259,7 @@ class PGLWLockTracer:
         tranche = event.tranche.decode("utf-8")
 
         print_prefix = f"{event.timestamp} [Pid {event.pid}]"
-        lock_mode = PGLWLockTracer.resolve_lock_mode(event)
+        lock_mode = LWLockMode(event.mode).name
 
         self.update_statistics(event, tranche, lock_mode)
 
@@ -331,6 +323,7 @@ class PGLWLockTracer:
             print("=======")
 
         enum_defines = BPFHelper.enum_to_defines(Events, "EVENT")
+
         bpf_program = BPFHelper.read_bpf_program("pg_lw_lock_tracer.c")
         bpf_program_final = bpf_program.replace("__DEFINES__", enum_defines)
 
