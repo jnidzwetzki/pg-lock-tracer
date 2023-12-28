@@ -692,7 +692,7 @@ class PGLockTracer:
 
         # Open the event queue
         self.bpf_instance["lockevents"].open_perf_buffer(
-            self.output_class.print_event, page_cnt=2048
+            self.output_class.print_event, page_cnt=BPFHelper.page_cnt
         )
 
     def register_probe(self, function_regex, bpf_fn_name, probe_on_enter=True):

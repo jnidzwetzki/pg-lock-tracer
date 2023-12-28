@@ -91,6 +91,9 @@ class PostgreSQLLockHelper:
 
 
 class BPFHelper:
+    # The size of the kernel ring buffer
+    page_cnt = 2048
+
     @staticmethod
     def enum_to_defines(enum_instance, prefix):
         """
