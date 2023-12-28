@@ -12,7 +12,7 @@ This project provides tools that allow you to gain deep insights into PostgreSQL
 * `pg_lw_lock_tracer` -  is a tracer for PostgreSQL lightweight locks (LWLocks).
 * `animate_lock_graph` - creates animated locks graphs based on the `pg_lock_tracer` output.
 
-__Note:__ Most of these tools employ the [BPF / eBPF](https://ebpf.io/) (_Extended Berkeley Packet Filter_) technology. At the moment, PostgreSQL 12, 13, 14, and 15 are supported (see additional information below).
+__Note:__ Most of these tools employ the [BPF / eBPF](https://ebpf.io/) (_Extended Berkeley Packet Filter_) technology. At the moment, PostgreSQL 12, 13, 14, 15, and 16 are supported (see additional information below).
 
 # pg_lock_tracer
 `pg_lock_tracer` observes the locking activity of a running PostgreSQL process (using _eBPF_ and _UProbes_). In contrast to the information that is present in the table `pg_locks` (which provides information about which locks are _currently_ requested), `pg_lock_tracer` gives you a continuous view of the locking activity and collects statistics and timings.
