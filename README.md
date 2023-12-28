@@ -8,11 +8,12 @@
 
 This project provides tools that allow you to gain deep insights into PostgreSQL's locking activities and troubleshoot locking-related issues (e.g., performance problems or deadlocks).
 
-* `pg_lock_tracer` - is a lock tracer for PostgreSQL.
-* `pg_lw_lock_tracer` -  is a tracer for PostgreSQL lightweight locks (LWLocks).
+* `pg_lock_tracer` - is a lock tracer for PostgreSQL (traces table level locks).
+* `pg_lw_lock_tracer` - is a tracer for PostgreSQL lightweight locks (traces LWLocks).
+* `pg_row_lock_tracer` - is a tracer for PostgreSQL row locks (traces Row-Level locks).
 * `animate_lock_graph` - creates animated locks graphs based on the `pg_lock_tracer` output.
 
-__Note:__ Most of these tools employ the [BPF / eBPF](https://ebpf.io/) (_Extended Berkeley Packet Filter_) technology. At the moment, PostgreSQL 12, 13, 14, 15, and 16 are supported (see additional information below).
+__Note:__ These tools employ the [eBPF](https://ebpf.io/) (_Extended Berkeley Packet Filter_) technology. At the moment, PostgreSQL 12, 13, 14, 15, and 16 are supported (see additional information below).
 
 # pg_lock_tracer
 `pg_lock_tracer` observes the locking activity of a running PostgreSQL process (using _eBPF_ and _UProbes_). In contrast to the information that is present in the table `pg_locks` (which provides information about which locks are _currently_ requested), `pg_lock_tracer` gives you a continuous view of the locking activity and collects statistics and timings.
@@ -664,7 +665,7 @@ pg_lock_tracer -x /home/jan/postgresql-sandbox/bin/REL_14_2_DEBUG/bin/postgres -
 ### Animated Lock Graphs
 See the content of the [examples](examples/) directory for examples.
 
-# pg_lw_lock_trace
+# pg_lw_lock_tracer
 
 `pg_lw_lock_trace` allows to trace lightweight locks ([LWLocks](https://github.com/postgres/postgres/blob/c8e1ba736b2b9e8c98d37a5b77c4ed31baf94147/src/backend/storage/lmgr/lwlock.c)) in a PostgreSQL process via _Userland Statically Defined Tracing_ (USDT).
 
@@ -783,8 +784,73 @@ Locks per type
 +--------------+----------+
 ```
 
-# Additional Information
+# pg_row_lock_tracer
 
+`pg_row_lock_tracer` allows to trace row locks (see the PostgreSQL [documentation](https://www.postgresql.org/docs/current/explicit-locking.html#LOCKING-ROWS)) of a PostgreSQL process using _eBPF_ and _UProbes_
+
+## Usage Examples
+```
+# Trace the row locks of the given PostgreSQL binary
+pg_row_lock_tracer -x /home/jan/postgresql-sandbox/bin/REL_14_9_DEBUG/bin/postgres
+
+# Trace the row locks of the PID 1234
+pg_row_lock_tracer -p 1234 -x /home/jan/postgresql-sandbox/bin/REL_14_9_DEBUG/bin/postgres
+
+# Trace the row locks of the PID 1234 and 5678
+pg_row_lock_tracer -p 1234 -p 5678 -x /home/jan/postgresql-sandbox/bin/REL_14_9_DEBUG/bin/postgres
+
+# Trace the row locks of the PID 1234 and be verbose
+pg_row_lock_tracer -p 1234 -x /home/jan/postgresql-sandbox/bin/REL_14_9_DEBUG/bin/postgres -v
+
+# Trace the row locks and show statistics
+pg_row_lock_tracer -x /home/jan/postgresql-sandbox/bin/REL_14_9_DEBUG/bin/postgres --statistics
+```
+
+## Example output
+
+SQL Query: `SELECT * FROM temperature FOR UPDATE;`
+
+CLI: `sudo pg_row_lock_tracer -x /home/jan/postgresql-sandbox/bin/REL_14_9_DEBUG/bin/postgres --statistics`
+
+
+Tracer output:
+
+```
+[...]
+2783502701862408 [Pid 2604491] LOCK_TUPLE_END TM_OK in 13100 ns
+2783502701877081 [Pid 2604491] LOCK_TUPLE (Tablespace 1663 database 305234 relation 313419) - (Block and offset 7 143) - LOCK_TUPLE_EXCLUSIVE LOCK_WAIT_BLOCK
+2783502701972367 [Pid 2604491] LOCK_TUPLE_END TM_OK in 95286 ns
+2783502701988387 [Pid 2604491] LOCK_TUPLE (Tablespace 1663 database 305234 relation 313419) - (Block and offset 7 144) - LOCK_TUPLE_EXCLUSIVE LOCK_WAIT_BLOCK
+2783502702001690 [Pid 2604491] LOCK_TUPLE_END TM_OK in 13303 ns
+2783502702016387 [Pid 2604491] LOCK_TUPLE (Tablespace 1663 database 305234 relation 313419) - (Block and offset 7 145) - LOCK_TUPLE_EXCLUSIVE LOCK_WAIT_BLOCK
+2783502702029375 [Pid 2604491] LOCK_TUPLE_END TM_OK in 12988 ns
+^C
+Lock statistics:
+================
+
+Used wait policies:
++---------+-----------------+----------------+-----------------+
+|   PID   | LOCK_WAIT_BLOCK | LOCK_WAIT_SKIP | LOCK_WAIT_ERROR |
++---------+-----------------+----------------+-----------------+
+| 2604491 |       1440      |       0        |        0        |
++---------+-----------------+----------------+-----------------+
+
+Lock modes:
++---------+---------------------+------------------+---------------------------+----------------------+
+|   PID   | LOCK_TUPLE_KEYSHARE | LOCK_TUPLE_SHARE | LOCK_TUPLE_NOKEYEXCLUSIVE | LOCK_TUPLE_EXCLUSIVE |
++---------+---------------------+------------------+---------------------------+----------------------+
+| 2604491 |          0          |        0         |             0             |         1440         |
++---------+---------------------+------------------+---------------------------+----------------------+
+
+Lock results:
++---------+-------+--------------+-----------------+------------+------------+------------------+---------------+
+|   PID   | TM_OK | TM_INVISIBLE | TM_SELFMODIFIED | TM_UPDATED | TM_DELETED | TM_BEINGMODIFIED | TM_WOULDBLOCK |
++---------+-------+--------------+-----------------+------------+------------+------------------+---------------+
+| 2604491 |  1440 |      0       |        0        |     0      |     0      |        0         |       0       |
++---------+-------+--------------+-----------------+------------+------------+------------------+---------------+
+```
+
+# Additional Information
 
 ## Installation
 
