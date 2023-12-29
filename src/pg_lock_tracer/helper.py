@@ -118,3 +118,21 @@ class BPFHelper:
 
         with program_file.open("r") as bpf_program:
             return bpf_program.read()
+
+    @staticmethod
+    def check_pid_exe(pids, executable):
+        """
+        Do the given PIDs belong to the executable
+        """
+        for pid in pids:
+            if not os.path.isdir(f"/proc/{pid}"):
+                raise ValueError(
+                    f"/proc entry for pid {pid} not found, does the process exist?"
+                )
+
+            binary = os.readlink(f"/proc/{pid}/exe")
+
+            if binary != executable:
+                raise ValueError(
+                    f"Pid {pid} does not belong to binary {executable}. Executable is {binary}"
+                )
