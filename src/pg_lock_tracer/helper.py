@@ -6,6 +6,8 @@ import os
 
 from pathlib import Path
 
+from bcc import BPF
+
 
 class PostgreSQLLockHelper:
 
@@ -136,3 +138,33 @@ class BPFHelper:
                 raise ValueError(
                     f"Pid {pid} does not belong to binary {executable}. Executable is {binary}"
                 )
+
+    @staticmethod
+    def register_ebpf_probe(
+        path, bpf_instance, function_regex, bpf_fn_name, verbose, probe_on_enter=True
+    ):
+        """
+        Register a BPF probe
+        """
+        addresses = set()
+        func_and_addr = BPF.get_user_functions_and_addresses(path, function_regex)
+
+        if not func_and_addr:
+            raise ValueError(f"Unable to locate function {function_regex}")
+
+        # Handle address duplicates
+        for function, address in func_and_addr:
+            if address in addresses:
+                continue
+            addresses.add(address)
+
+            if probe_on_enter:
+                bpf_instance.attach_uprobe(name=path, sym=function, fn_name=bpf_fn_name)
+                if verbose:
+                    print(f"Attaching to {function} at address {address} on enter")
+            else:
+                bpf_instance.attach_uretprobe(
+                    name=path, sym=function, fn_name=bpf_fn_name
+                )
+                if verbose:
+                    print(f"Attaching to {function} at address {address} on return")
