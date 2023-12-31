@@ -126,6 +126,9 @@ class BPFHelper:
         """
         Do the given PIDs belong to the executable
         """
+        if not pids:
+            return
+
         for pid in pids:
             if not os.path.isdir(f"/proc/{pid}"):
                 raise ValueError(
