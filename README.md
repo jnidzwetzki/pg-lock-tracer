@@ -8,9 +8,9 @@
 
 This project provides tools that allow you to gain deep insights into PostgreSQL's locking activities and troubleshoot locking-related issues (e.g., performance problems or deadlocks).
 
-* `pg_lock_tracer` - is a lock tracer for PostgreSQL (traces table level locks).
-* `pg_lw_lock_tracer` - is a tracer for PostgreSQL lightweight locks (traces LWLocks).
-* `pg_row_lock_tracer` - is a tracer for PostgreSQL row locks (traces Row-Level locks).
+* `pg_lock_tracer` - is a PostgreSQL table level lock tracer.
+* `pg_lw_lock_tracer` - is a tracer for PostgreSQL lightweight locks (LWLocks).
+* `pg_row_lock_tracer` - is a tracer for PostgreSQL row locks.
 * `animate_lock_graph` - creates animated locks graphs based on the `pg_lock_tracer` output.
 
 __Note:__ These tools employ the [eBPF](https://ebpf.io/) (_Extended Berkeley Packet Filter_) technology. At the moment, PostgreSQL 12, 13, 14, 15, and 16 are supported (see additional information below).
