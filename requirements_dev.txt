@@ -1,6 +1,6 @@
 astroid==3.0.2
 attrs==23.2.0
-black==23.12.1
+black==24.1.1
 click==8.1.7
 dill==0.3.7
 exceptiongroup==1.2.0
