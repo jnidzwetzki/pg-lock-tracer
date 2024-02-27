@@ -52,8 +52,13 @@ pg_lock_tracer -x /home/jan/postgresql-sandbox/bin/REL_15_1_DEBUG/bin/postgres -
 # Show statistics about locks
 pg_lock_tracer -x /home/jan/postgresql-sandbox/bin/REL_15_1_DEBUG/bin/postgres -p 1234 --statistics
 
-# Create an animated lock graph
-animate_lock_graph -i create_table_trace.json -o create_table_trace.html
+# Create an animated lock graph (with Oids)
+pg_lock_tracer -x /home/jan/postgresql-sandbox/bin/REL_15_1_DEBUG/bin/postgres -p 1234 -j -o locks.json
+animate_lock_graph -i lock -o locks.html
+
+# Create an animated lock graph (with table names)
+pg_lock_tracer -x /home/jan/postgresql-sandbox/bin/REL_15_1_DEBUG/bin/postgres -p 1234 -j -r 1234:psql://jan@localhost/test2 -o locks.json
+animate_lock_graph -i lock -o locks.html
 ```
 
 ## Example Output
