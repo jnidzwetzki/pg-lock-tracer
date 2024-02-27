@@ -10,7 +10,6 @@ from bcc import BPF
 
 
 class PostgreSQLLockHelper:
-
     """
     # Defines taken from: src/include/storage/lockdefs.h
     #
