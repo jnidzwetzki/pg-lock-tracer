@@ -207,7 +207,7 @@ class DOTModel:
             if self.verbose:
                 print(f"Processing {event}")
 
-            tablename = event["table"]
+            tablename = StringHelper.get_tablename(event)
             lock_type = event["lock_type"]
 
             if not self.graph.vs.select(label_eq=tablename):
@@ -244,7 +244,7 @@ class DOTModel:
             if self.verbose:
                 print(f"Processing {event}")
 
-            tablename = event["table"]
+            tablename = StringHelper.get_tablename(event)
             lock_type = event["lock_type"]
             lock_numeric_value = PostgreSQLLockHelper.lock_type_to_int(lock_type)
 
@@ -382,6 +382,16 @@ class StringHelper:
                 result += "\\n"
 
         return result
+
+    @staticmethod
+    def get_tablename(event):
+        """
+        Get the tablename or the Oid of the event.
+        """
+        if "table" in event:
+            return event["table"]
+
+        return f"Oid {event['oid']}"
 
 
 def main():
