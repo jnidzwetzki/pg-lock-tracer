@@ -1,4 +1,5 @@
 """Resolve PostgreSQL OIDs to names and cache the result"""
+
 import sys
 
 from urllib.parse import urlparse
