@@ -480,7 +480,11 @@ class PGLockTraceOutputJSON(PGLockTraceOutput):
         """
         event = self.bpf_instance["lockevents"].event(data)
 
-        if event.pid not in self.pids and event.event_type < Events.GLOBAL:
+        if (
+            self.pids
+            and event.pid not in self.pids
+            and event.event_type < Events.GLOBAL
+        ):
             return
 
         output = {}
