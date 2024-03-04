@@ -18,7 +18,7 @@ platformdirs==4.2.0
 pluggy==1.4.0
 prettytable==3.10.0
 psycopg2==2.9.9
-pylint==3.0.3
+pylint==3.1.0
 pytest==8.0.2
 texttable==1.7.0
 tomli==2.0.1
