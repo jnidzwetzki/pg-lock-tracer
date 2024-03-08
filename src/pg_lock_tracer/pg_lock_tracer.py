@@ -470,7 +470,8 @@ class PGLockTraceOutputHuman(PGLockTraceOutput):
                 )
                 line = line.decode("utf-8")
                 # Get line with: 'gdb info line *(symbol+0x1111)'
-                print(f"\t{line}")
+                line = f"\t{line}"
+                self.handle_output_line(line)
 
 
 class PGLockTraceOutputJSON(PGLockTraceOutput):
