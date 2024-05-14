@@ -34,7 +34,7 @@ class OIDResolver:
                 host=hostname,
                 port=port,
             )
-
+            self.connection.set_session(autocommit=True)
             self.cur = self.connection.cursor()
 
             # Warmup cache
