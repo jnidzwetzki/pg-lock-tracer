@@ -8,7 +8,7 @@ graphviz==0.21
 igraph==0.11.9
 iniconfig==2.1.0
 isort==5.13.2
-lazy-object-proxy==1.10.0
+lazy-object-proxy==1.11.0
 mccabe==0.7.0
 mypy-extensions==1.0.0
 packaging==25.0
