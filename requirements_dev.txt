@@ -2,7 +2,7 @@ astroid==3.3.10
 attrs==23.2.0
 black==24.10.0
 click==8.1.8
-dill==0.3.8
+dill==0.4.0
 exceptiongroup==1.2.2
 graphviz==0.21
 igraph==0.11.9
