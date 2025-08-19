@@ -23,4 +23,4 @@ texttable==1.7.0
 tomli==2.2.1
 typing-extensions==4.14.1
 wcwidth==0.2.13
-wrapt==1.17.2
+wrapt==1.17.3
