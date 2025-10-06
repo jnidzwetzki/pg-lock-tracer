@@ -1,5 +1,5 @@
 astroid==3.3.11
-attrs==25.3.0
+attrs==25.4.0
 black==25.9.0
 click==8.1.8
 dill==0.4.0
