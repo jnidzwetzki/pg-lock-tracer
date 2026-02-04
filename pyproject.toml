@@ -1,3 +1,60 @@
 [build-system]
 requires = ["setuptools>=59"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "pg_lock_tracer"
+description = "An eBPF based lock tracer for PostgreSQL"
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.10"
+license = { text = "Apache Software License 2.0" }
+authors = [
+	{ name = "Jan Nidzwetzki", email = "jnidzwetzki@gmx.de" },
+]
+keywords = ["postgresql", "postgres", "ebpf", "locktracer"]
+classifiers = [
+	"Development Status :: 4 - Beta",
+	"Intended Audience :: Developers",
+	"Operating System :: POSIX :: Linux",
+	"Programming Language :: Python",
+	"Topic :: Software Development :: Debuggers",
+	"License :: OSI Approved :: Apache Software License",
+]
+dependencies = [
+	"graphviz",
+	"igraph",
+	"prettytable",
+	"psycopg2",
+]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/jnidzwetzki/pg-lock-tracer"
+"Bug Tracker" = "https://github.com/jnidzwetzki/pg-lock-tracer/issues"
+
+[project.scripts]
+pg_lock_tracer = "pg_lock_tracer.pg_lock_tracer:main"
+pg_lw_lock_tracer = "pg_lock_tracer.pg_lw_lock_tracer:main"
+pg_row_lock_tracer = "pg_lock_tracer.pg_row_lock_tracer:main"
+pg_spinlock_delay_tracer = "pg_lock_tracer.pg_spinlock_delay_tracer:main"
+animate_lock_graph = "pg_lock_tracer.animate_lock_graph:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"pg_lock_tracer.bpf" = ["*.c"]
+
+[tool.setuptools.dynamic]
+version = { attr = "pg_lock_tracer.__version__" }
+
+[tool.pytest.ini_options]
+testpaths = ["tests/"]
+addopts = [
+	"--verbose",
+	"--ignore-glob=**/_*.py",
+]
+
