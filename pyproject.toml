@@ -7,7 +7,10 @@ name = "pg_lock_tracer"
 description = "An eBPF based lock tracer for PostgreSQL"
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.10"
-license = { text = "Apache Software License 2.0" }
+license = "Apache-2.0"
+license-files = [
+    "LICENSE",
+]
 authors = [
 	{ name = "Jan Nidzwetzki", email = "jnidzwetzki@gmx.de" },
 ]
@@ -17,8 +20,7 @@ classifiers = [
 	"Intended Audience :: Developers",
 	"Operating System :: POSIX :: Linux",
 	"Programming Language :: Python",
-	"Topic :: Software Development :: Debuggers",
-	"License :: OSI Approved :: Apache Software License",
+	"Topic :: Software Development :: Debuggers"
 ]
 dependencies = [
 	"graphviz",
