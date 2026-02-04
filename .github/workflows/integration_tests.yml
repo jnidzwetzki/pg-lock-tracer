@@ -11,8 +11,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        psql_version: ['13.9', '14.4', '15.1', '16.1']
-        python_version: ['3.9', '3.10', '3.11', '3.12']
+        psql_version: ['14.20', '15.15', '16.11', '17.7', '18.1']
+        python_version: ['3.10', '3.11', '3.12']
 
     name: PostgreSQL ${{ matrix.psql_version }} and Python ${{ matrix.python_version }} integration test
     runs-on: ubuntu-24.04
