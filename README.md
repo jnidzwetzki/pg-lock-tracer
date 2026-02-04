@@ -11,9 +11,10 @@ This project provides tools that allow you to gain deep insights into PostgreSQL
 * `pg_lock_tracer` - is a PostgreSQL table level lock tracer.
 * `pg_lw_lock_tracer` - is a tracer for PostgreSQL lightweight locks (LWLocks).
 * `pg_row_lock_tracer` - is a tracer for PostgreSQL row locks.
+* `pg_spinlock_delay_tracer` - is a tracer for PostgreSQL spinlock delays.
 * `animate_lock_graph` - creates animated locks graphs based on the `pg_lock_tracer` output.
 
-__Note:__ These tools employ the [eBPF](https://ebpf.io/) (_Extended Berkeley Packet Filter_) technology. At the moment, PostgreSQL 12, 13, 14, 15, and 16 are supported (see additional information below).
+__Note:__ These tools employ the [eBPF](https://ebpf.io/) (_Extended Berkeley Packet Filter_) technology. At the moment, PostgreSQL 14, 15, 16, 17, and 18 are supported (see additional information below).
 
 # pg_lock_tracer
 `pg_lock_tracer` observes the locking activity of a running PostgreSQL process (using _eBPF_ and _UProbes_). In contrast to the information that is present in the table `pg_locks` (which provides information about which locks are _currently_ requested), `pg_lock_tracer` gives you a continuous view of the locking activity and collects statistics and timings.
@@ -856,6 +857,53 @@ Lock results:
 +---------+-------+--------------+-----------------+------------+------------+------------------+---------------+
 | 2604491 |  1440 |      0       |        0        |     0      |     0      |        0         |       0       |
 +---------+-------+--------------+-----------------+------------+------------+------------------+---------------+
+```
+
+# pg_spinlock_delay_tracer
+`pg_spinlock_delay_tracer` allows tracing spinlock delays in a PostgreSQL process. Spin locks are used in PostgreSQL to protect short critical sections in the code. If another process already holds a spinlock, the requesting process will repeatedly check (i.e., "spin") until the lock becomes available. If the lock is held for a longer period, PostgreSQL performs a ["spin delay"](https://github.com/postgres/postgres/blob/0c8e082fba8d36434552d3d7800abda54acafd57/src/backend/storage/lmgr/s_lock.c#L106) and yields the CPU for a short time to avoid busy-waiting. Such delays are reported via the `pg_spinlock_delay_tracer`. For each delay, it prints the content of the `SpinDelayStatus` structure, which contains information about the number of spins, delays, and the current delay time. Additionally, the function name and source code location where the spin delay occurred are reported.
+
+## Usage Examples
+```
+# Trace the spinlock delays of the given PostgreSQL binary
+pg_spinlock_delay_tracer -x /home/jan/postgresql-sandbox/bin/REL_17_1_DEBUG/bin/postgres
+
+# Trace the spinlock delays of the PID 1234
+pg_spinlock_delay_tracer -p 1234 -x /home/jan/postgresql-sandbox/bin/REL_17_1_DEBUG/bin/postgres
+```
+
+## Example output
+To reproduce a spinlock delay, follow these steps to simulate a delay at the WAL insert position. First, start two different sessions connected to the same database. Then, create two tables:
+
+```sql
+CREATE TABLE mydata1 (id INT);
+CREATE TABLE mydata2 (id INT);
+```
+
+Next, open a debugger and set a breakpoint in the function `ReserveXLogInsertLocation` after the spin lock `SpinLockAcquire(&Insert->insertpos_lck);` is acquired. Afterward, start the `pg_spinlock_delay_tracer` and perform two inserts in the two different sessions:
+
+```
+# Session 1
+INSERT INTO mydata1 VALUES(1);
+# Session 2
+INSERT INTO mydata2 VALUES(2);
+```
+
+Note: Two different tables are used to prevent both sessions from trying to lock the same buffer and waiting for each other on a different lock.
+
+The debugger should stop in the first session at the breakpoint. Furthermore, the pg_spinlock_delay_tracer should report spinlock delays in the second session, as the first session holds the spinlock for a longer period.
+
+```
+pg_spinlock_delay_tracer -x /home/jan/postgresql-sandbox/bin/REL_17_1_DEBUG/bin/postgres
+[...]
+13180680737869452 [Pid 1864403] SpinDelay spins=996 delays=939 cur_delay=566086 at ReserveXLogInsertLocation, xlog.c:1132
+13180680737874986 [Pid 1864403] SpinDelay spins=997 delays=939 cur_delay=566086 at ReserveXLogInsertLocation, xlog.c:1132
+13180680737880522 [Pid 1864403] SpinDelay spins=998 delays=939 cur_delay=566086 at ReserveXLogInsertLocation, xlog.c:1132
+13180680737886009 [Pid 1864403] SpinDelay spins=999 delays=939 cur_delay=566086 at ReserveXLogInsertLocation, xlog.c:1132
+13180681304189362 [Pid 1864403] SpinDelay spins=0 delays=940 cur_delay=661655 at ReserveXLogInsertLocation, xlog.c:1132
+13180681304227806 [Pid 1864403] SpinDelay spins=1 delays=940 cur_delay=661655 at ReserveXLogInsertLocation, xlog.c:1132
+13180681304241759 [Pid 1864403] SpinDelay spins=2 delays=940 cur_delay=661655 at ReserveXLogInsertLocation, xlog.c:1132
+13180681304255150 [Pid 1864403] SpinDelay spins=3 delays=940 cur_delay=661655 at ReserveXLogInsertLocation, xlog.c:1132
+[...]
 ```
 
 # Additional Information
