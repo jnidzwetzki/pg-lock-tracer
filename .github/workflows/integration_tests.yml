@@ -99,3 +99,8 @@ jobs:
            animate_lock_graph --version
            animate_lock_graph -o animation.html -i examples/create_table_trace.json
            diff animation.html -i examples/create_table_trace.html
+
+      - name: Check that pg_spinlock_delay_tracer can be executed
+        run: |
+           pg_spinlock_delay_tracer --version
+           sudo pg_spinlock_delay_tracer -x ~/postgresql/bin/${{ matrix.psql_version }}/bin/postgres -v -p $(pidof postgres) --dry-run
