@@ -4,6 +4,7 @@ name: Upload Python Package
 on:
   release:
     types: [published]
+  pull_request:
 
 permissions:
   contents: read
@@ -22,11 +23,14 @@ jobs:
         pip install build
         pip install twine
         pip install dunamai
+        # See https://github.com/pypa/twine/issues/1216
+        pip install -U packaging
     
     - name: Show version based on git tag
       run: dunamai from git --style semver
 
     - name: Ensure that program and tag version match
+      if: github.event_name == 'release'
       run: |
         PACKAGE_VERSION=$(python -c "from src.pg_lock_tracer import __version__; print(__version__)")
         GIT_VERSION=$(dunamai from git --style semver)
@@ -45,6 +49,7 @@ jobs:
         TWINE_PASSWORD: '${{ secrets.TWINE_PASSWORD_TEST }}'
 
     - name: Upload to pypi
+      if: github.event_name == 'release'
       run: 'twine upload --non-interactive dist/*'
       env:
         TWINE_USERNAME: '__token__'
