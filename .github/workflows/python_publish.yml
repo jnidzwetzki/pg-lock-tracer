@@ -43,6 +43,7 @@ jobs:
       run: python -m build
 
     - name: Upload to test.pypi
+      if: github.event_name == 'release'
       run: 'twine upload --non-interactive --repository testpypi dist/*'
       env:
         TWINE_USERNAME: '__token__'
