@@ -6,22 +6,41 @@
 [![Release date](https://img.shields.io/github/release-date/jnidzwetzki/pg-lock-tracer)](https://github.com/jnidzwetzki/pg-lock-tracer/)
 [![GitHub Repo stars](https://img.shields.io/github/stars/jnidzwetzki/pg-lock-tracer?style=social)](https://github.com/jnidzwetzki/pg-lock-tracer/)
 
-This project provides tools that allow you to gain deep insights into PostgreSQL's locking activities and troubleshoot locking-related issues (e.g., performance problems or deadlocks).
+A set of eBPF-based tools designed to observe and visualize PostgreSQL 🐘 locking activity. These tools help users understand lock timing and contention behavior.
 
-* `pg_lock_tracer` - is a PostgreSQL table level lock tracer.
-* `pg_lw_lock_tracer` - is a tracer for PostgreSQL lightweight locks (LWLocks).
-* `pg_row_lock_tracer` - is a tracer for PostgreSQL row locks.
-* `pg_spinlock_delay_tracer` - is a tracer for PostgreSQL spinlock delays.
-* `animate_lock_graph` - creates animated locks graphs based on the `pg_lock_tracer` output.
+Key components:
 
-__Note:__ These tools employ the [eBPF](https://ebpf.io/) (_Extended Berkeley Packet Filter_) technology. At the moment, PostgreSQL 14, 15, 16, 17, and 18 are supported (see additional information below).
+- `pg_lock_tracer`: heavy lock tracer (e.g., table level locks)
+- `pg_lw_lock_tracer`: lightweight lock (LWLock) tracer
+- `pg_row_lock_tracer`: row-level lock tracer
+- `pg_spinlock_delay_tracer`: spinlock delay tracer
+- `animate_lock_graph`: render animated lock graphs from `pg_lock_tracer` tracer output
+
+__Note:__ These tools rely on [eBPF](https://ebpf.io/) (_Extended Berkeley Packet Filter_) technology. At the moment, PostgreSQL 14, 15, 16, 17, and 18 are supported (see additional information below).
+
+
+## ⚡ Quickstart
+1. Install the pg-lock-tracer tools:
+
+```
+$ pip install pg-lock-tracer
+```
+
+2. Identify the PostgreSQL server binary used by your instance (e.g., `/usr/lib/postgresql/X/bin/postgres`).
+3. Start tracing a running Postgres PID (requires root privileges):
+
+```
+$ sudo pg_lock_tracer -x /path/to/postgres
+```
+
+This shows the locking activity of all processes running this PostgreSQL binary. 
 
 # pg_lock_tracer
 `pg_lock_tracer` observes the locking activity of a running PostgreSQL process (using _eBPF_ and _UProbes_). In contrast to the information that is present in the table `pg_locks` (which provides information about which locks are _currently_ requested), `pg_lock_tracer` gives you a continuous view of the locking activity and collects statistics and timings.
 
-The tracer also allows dumping the output as JSON formatted lines, which allows further processing with additional tools. This repository also contains the script `animate_lock_graph`, which provides an animated version of the taken looks.
+The tracer also allows dumping the output as JSON-formatted lines, which allows further processing with additional tools. This repository also contains the script `animate_lock_graph`, which provides an animated version of the taken looks.
 
-## Usage Examples
+## 🧪 Usage Examples
 ```
 # Trace use binary '/home/jan/postgresql-sandbox/bin/REL_15_1_DEBUG/bin/postgres' for tracing
 pg_lock_tracer -x /home/jan/postgresql-sandbox/bin/REL_15_1_DEBUG/bin/postgres
@@ -65,7 +84,7 @@ pg_lock_tracer -x /home/jan/postgresql-sandbox/bin/REL_15_1_DEBUG/bin/postgres -
 animate_lock_graph -i lock -o locks.html
 ```
 
-## Example Output
+## 📄 Example Output
 
 CLI: `pg_lock_tracer -x /home/jan/postgresql-sandbox/bin/REL_14_2_DEBUG/bin/postgres -p 327578 -r 327578:sql://jan@localhost/test2 --statistics`
 
@@ -678,7 +697,7 @@ See the content of the [examples](examples/) directory for examples.
 
 `pg_lw_lock_trace` allows to trace lightweight locks ([LWLocks](https://github.com/postgres/postgres/blob/c8e1ba736b2b9e8c98d37a5b77c4ed31baf94147/src/backend/storage/lmgr/lwlock.c)) in a PostgreSQL process via _Userland Statically Defined Tracing_ (USDT).
 
-## Usage Examples
+## 🧪 Usage Examples
 ```
 # Trace the LW locks of the PID 1234
 pg_lw_lock_tracer -p 1234
@@ -797,7 +816,7 @@ Locks per type
 
 `pg_row_lock_tracer` allows to trace row locks (see the PostgreSQL [documentation](https://www.postgresql.org/docs/current/explicit-locking.html#LOCKING-ROWS)) of a PostgreSQL process using _eBPF_ and _UProbes_
 
-## Usage Examples
+## 🧪 Usage Examples
 ```
 # Trace the row locks of the given PostgreSQL binary
 pg_row_lock_tracer -x /home/jan/postgresql-sandbox/bin/REL_14_9_DEBUG/bin/postgres
@@ -862,7 +881,7 @@ Lock results:
 # pg_spinlock_delay_tracer
 `pg_spinlock_delay_tracer` allows tracing spinlock delays in a PostgreSQL process. Spin locks are used in PostgreSQL to protect short critical sections in the code. If another process already holds a spinlock, the requesting process will repeatedly check (i.e., "spin") until the lock becomes available. If the lock is held for a longer period, PostgreSQL performs a ["spin delay"](https://github.com/postgres/postgres/blob/0c8e082fba8d36434552d3d7800abda54acafd57/src/backend/storage/lmgr/s_lock.c#L106) and yields the CPU for a short time to avoid busy-waiting. Such delays are reported via the `pg_spinlock_delay_tracer`. For each delay, it prints the content of the `SpinDelayStatus` structure, which contains information about the number of spins, delays, and the current delay time. Additionally, the function name and source code location where the spin delay occurred are reported.
 
-## Usage Examples
+## 🧪 Usage Examples
 ```
 # Trace the spinlock delays of the given PostgreSQL binary
 pg_spinlock_delay_tracer -x /home/jan/postgresql-sandbox/bin/REL_17_1_DEBUG/bin/postgres
