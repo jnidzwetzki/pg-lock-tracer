@@ -22,5 +22,5 @@ pytest==9.0.2
 texttable==1.7.0
 tomli==2.4.0
 typing-extensions==4.15.0
-wcwidth==0.2.14
+wcwidth==0.6.0
 wrapt==2.1.1
