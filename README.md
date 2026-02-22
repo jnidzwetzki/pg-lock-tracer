@@ -1,5 +1,4 @@
 # Lock tracing tools for PostgreSQL
-[![Make a PR](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 [![Build Status](https://github.com/jnidzwetzki/pg-lock-tracer/actions/workflows/tests.yml/badge.svg)](https://github.com/jnidzwetzki/pg-lock-tracer/actions/workflows/tests.yml)
 [![PyPI](https://img.shields.io/pypi/v/pg-lock-tracer?color=green)](https://pypi.org/project/pg-lock-tracer/)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/pg-lock-tracer)](https://pypi.org/project/pg-lock-tracer/)
