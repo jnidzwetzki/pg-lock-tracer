@@ -16,7 +16,7 @@ pathspec==1.0.4
 platformdirs==4.9.6
 pluggy==1.6.0
 prettytable==3.17.0
-psycopg2==2.9.11
+psycopg2==2.9.12
 pylint==4.0.5
 pytest==9.0.3
 texttable==1.7.0
