@@ -942,7 +942,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 
 # Copy the distribution Python BCC packages into this environment
-cp -av /usr/lib/python3/dist-packages/bcc* $(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")
+cp -av /usr/lib/python3/dist-packages/bcc* $(python -c "import sysconfig; print(sysconfig.get_path('platlib'))")
 ```
 
 Now, the tracing tools can be installed directly via `pip` by executing:
