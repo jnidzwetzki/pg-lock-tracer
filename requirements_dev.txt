@@ -15,7 +15,7 @@ packaging==26.2
 pathspec==1.1.1
 platformdirs==4.10.0
 pluggy==1.6.0
-prettytable==3.17.0
+prettytable==3.18.0
 psycopg2==2.9.12
 pylint==4.0.5
 pytest==9.0.3
