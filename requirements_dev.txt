@@ -21,6 +21,6 @@ pylint==4.0.6
 pytest==9.1.1
 texttable==1.7.0
 tomli==2.4.1
-typing-extensions==4.15.0
+typing-extensions==4.16.0
 wcwidth==0.8.2
 wrapt==2.2.2
