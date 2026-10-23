@@ -19,7 +19,7 @@ prettytable==3.18.0
 psycopg2==2.9.13
 pylint==4.0.10
 pytest==9.1.1
-texttable==1.7.0
+texttable==1.7.2
 tomli==2.4.1
 typing-extensions==4.16.0
 wcwidth==0.8.4
