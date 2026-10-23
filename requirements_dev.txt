@@ -14,7 +14,7 @@ mypy-extensions==1.1.0
 packaging==26.3
 pathspec==1.1.1
 platformdirs==4.12.2
-pluggy==1.6.0
+pluggy==1.7.0
 prettytable==3.18.0
 psycopg2==2.9.13
 pylint==4.0.10
