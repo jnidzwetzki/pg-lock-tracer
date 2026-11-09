@@ -514,27 +514,39 @@ int bpf_deadlock(struct pt_regs *ctx) {
 /*
  * PSQL: StartTransaction
  */
-int bpf_transaction_begin(struct pt_regs *ctx) {
+static void handle_transaction_begin(struct pt_regs *ctx) {
   PostgreSQLEvent event = {.event_type = EVENT_TRANSACTION_BEGIN};
   fill_basic_data_and_submit(&event, ctx);
+}
+
+int bpf_transaction_begin(struct pt_regs *ctx) {
+  handle_transaction_begin(ctx);
   return 0;
 }
 
 /*
  * PSQL: CommitTransaction
  */
-int bpf_transaction_commit(struct pt_regs *ctx) {
+static void handle_transaction_commit(struct pt_regs *ctx) {
   PostgreSQLEvent event = {.event_type = EVENT_TRANSACTION_COMMIT};
   fill_basic_data_and_submit(&event, ctx);
+}
+
+int bpf_transaction_commit(struct pt_regs *ctx) {
+  handle_transaction_commit(ctx);
   return 0;
 }
 
 /*
  * PSQL: AbortTransaction
  */
-int bpf_transaction_abort(struct pt_regs *ctx) {
+static void handle_transaction_abort(struct pt_regs *ctx) {
   PostgreSQLEvent event = {.event_type = EVENT_TRANSACTION_ABORT};
   fill_basic_data_and_submit(&event, ctx);
+}
+
+int bpf_transaction_abort(struct pt_regs *ctx) {
+  handle_transaction_abort(ctx);
   return 0;
 }
 
@@ -547,8 +559,12 @@ int bpf_transaction_abort(struct pt_regs *ctx) {
 /*
  * PSQL: AcceptInvalidationMessages
  */
-int bpf_accept_invalidation_messages(struct pt_regs *ctx) {
+static void handle_accept_invalidation_messages(struct pt_regs *ctx) {
   PostgreSQLEvent event = {.event_type = EVENT_INVALIDATION_MESSAGES_ACCEPT};
   fill_basic_data_and_submit(&event, ctx);
+}
+
+int bpf_accept_invalidation_messages(struct pt_regs *ctx) {
+  handle_accept_invalidation_messages(ctx);
   return 0;
 }
