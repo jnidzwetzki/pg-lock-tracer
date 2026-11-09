@@ -260,16 +260,20 @@ int bpf_errstart(struct pt_regs *ctx) {
  * Parameter 1: Oid
  * Parameter 2: LOCKMODE
  */
-int bpf_lock_relation_oid(struct pt_regs *ctx) {
+static void handle_lock_relation_oid(struct pt_regs *ctx, u32 relid,
+                                     int lockmode) {
   PostgreSQLEvent event = {.event_type = EVENT_LOCK_RELATION_OID};
-  bpf_probe_read_kernel(&(event.object), sizeof(event.object),
-                        &(PT_REGS_PARM1(ctx)));
+  event.object = relid;
 
 #ifdef STACKTRACE_LOCK
   event.stackid = stacks.get_stackid(ctx, BPF_F_USER_STACK);
 #endif
 
-  handle_table_event(&event, ctx, PT_REGS_PARM2(ctx));
+  handle_table_event(&event, ctx, lockmode);
+}
+
+int bpf_lock_relation_oid(struct pt_regs *ctx) {
+  handle_lock_relation_oid(ctx, PT_REGS_PARM1(ctx), PT_REGS_PARM2(ctx));
   return 0;
 }
 
@@ -287,11 +291,15 @@ int bpf_lock_relation_oid_end(struct pt_regs *ctx) {
  * Parameter 1: Oid
  * Parameter 2: LOCKMODE
  */
-int bpf_unlock_relation_oid(struct pt_regs *ctx) {
+static void handle_unlock_relation_oid(struct pt_regs *ctx, u32 relid,
+                                       int lockmode) {
   PostgreSQLEvent event = {.event_type = EVENT_UNLOCK_RELATION_OID};
-  bpf_probe_read_kernel(&(event.object), sizeof(event.object),
-                        &(PT_REGS_PARM1(ctx)));
-  handle_table_event(&event, ctx, PT_REGS_PARM2(ctx));
+  event.object = relid;
+  handle_table_event(&event, ctx, lockmode);
+}
+
+int bpf_unlock_relation_oid(struct pt_regs *ctx) {
+  handle_unlock_relation_oid(ctx, PT_REGS_PARM1(ctx), PT_REGS_PARM2(ctx));
   return 0;
 }
 
@@ -336,14 +344,16 @@ static void fill_lock_object(PostgreSQLEvent *event, void *param) {
  * Parameter 2 PROCLOCK
  * Parameter 3 LOCKMODE
  */
-int bpf_lock_grant(struct pt_regs *ctx) {
+static void handle_lock_grant(struct pt_regs *ctx, void *lock, int lockmode) {
   PostgreSQLEvent event = {.event_type = EVENT_LOCK_GRANTED};
-  bpf_probe_read_kernel(&(event.mode), sizeof(event.mode),
-                        &(PT_REGS_PARM3(ctx)));
-  fill_lock_object(&event, (void *)PT_REGS_PARM1(ctx));
+  event.mode = lockmode;
+  fill_lock_object(&event, lock);
 
   if (event.object != 0) fill_basic_data_and_submit(&event, ctx);
+}
 
+int bpf_lock_grant(struct pt_regs *ctx) {
+  handle_lock_grant(ctx, (void *)PT_REGS_PARM1(ctx), PT_REGS_PARM3(ctx));
   return 0;
 }
 
@@ -352,13 +362,16 @@ int bpf_lock_grant(struct pt_regs *ctx) {
  * Parameter 1 OID
  * Parameter 2 LOCKMODE
  */
-int bpf_lock_fastpath_grant(struct pt_regs *ctx) {
+static void handle_lock_fastpath_grant(struct pt_regs *ctx, u32 relid,
+                                       int lockmode) {
   PostgreSQLEvent event = {.event_type = EVENT_LOCK_GRANTED_FASTPATH};
-  bpf_probe_read_kernel(&(event.object), sizeof(event.object),
-                        &(PT_REGS_PARM1(ctx)));
-  bpf_probe_read_kernel(&(event.mode), sizeof(event.mode),
-                        &(PT_REGS_PARM2(ctx)));
+  event.object = relid;
+  event.mode = lockmode;
   fill_basic_data_and_submit(&event, ctx);
+}
+
+int bpf_lock_fastpath_grant(struct pt_regs *ctx) {
+  handle_lock_fastpath_grant(ctx, PT_REGS_PARM1(ctx), PT_REGS_PARM2(ctx));
   return 0;
 }
 
@@ -402,12 +415,15 @@ static void fill_locallock_object(PostgreSQLEvent *event, void *param) {
  * Parameter 1 LOCALLOCK
  * Parameter 2 ResourceOwner
  */
-int bpf_lock_local_grant(struct pt_regs *ctx) {
+static void handle_lock_local_grant(struct pt_regs *ctx, void *locallock) {
   PostgreSQLEvent event = {.event_type = EVENT_LOCK_GRANTED_LOCAL};
-  fill_locallock_object(&event, (void *)PT_REGS_PARM1(ctx));
+  fill_locallock_object(&event, locallock);
 
   if (event.object != 0) fill_basic_data_and_submit(&event, ctx);
+}
 
+int bpf_lock_local_grant(struct pt_regs *ctx) {
+  handle_lock_local_grant(ctx, (void *)PT_REGS_PARM1(ctx));
   return 0;
 }
 
@@ -416,18 +432,20 @@ int bpf_lock_local_grant(struct pt_regs *ctx) {
  * Parameter 1 LOCK
  * Parameter 2 LOCKMODE
  */
-int bpf_lock_ungrant(struct pt_regs *ctx) {
+static void handle_lock_ungrant(struct pt_regs *ctx, void *lock, int lockmode) {
   PostgreSQLEvent event = {.event_type = EVENT_LOCK_UNGRANTED};
-  bpf_probe_read_kernel(&(event.mode), sizeof(event.mode),
-                        &(PT_REGS_PARM2(ctx)));
-  fill_lock_object(&event, (void *)PT_REGS_PARM1(ctx));
+  event.mode = lockmode;
+  fill_lock_object(&event, lock);
 
 #ifdef STACKTRACE_UNLOCK
   event.stackid = stacks.get_stackid(ctx, BPF_F_USER_STACK);
 #endif
 
   if (event.object != 0) fill_basic_data_and_submit(&event, ctx);
+}
 
+int bpf_lock_ungrant(struct pt_regs *ctx) {
+  handle_lock_ungrant(ctx, (void *)PT_REGS_PARM1(ctx), PT_REGS_PARM2(ctx));
   return 0;
 }
 
@@ -436,19 +454,21 @@ int bpf_lock_ungrant(struct pt_regs *ctx) {
  * Parameter 1 Oid
  * Parameter 2 LOCKMODE
  */
-int bpf_lock_fastpath_ungrant(struct pt_regs *ctx) {
+static void handle_lock_fastpath_ungrant(struct pt_regs *ctx, u32 relid,
+                                         int lockmode) {
   PostgreSQLEvent event = {.event_type = EVENT_LOCK_UNGRANTED_FASTPATH};
-  bpf_probe_read_kernel(&(event.object), sizeof(event.object),
-                        &(PT_REGS_PARM1(ctx)));
-  bpf_probe_read_kernel(&(event.mode), sizeof(event.mode),
-                        &(PT_REGS_PARM2(ctx)));
+  event.object = relid;
+  event.mode = lockmode;
 
 #ifdef STACKTRACE_UNLOCK
   event.stackid = stacks.get_stackid(ctx, BPF_F_USER_STACK);
 #endif
 
   fill_basic_data_and_submit(&event, ctx);
+}
 
+int bpf_lock_fastpath_ungrant(struct pt_regs *ctx) {
+  handle_lock_fastpath_ungrant(ctx, PT_REGS_PARM1(ctx), PT_REGS_PARM2(ctx));
   return 0;
 }
 
@@ -456,12 +476,15 @@ int bpf_lock_fastpath_ungrant(struct pt_regs *ctx) {
  * PSQL: RemoveLocalLock
  * Parameter 1: LOCALLOCK
  */
-int bpf_local_lock_ungrant(struct pt_regs *ctx) {
+static void handle_local_lock_ungrant(struct pt_regs *ctx, void *locallock) {
   PostgreSQLEvent event = {.event_type = EVENT_LOCK_UNGRANTED_LOCAL};
-  fill_locallock_object(&event, (void *)PT_REGS_PARM1(ctx));
+  fill_locallock_object(&event, locallock);
 
   if (event.object != 0) fill_basic_data_and_submit(&event, ctx);
+}
 
+int bpf_local_lock_ungrant(struct pt_regs *ctx) {
+  handle_local_lock_ungrant(ctx, (void *)PT_REGS_PARM1(ctx));
   return 0;
 }
 
@@ -469,12 +492,16 @@ int bpf_local_lock_ungrant(struct pt_regs *ctx) {
  * Deadlock detected
  * PSQL: DeadLockReport
  */
-int bpf_deadlock(struct pt_regs *ctx) {
+static void handle_deadlock(struct pt_regs *ctx) {
   PostgreSQLEvent event = {.event_type = EVENT_DEADLOCK};
 #ifdef STACKTRACE_DEADLOCK
   event.stackid = stacks.get_stackid(ctx, BPF_F_USER_STACK);
 #endif
   fill_basic_data_and_submit(&event, ctx);
+}
+
+int bpf_deadlock(struct pt_regs *ctx) {
+  handle_deadlock(ctx);
   return 0;
 }
 
