@@ -928,7 +928,7 @@ pg_spinlock_delay_tracer -x /home/jan/postgresql-sandbox/bin/REL_17_1_DEBUG/bin/
 
 ## Installation
 
-The PostgreSQL lock tracing tools are available as a Python package. These tools depend on the Python package for BPF. Unfortunately, this package is currently not available via `pip` (the Python package manager). Therefore, the package of the Linux distribution needs to be installed to provide this dependency. On Debian and Ubuntu, this can be done by executing the following command:
+The PostgreSQL lock tracing tools are available as a Python package and require Python 3.11 or newer. These tools depend on the Python package for BPF. Unfortunately, this package is currently not available via `pip` (the Python package manager). Therefore, the package of the Linux distribution needs to be installed to provide this dependency. On Debian and Ubuntu, this can be done by executing the following command:
 
 ```shell
 apt install python3-bpfcc
@@ -953,11 +953,22 @@ pip install pg-lock-tracer
 
 The tools are now installed and can be invoked by calling `pg_lock_tracer` or `pg_lw_lock_tracer`.
 
-If you want to install the latest development snapshot and development dependencies of the tools, the following commands need to be executed:
+If you want to install the latest development snapshot of the tools, the following command needs to be executed:
 
 ```shell
-pip install -r requirements_dev.txt
 pip install git+https://github.com/jnidzwetzki/pg-lock-tracer
+```
+
+To work on the tools, clone the repository and install the package in editable mode together with the development dependencies (`pytest` and `ruff`). The tests, the linter, and the formatter can then be executed as follows:
+
+```shell
+git clone https://github.com/jnidzwetzki/pg-lock-tracer
+cd pg-lock-tracer
+pip install -e . -r requirements_dev.txt
+
+pytest
+ruff check src tests
+ruff format src tests
 ```
 
 ## PostgreSQL Build
