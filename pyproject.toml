@@ -1,12 +1,12 @@
 [build-system]
-requires = ["setuptools>=59"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "pg_lock_tracer"
 description = "An eBPF based lock tracer for PostgreSQL"
 readme = { file = "README.md", content-type = "text/markdown" }
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = "Apache-2.0"
 license-files = [
     "LICENSE",
@@ -20,6 +20,11 @@ classifiers = [
 	"Intended Audience :: Developers",
 	"Operating System :: POSIX :: Linux",
 	"Programming Language :: Python",
+	"Programming Language :: Python :: 3 :: Only",
+	"Programming Language :: Python :: 3.11",
+	"Programming Language :: Python :: 3.12",
+	"Programming Language :: Python :: 3.13",
+	"Programming Language :: Python :: 3.14",
 	"Topic :: Software Development :: Debuggers"
 ]
 dependencies = [
