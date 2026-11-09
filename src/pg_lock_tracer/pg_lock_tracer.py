@@ -100,7 +100,7 @@ PROBES = [
         "bpf_lock_fastpath_ungrant",
         True,
     ),
-    (TraceEvents.LOCK, "^RemoveLocalLock$", "bfp_local_lock_ungrant", True),
+    (TraceEvents.LOCK, "^RemoveLocalLock$", "bpf_local_lock_ungrant", True),
     # Invalidation messages probes
     (
         TraceEvents.INVALIDATION,

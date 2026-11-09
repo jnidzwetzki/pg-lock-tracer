@@ -38,17 +38,22 @@ static void fill_basic_data(PostgreSQLEvent *event) {
   event->timestamp = bpf_ktime_get_ns();
 }
 
+static void fill_basic_data_and_submit(PostgreSQLEvent *event,
+                                       struct pt_regs *ctx) {
+  fill_basic_data(event);
+  lockevents.perf_submit(ctx, event, sizeof(PostgreSQLEvent));
+}
+
 /*
  * ====================================
  * Table handling
  * ====================================
  */
 
-static void handle_table_event(PostgreSQLEvent *event, struct pt_regs *ctx) {
+static void handle_table_event(PostgreSQLEvent *event, struct pt_regs *ctx,
+                               int lockmode) {
   fill_basic_data(event);
-
-  bpf_probe_read_kernel(&(event->mode), sizeof(event->mode),
-                        &(PT_REGS_PARM2(ctx)));
+  event->mode = lockmode;
 
   // bpf_trace_printk("Event: %d %d\\n", event.object, event.mode);
 
@@ -64,7 +69,7 @@ int bpf_table_open(struct pt_regs *ctx) {
   PostgreSQLEvent event = {.event_type = EVENT_TABLE_OPEN};
   bpf_probe_read_kernel(&(event.object), sizeof(event.object),
                         &(PT_REGS_PARM1(ctx)));
-  handle_table_event(&event, ctx);
+  handle_table_event(&event, ctx, PT_REGS_PARM2(ctx));
   return 0;
 }
 
@@ -85,20 +90,26 @@ typedef struct RangeVar {
   char *relname;
 } RangeVar;
 
+static void fill_range_var(PostgreSQLEvent *event, void *relation) {
+  RangeVar range_var = {};
+  bpf_probe_read_user(&range_var, sizeof(range_var), relation);
+  bpf_probe_read_user_str(event->payload_str1, sizeof(event->payload_str1),
+                          (void *)range_var.schemaname);
+  bpf_probe_read_user_str(event->payload_str2, sizeof(event->payload_str2),
+                          (void *)range_var.relname);
+}
+
 /*
  * PostgreSQL: table_openrv
  * Parameter 1: const RangeVar *relation
  * Parameter 2: LOCKMODE lockmode
  */
-int bpf_table_openrv(struct pt_regs *ctx, RangeVar *relation) {
+int bpf_table_openrv(struct pt_regs *ctx) {
   PostgreSQLEvent event = {.event_type = EVENT_TABLE_OPEN_RV};
 
-  bpf_probe_read_user_str(event.payload_str1, sizeof(event.payload_str1),
-                          (void *)relation->schemaname);
-  bpf_probe_read_user_str(event.payload_str2, sizeof(event.payload_str2),
-                          (void *)relation->relname);
+  fill_range_var(&event, (void *)PT_REGS_PARM1(ctx));
 
-  handle_table_event(&event, ctx);
+  handle_table_event(&event, ctx, PT_REGS_PARM2(ctx));
 
   return 0;
 }
@@ -109,15 +120,12 @@ int bpf_table_openrv(struct pt_regs *ctx, RangeVar *relation) {
  * Parameter 2: LOCKMODE lockmode
  * Parameter 3: bool missing_ok
  */
-int bpf_table_openrv_extended(struct pt_regs *ctx, RangeVar *relation) {
+int bpf_table_openrv_extended(struct pt_regs *ctx) {
   PostgreSQLEvent event = {.event_type = EVENT_TABLE_OPEN_RV_EXTENDED};
 
-  bpf_probe_read_user_str(event.payload_str1, sizeof(event.payload_str1),
-                          (void *)relation->schemaname);
-  bpf_probe_read_user_str(event.payload_str2, sizeof(event.payload_str2),
-                          (void *)relation->relname);
+  fill_range_var(&event, (void *)PT_REGS_PARM1(ctx));
 
-  handle_table_event(&event, ctx);
+  handle_table_event(&event, ctx, PT_REGS_PARM2(ctx));
 
   return 0;
 }
@@ -160,14 +168,8 @@ int bpf_table_close(struct pt_regs *ctx) {
   // bpf_probe_read_kernel(&(event.object), sizeof(event.object),
   // &(PT_REGS_PARM1(ctx))); bpf_trace_printk("Oid: %d \\n", oid);
 
-  handle_table_event(&event, ctx);
+  handle_table_event(&event, ctx, PT_REGS_PARM2(ctx));
   return 0;
-}
-
-static void fill_basic_data_and_submit(PostgreSQLEvent *event,
-                                       struct pt_regs *ctx) {
-  fill_basic_data(event);
-  lockevents.perf_submit(ctx, event, sizeof(PostgreSQLEvent));
 }
 
 /*
@@ -230,7 +232,7 @@ int bpf_lock_relation_oid(struct pt_regs *ctx) {
   event.stackid = stacks.get_stackid(ctx, BPF_F_USER_STACK);
 #endif
 
-  handle_table_event(&event, ctx);
+  handle_table_event(&event, ctx, PT_REGS_PARM2(ctx));
   return 0;
 }
 
@@ -252,7 +254,7 @@ int bpf_unlock_relation_oid(struct pt_regs *ctx) {
   PostgreSQLEvent event = {.event_type = EVENT_UNLOCK_RELATION_OID};
   bpf_probe_read_kernel(&(event.object), sizeof(event.object),
                         &(PT_REGS_PARM1(ctx)));
-  handle_table_event(&event, ctx);
+  handle_table_event(&event, ctx, PT_REGS_PARM2(ctx));
   return 0;
 }
 
@@ -417,7 +419,7 @@ int bpf_lock_fastpath_ungrant(struct pt_regs *ctx) {
  * PSQL: RemoveLocalLock
  * Parameter 1: LOCALLOCK
  */
-int bfp_local_lock_ungrant(struct pt_regs *ctx) {
+int bpf_local_lock_ungrant(struct pt_regs *ctx) {
   PostgreSQLEvent event = {.event_type = EVENT_LOCK_UNGRANTED_LOCAL};
   fill_locallock_object(&event, (void *)PT_REGS_PARM1(ctx));
 
