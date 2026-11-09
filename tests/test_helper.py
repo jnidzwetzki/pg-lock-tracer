@@ -22,6 +22,26 @@ class UNITTests(unittest.TestCase):
         # Test conversion was ok
         self.assertListEqual([0, 1, 6, 8], my_locks_numeric)
 
+    def test_lock_type_to_str(self):
+        """
+        Test the conversion of numeric lock values into names
+        """
+        self.assertEqual("NoLock", PostgreSQLLockHelper.lock_type_to_str(0))
+        self.assertEqual(
+            "AccessExclusiveLock", PostgreSQLLockHelper.lock_type_to_str(8)
+        )
+
+        # Lock mode not available (e.g., optimized out at an inlined call site)
+        self.assertEqual(
+            "Unknown",
+            PostgreSQLLockHelper.lock_type_to_str(
+                PostgreSQLLockHelper.UNKNOWN_LOCK_TYPE
+            ),
+        )
+
+        with self.assertRaises(ValueError):
+            PostgreSQLLockHelper.lock_type_to_str(42)
+
     def encode_and_decode_locks(self, locks):
         """
         Decode and encode the list of locks and test for errors

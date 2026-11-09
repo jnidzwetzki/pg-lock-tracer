@@ -69,11 +69,17 @@ class PostgreSQLLockHelper:
 
         return result
 
+    # The lock mode of a call site where the mode is optimized out
+    UNKNOWN_LOCK_TYPE = -1
+
     @staticmethod
     def lock_type_to_str(lock_type):
         """
         Return the name of a lock based on the numeric value
         """
+        if lock_type == PostgreSQLLockHelper.UNKNOWN_LOCK_TYPE:
+            return "Unknown"
+
         for lock_name, lock_numeric_value in PostgreSQLLockHelper.locks.items():
             if lock_numeric_value == lock_type:
                 return lock_name
