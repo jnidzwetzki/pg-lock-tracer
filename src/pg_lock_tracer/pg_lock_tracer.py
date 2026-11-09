@@ -15,6 +15,7 @@ import os
 import sys
 from abc import ABC, abstractmethod
 from enum import IntEnum, auto, unique
+from typing import NamedTuple
 
 from bcc import BPF
 from prettytable import PrettyTable
@@ -71,45 +72,51 @@ class TraceEvents(IntEnum):
     ERROR = auto()
 
 
-# The probes to attach: (trace event, function regex, BPF function, probe on enter)
+class Probe(NamedTuple):
+    """
+    A probe for a PostgreSQL function
+    """
+
+    trace_event: TraceEvents
+    function: str
+    bpf_fn: str
+    on_enter: bool = True
+
+
 PROBES = [
     # Transaction probes
-    (TraceEvents.TRANSACTION, "^StartTransaction$", "bpf_transaction_begin", True),
-    (TraceEvents.TRANSACTION, "^CommitTransaction$", "bpf_transaction_commit", True),
-    (TraceEvents.TRANSACTION, "^AbortTransaction$", "bpf_transaction_abort", True),
-    (TraceEvents.TRANSACTION, "^DeadLockReport$", "bpf_deadlock", True),
+    Probe(TraceEvents.TRANSACTION, "StartTransaction", "bpf_transaction_begin"),
+    Probe(TraceEvents.TRANSACTION, "CommitTransaction", "bpf_transaction_commit"),
+    Probe(TraceEvents.TRANSACTION, "AbortTransaction", "bpf_transaction_abort"),
+    Probe(TraceEvents.TRANSACTION, "DeadLockReport", "bpf_deadlock"),
     # Query probes
-    (TraceEvents.QUERY, "^exec_simple_query$", "bpf_query_begin", True),
-    (TraceEvents.QUERY, "^exec_simple_query$", "bpf_query_end", False),
+    Probe(TraceEvents.QUERY, "exec_simple_query", "bpf_query_begin"),
+    Probe(TraceEvents.QUERY, "exec_simple_query", "bpf_query_end", on_enter=False),
     # Table probes
-    (TraceEvents.TABLE, "^table_open$", "bpf_table_open", True),
-    (TraceEvents.TABLE, "^table_openrv$", "bpf_table_openrv", True),
-    (TraceEvents.TABLE, "^table_openrv_extended$", "bpf_table_openrv_extended", True),
-    (TraceEvents.TABLE, "^table_close$", "bpf_table_close", True),
+    Probe(TraceEvents.TABLE, "table_open", "bpf_table_open"),
+    Probe(TraceEvents.TABLE, "table_openrv", "bpf_table_openrv"),
+    Probe(TraceEvents.TABLE, "table_openrv_extended", "bpf_table_openrv_extended"),
+    Probe(TraceEvents.TABLE, "table_close", "bpf_table_close"),
     # Lock probes
-    (TraceEvents.LOCK, "^LockRelationOid$", "bpf_lock_relation_oid", True),
-    (TraceEvents.LOCK, "^LockRelationOid$", "bpf_lock_relation_oid_end", False),
-    (TraceEvents.LOCK, "^UnlockRelationOid$", "bpf_unlock_relation_oid", True),
-    (TraceEvents.LOCK, "^GrantLock$", "bpf_lock_grant", True),
-    (TraceEvents.LOCK, "^FastPathGrantRelationLock$", "bpf_lock_fastpath_grant", True),
-    (TraceEvents.LOCK, "^GrantLockLocal$", "bpf_lock_local_grant", True),
-    (TraceEvents.LOCK, "^UnGrantLock$", "bpf_lock_ungrant", True),
-    (
-        TraceEvents.LOCK,
-        "^FastPathUnGrantRelationLock$",
-        "bpf_lock_fastpath_ungrant",
-        True,
+    Probe(TraceEvents.LOCK, "LockRelationOid", "bpf_lock_relation_oid"),
+    Probe(
+        TraceEvents.LOCK, "LockRelationOid", "bpf_lock_relation_oid_end", on_enter=False
     ),
-    (TraceEvents.LOCK, "^RemoveLocalLock$", "bpf_local_lock_ungrant", True),
+    Probe(TraceEvents.LOCK, "UnlockRelationOid", "bpf_unlock_relation_oid"),
+    Probe(TraceEvents.LOCK, "GrantLock", "bpf_lock_grant"),
+    Probe(TraceEvents.LOCK, "FastPathGrantRelationLock", "bpf_lock_fastpath_grant"),
+    Probe(TraceEvents.LOCK, "GrantLockLocal", "bpf_lock_local_grant"),
+    Probe(TraceEvents.LOCK, "UnGrantLock", "bpf_lock_ungrant"),
+    Probe(TraceEvents.LOCK, "FastPathUnGrantRelationLock", "bpf_lock_fastpath_ungrant"),
+    Probe(TraceEvents.LOCK, "RemoveLocalLock", "bpf_local_lock_ungrant"),
     # Invalidation messages probes
-    (
+    Probe(
         TraceEvents.INVALIDATION,
-        "^AcceptInvalidationMessages$",
+        "AcceptInvalidationMessages",
         "bpf_accept_invalidation_messages",
-        True,
     ),
     # Error probes
-    (TraceEvents.ERROR, "^errstart$", "bpf_errstart", True),
+    Probe(TraceEvents.ERROR, "errstart", "bpf_errstart"),
 ]
 
 
@@ -738,15 +745,15 @@ class PGLockTracer:
         """
         Attach BPF probes
         """
-        for trace_event, function_regex, bpf_fn_name, probe_on_enter in PROBES:
-            if self.args.trace is None or trace_event.name in self.args.trace:
+        for probe in PROBES:
+            if self.args.trace is None or probe.trace_event.name in self.args.trace:
                 BPFHelper.register_ebpf_probe(
                     self.args.path,
                     self.bpf_instance,
-                    function_regex,
-                    bpf_fn_name,
+                    f"^{probe.function}$",
+                    probe.bpf_fn,
                     self.args.verbose,
-                    probe_on_enter,
+                    probe.on_enter,
                 )
 
     def run(self):
