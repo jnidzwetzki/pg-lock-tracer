@@ -71,6 +71,48 @@ class TraceEvents(IntEnum):
     ERROR = auto()
 
 
+# The probes to attach: (trace event, function regex, BPF function, probe on enter)
+PROBES = [
+    # Transaction probes
+    (TraceEvents.TRANSACTION, "^StartTransaction$", "bpf_transaction_begin", True),
+    (TraceEvents.TRANSACTION, "^CommitTransaction$", "bpf_transaction_commit", True),
+    (TraceEvents.TRANSACTION, "^AbortTransaction$", "bpf_transaction_abort", True),
+    (TraceEvents.TRANSACTION, "^DeadLockReport$", "bpf_deadlock", True),
+    # Query probes
+    (TraceEvents.QUERY, "^exec_simple_query$", "bpf_query_begin", True),
+    (TraceEvents.QUERY, "^exec_simple_query$", "bpf_query_end", False),
+    # Table probes
+    (TraceEvents.TABLE, "^table_open$", "bpf_table_open", True),
+    (TraceEvents.TABLE, "^table_openrv$", "bpf_table_openrv", True),
+    (TraceEvents.TABLE, "^table_openrv_extended$", "bpf_table_openrv_extended", True),
+    (TraceEvents.TABLE, "^table_close$", "bpf_table_close", True),
+    # Lock probes
+    (TraceEvents.LOCK, "^LockRelationOid$", "bpf_lock_relation_oid", True),
+    (TraceEvents.LOCK, "^LockRelationOid$", "bpf_lock_relation_oid_end", False),
+    (TraceEvents.LOCK, "^UnlockRelationOid$", "bpf_unlock_relation_oid", True),
+    (TraceEvents.LOCK, "^GrantLock$", "bpf_lock_grant", True),
+    (TraceEvents.LOCK, "^FastPathGrantRelationLock$", "bpf_lock_fastpath_grant", True),
+    (TraceEvents.LOCK, "^GrantLockLocal$", "bpf_lock_local_grant", True),
+    (TraceEvents.LOCK, "^UnGrantLock$", "bpf_lock_ungrant", True),
+    (
+        TraceEvents.LOCK,
+        "^FastPathUnGrantRelationLock$",
+        "bpf_lock_fastpath_ungrant",
+        True,
+    ),
+    (TraceEvents.LOCK, "^RemoveLocalLock$", "bfp_local_lock_ungrant", True),
+    # Invalidation messages probes
+    (
+        TraceEvents.INVALIDATION,
+        "^AcceptInvalidationMessages$",
+        "bpf_accept_invalidation_messages",
+        True,
+    ),
+    # Error probes
+    (TraceEvents.ERROR, "^errstart$", "bpf_errstart", True),
+]
+
+
 parser = argparse.ArgumentParser(
     description="",
     formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -696,172 +738,16 @@ class PGLockTracer:
         """
         Attach BPF probes
         """
-        # Transaction probes
-        if self.args.trace is None or TraceEvents.TRANSACTION.name in self.args.trace:
-            BPFHelper.register_ebpf_probe(
-                self.args.path,
-                self.bpf_instance,
-                "^StartTransaction$",
-                "bpf_transaction_begin",
-                self.args.verbose,
-            )
-            BPFHelper.register_ebpf_probe(
-                self.args.path,
-                self.bpf_instance,
-                "^CommitTransaction$",
-                "bpf_transaction_commit",
-                self.args.verbose,
-            )
-            BPFHelper.register_ebpf_probe(
-                self.args.path,
-                self.bpf_instance,
-                "^AbortTransaction$",
-                "bpf_transaction_abort",
-                self.args.verbose,
-            )
-            BPFHelper.register_ebpf_probe(
-                self.args.path,
-                self.bpf_instance,
-                "^DeadLockReport$",
-                "bpf_deadlock",
-                self.args.verbose,
-            )
-
-        # Query probes
-        if self.args.trace is None or TraceEvents.QUERY.name in self.args.trace:
-            BPFHelper.register_ebpf_probe(
-                self.args.path,
-                self.bpf_instance,
-                "^exec_simple_query$",
-                "bpf_query_begin",
-                self.args.verbose,
-            )
-            BPFHelper.register_ebpf_probe(
-                self.args.path,
-                self.bpf_instance,
-                "^exec_simple_query$",
-                "bpf_query_end",
-                self.args.verbose,
-                False,
-            )
-
-        # Table probes
-        if self.args.trace is None or TraceEvents.TABLE.name in self.args.trace:
-            BPFHelper.register_ebpf_probe(
-                self.args.path,
-                self.bpf_instance,
-                "^table_open$",
-                "bpf_table_open",
-                self.args.verbose,
-            )
-            BPFHelper.register_ebpf_probe(
-                self.args.path,
-                self.bpf_instance,
-                "^table_openrv$",
-                "bpf_table_openrv",
-                self.args.verbose,
-            )
-            BPFHelper.register_ebpf_probe(
-                self.args.path,
-                self.bpf_instance,
-                "^table_openrv_extended$",
-                "bpf_table_openrv_extended",
-                self.args.verbose,
-            )
-            BPFHelper.register_ebpf_probe(
-                self.args.path,
-                self.bpf_instance,
-                "^table_close$",
-                "bpf_table_close",
-                self.args.verbose,
-            )
-
-        # Lock probes
-        if self.args.trace is None or TraceEvents.LOCK.name in self.args.trace:
-            BPFHelper.register_ebpf_probe(
-                self.args.path,
-                self.bpf_instance,
-                "^LockRelationOid$",
-                "bpf_lock_relation_oid",
-                self.args.verbose,
-            )
-            BPFHelper.register_ebpf_probe(
-                self.args.path,
-                self.bpf_instance,
-                "^LockRelationOid$",
-                "bpf_lock_relation_oid_end",
-                self.args.verbose,
-                False,
-            )
-            BPFHelper.register_ebpf_probe(
-                self.args.path,
-                self.bpf_instance,
-                "^UnlockRelationOid$",
-                "bpf_unlock_relation_oid",
-                self.args.verbose,
-            )
-            BPFHelper.register_ebpf_probe(
-                self.args.path,
-                self.bpf_instance,
-                "^GrantLock$",
-                "bpf_lock_grant",
-                self.args.verbose,
-            )
-            BPFHelper.register_ebpf_probe(
-                self.args.path,
-                self.bpf_instance,
-                "^FastPathGrantRelationLock$",
-                "bpf_lock_fastpath_grant",
-                self.args.verbose,
-            )
-            BPFHelper.register_ebpf_probe(
-                self.args.path,
-                self.bpf_instance,
-                "^GrantLockLocal$",
-                "bpf_lock_local_grant",
-                self.args.verbose,
-            )
-            BPFHelper.register_ebpf_probe(
-                self.args.path,
-                self.bpf_instance,
-                "^UnGrantLock$",
-                "bpf_lock_ungrant",
-                self.args.verbose,
-            )
-            BPFHelper.register_ebpf_probe(
-                self.args.path,
-                self.bpf_instance,
-                "^FastPathUnGrantRelationLock$",
-                "bpf_lock_fastpath_ungrant",
-                self.args.verbose,
-            )
-            BPFHelper.register_ebpf_probe(
-                self.args.path,
-                self.bpf_instance,
-                "^RemoveLocalLock$",
-                "bfp_local_lock_ungrant",
-                self.args.verbose,
-            )
-
-        # Invalidation messages probes
-        if self.args.trace is None or TraceEvents.INVALIDATION.name in self.args.trace:
-            BPFHelper.register_ebpf_probe(
-                self.args.path,
-                self.bpf_instance,
-                "^AcceptInvalidationMessages$",
-                "bpf_accept_invalidation_messages",
-                self.args.verbose,
-            )
-
-        # Error probes
-        if self.args.trace is None or TraceEvents.ERROR.name in self.args.trace:
-            BPFHelper.register_ebpf_probe(
-                self.args.path,
-                self.bpf_instance,
-                "^errstart$",
-                "bpf_errstart",
-                self.args.verbose,
-            )
+        for trace_event, function_regex, bpf_fn_name, probe_on_enter in PROBES:
+            if self.args.trace is None or trace_event.name in self.args.trace:
+                BPFHelper.register_ebpf_probe(
+                    self.args.path,
+                    self.bpf_instance,
+                    function_regex,
+                    bpf_fn_name,
+                    self.args.verbose,
+                    probe_on_enter,
+                )
 
     def run(self):
         """
