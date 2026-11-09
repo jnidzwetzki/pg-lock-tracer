@@ -94,15 +94,8 @@ class OIDResolver:
         WHERE c.oid = %s;
         """
 
-        oid = str(oid)
-
         try:
-            self.cur.execute(
-                select_stmt,
-                [
-                    oid,
-                ],
-            )
+            self.cur.execute(select_stmt, [str(oid)])
 
             result_row = self.cur.fetchone()
 
