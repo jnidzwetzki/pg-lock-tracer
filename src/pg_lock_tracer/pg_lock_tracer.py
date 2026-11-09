@@ -9,19 +9,19 @@
 # is used to trace these events.
 ###############################################
 
+import argparse
+import json
 import os
 import sys
-import json
-import argparse
-
-from abc import ABC
+from abc import ABC, abstractmethod
 from enum import IntEnum, auto, unique
+
 from bcc import BPF
 from prettytable import PrettyTable
 
 from pg_lock_tracer import __version__
+from pg_lock_tracer.helper import BPFHelper, PostgreSQLLockHelper
 from pg_lock_tracer.oid_resolver import OIDResolver
-from pg_lock_tracer.helper import PostgreSQLLockHelper, BPFHelper
 
 EXAMPLES = """
 
@@ -33,7 +33,7 @@ pg_lock_tracer -x /home/jan/postgresql-sandbox/bin/REL_15_1_DEBUG/bin/postgres -
 pg_lock_tracer -x /home/jan/postgresql-sandbox/bin/REL_15_1_DEBUG/bin/postgres -p 1234 -p 5678
 
 # Be verbose
-pg_lock_tracer -x /home/jan/postgresql-sandbox/bin/REL_15_1_DEBUG/bin/postgres -p 1234 -v 
+pg_lock_tracer -x /home/jan/postgresql-sandbox/bin/REL_15_1_DEBUG/bin/postgres -p 1234 -v
 
 # Use the given db connection to access the catalog of PID 1234 to resolve OIDs
 pg_lock_tracer -x /home/jan/postgresql-sandbox/bin/REL_15_1_DEBUG/bin/postgres -p 1234 -r 1234:psql://jan@localhost/test2
@@ -251,6 +251,7 @@ class PGLockTraceOutput(ABC):
         self.oid_resolvers = oid_resolvers
         self.pids = pids
 
+    @abstractmethod
     def print_event(self, _cpu, data, _size):
         """
         Handle the output of the given event. Subclasses will implement
@@ -344,8 +345,7 @@ class PGLockTraceOutput(ABC):
 
 
 class PGLockTraceOutputHuman(PGLockTraceOutput):
-    # pylint: disable=too-many-branches, too-many-statements
-    def print_event(self, _cpu, data, _size):
+    def print_event(self, _cpu, data, _size):  # noqa: PLR0912, PLR0915
         """
         Print event in a human readable format
         """
@@ -666,8 +666,8 @@ class PGLockTracer:
 
         # Open file for output if provided
         if self.args.output_file:
-            # pylint: disable=consider-using-with
-            self.output_file = open(self.args.output_file, "w", encoding="utf-8")
+            # Closed in run()
+            self.output_file = open(self.args.output_file, "w", encoding="utf-8")  # noqa: SIM115
             if not self.output_file.writable():
                 raise ValueError(
                     f"Output file {self.args.output_file} is not writeable"

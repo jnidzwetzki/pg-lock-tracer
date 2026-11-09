@@ -1,7 +1,6 @@
 """Resolve PostgreSQL OIDs to names and cache the result"""
 
 import sys
-
 from urllib.parse import urlparse
 
 import psycopg2
@@ -69,7 +68,7 @@ class OIDResolver:
         """
 
         select_stmt = """
-        SELECT n.nspname, c.relname, c.oid 
+        SELECT n.nspname, c.relname, c.oid
         FROM pg_namespace n
         JOIN pg_class c ON n.oid = c.relnamespace
         """

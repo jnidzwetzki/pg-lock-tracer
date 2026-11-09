@@ -9,9 +9,8 @@
 # sudo bpftrace -l "usdt:/home/jan/postgresql-sandbox/bin/REL_15_1_DEBUG/bin/postgres:*"
 ###############################################
 
-import sys
 import argparse
-
+import sys
 from enum import IntEnum, unique
 
 from bcc import BPF, USDT

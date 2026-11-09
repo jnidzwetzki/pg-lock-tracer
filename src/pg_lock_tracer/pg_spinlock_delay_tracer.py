@@ -4,8 +4,8 @@
 #
 ###############################################
 
-import sys
 import argparse
+import sys
 
 from bcc import BPF
 

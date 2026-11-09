@@ -1,12 +1,12 @@
 [build-system]
-requires = ["setuptools>=59"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "pg_lock_tracer"
 description = "An eBPF based lock tracer for PostgreSQL"
 readme = { file = "README.md", content-type = "text/markdown" }
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = "Apache-2.0"
 license-files = [
     "LICENSE",
@@ -20,6 +20,11 @@ classifiers = [
 	"Intended Audience :: Developers",
 	"Operating System :: POSIX :: Linux",
 	"Programming Language :: Python",
+	"Programming Language :: Python :: 3 :: Only",
+	"Programming Language :: Python :: 3.11",
+	"Programming Language :: Python :: 3.12",
+	"Programming Language :: Python :: 3.13",
+	"Programming Language :: Python :: 3.14",
 	"Topic :: Software Development :: Debuggers"
 ]
 dependencies = [
@@ -60,3 +65,19 @@ addopts = [
 	"--ignore-glob=**/_*.py",
 ]
 
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "UP", "SIM", "PL", "RUF"]
+ignore = [
+	"E501",    # code is wrapped by ruff format; long usage examples and HTML strings are intended
+	"PLR2004", # magic values are common in BPF and lock handling code
+]
+
+[tool.ruff.lint.pylint]
+max-args = 10
+max-branches = 12
+max-statements = 50
+max-returns = 20

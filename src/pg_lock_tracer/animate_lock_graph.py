@@ -8,12 +8,12 @@
 # * Only lock traces of one query are supported.
 ##########################
 
-import os
-import json
 import argparse
+import json
+import os
 
-import igraph
 import graphviz
+import igraph
 
 from pg_lock_tracer import __version__
 from pg_lock_tracer.helper import PostgreSQLLockHelper
@@ -187,7 +187,7 @@ class DOTModel:
         """
         Calculate the dot graphs for each line of the input
         """
-        with open(self.input_file, "r", encoding="utf-8") as input_file_handle:
+        with open(self.input_file, encoding="utf-8") as input_file_handle:
             for line in input_file_handle:
                 json_data = json.loads(line)
                 self.handle_json(json_data)
@@ -362,7 +362,6 @@ class DOTModel:
         return result
 
 
-# pylint: disable=too-few-public-methods
 class StringHelper:
     @staticmethod
     def split_string(mystring, max_length):

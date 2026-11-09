@@ -3,8 +3,8 @@ Helper classes
 """
 
 import os
-
 from pathlib import Path
+from typing import ClassVar
 
 from bcc import BPF
 
@@ -29,16 +29,17 @@ class PostgreSQLLockHelper:
     #                                    * and unqualified LOCK TABLE */
     """
 
-    locks = {}
-    locks["NoLock"] = 0
-    locks["AccessShareLock"] = 1
-    locks["RowShareLock"] = 2
-    locks["RowExclusiveLock"] = 3
-    locks["ShareUpdateExclusiveLock"] = 4
-    locks["ShareLock"] = 5
-    locks["ShareRowExclusiveLock"] = 6
-    locks["ExclusiveLock"] = 7
-    locks["AccessExclusiveLock"] = 8
+    locks: ClassVar[dict[str, int]] = {
+        "NoLock": 0,
+        "AccessShareLock": 1,
+        "RowShareLock": 2,
+        "RowExclusiveLock": 3,
+        "ShareUpdateExclusiveLock": 4,
+        "ShareLock": 5,
+        "ShareRowExclusiveLock": 6,
+        "ExclusiveLock": 7,
+        "AccessExclusiveLock": 8,
+    }
 
     @staticmethod
     def encode_locks_into_value(locks):
@@ -60,7 +61,7 @@ class PostgreSQLLockHelper:
         """
         result = []
 
-        for lock in range(0, 9):
+        for lock in range(len(PostgreSQLLockHelper.locks)):
             lock_value = 1 << int(lock)
 
             if encoded_value & lock_value == lock_value:
@@ -114,11 +115,10 @@ class BPFHelper:
         """
         program_file = Path(__file__).parent / "bpf" / program_name
 
-        if not os.path.exists(program_file):
+        if not program_file.is_file():
             raise ValueError(f"BPF program file not found {program_file}")
 
-        with program_file.open("r") as bpf_program:
-            return bpf_program.read()
+        return program_file.read_text(encoding="utf-8")
 
     @staticmethod
     def check_pid_exe(pids, executable):

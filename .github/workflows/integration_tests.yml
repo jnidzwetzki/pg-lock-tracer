@@ -12,7 +12,7 @@ jobs:
       fail-fast: false
       matrix:
         psql_version: ['14.20', '15.15', '16.11', '17.7', '18.1']
-        python_version: ['3.10', '3.11', '3.12']
+        python_version: ['3.11', '3.12', '3.13', '3.14']
 
     name: PostgreSQL ${{ matrix.psql_version }} and Python ${{ matrix.python_version }} integration test
     runs-on: ubuntu-24.04
@@ -76,23 +76,29 @@ jobs:
           #readelf --string-dump=.gnu_debuglink /usr/lib/postgresql/${{ matrix.psql_version }}/bin/postgres
           #objdump -TC /usr/lib/postgresql/${{ matrix.psql_version }}/bin/postgres
 
+      - name: Copy distribution BPF packages
+        run: |
+          cp -av /usr/lib/python3/dist-packages/bcc* $(python -c "import sysconfig; print(sysconfig.get_path('platlib'))")
+          # The tracers run as root; make sure root uses the matrix Python, not the system Python
+          sudo env "PATH=$PATH" python -c "import sys, bcc; print(sys.version)"
+
       - name: Install package
-        run: sudo python -m pip install .
+        run: python -m pip install .
       
       - name: Check that pg_lock_tracer can be executed
         run: |
            pg_lock_tracer --version
-           sudo pg_lock_tracer -x ~/postgresql/bin/${{ matrix.psql_version }}/bin/postgres -v -p $(pidof postgres) --statistics --dry-run
+           sudo env "PATH=$PATH" pg_lock_tracer -x ~/postgresql/bin/${{ matrix.psql_version }}/bin/postgres -v -p $(pidof postgres) --statistics --dry-run
 
       - name: Check that pg_lw_lock_tracer can be executed
         run: |
            pg_lw_lock_tracer --version
-           sudo pg_lw_lock_tracer -p $(pidof postgres) --dry-run
+           sudo env "PATH=$PATH" pg_lw_lock_tracer -p $(pidof postgres) --dry-run
 
       - name: Check that pg_row_lock_tracer can be executed
         run: |
           pg_row_lock_tracer --version
-          sudo pg_row_lock_tracer -x ~/postgresql/bin/${{ matrix.psql_version }}/bin/postgres -v -p $(pidof postgres) --statistics --dry-run
+          sudo env "PATH=$PATH" pg_row_lock_tracer -x ~/postgresql/bin/${{ matrix.psql_version }}/bin/postgres -v -p $(pidof postgres) --statistics --dry-run
 
       - name: Check that animate_lock_graph can be executed
         run: |
@@ -103,4 +109,4 @@ jobs:
       - name: Check that pg_spinlock_delay_tracer can be executed
         run: |
            pg_spinlock_delay_tracer --version
-           sudo pg_spinlock_delay_tracer -x ~/postgresql/bin/${{ matrix.psql_version }}/bin/postgres -v -p $(pidof postgres) --dry-run
+           sudo env "PATH=$PATH" pg_spinlock_delay_tracer -x ~/postgresql/bin/${{ matrix.psql_version }}/bin/postgres -v -p $(pidof postgres) --dry-run

@@ -7,8 +7,12 @@ on:
 
 jobs:
   tests:
-    name: Perform unit tests
+    name: Perform unit tests with Python ${{ matrix.python_version }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python_version: ['3.11', '3.12', '3.13', '3.14']
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -18,10 +22,10 @@ jobs:
           sudo apt update
           sudo apt install python3-bpfcc
 
-      - name: Setup python 3.10
+      - name: Setup python ${{ matrix.python_version }}
         uses: actions/setup-python@v7
         with:
-          python-version: '3.10'
+          python-version: ${{ matrix.python_version }}
 
       - name: Copy distribution BPF packages
         run: cp -av /usr/lib/python3/dist-packages/bcc* $(python -c "import sysconfig; print(sysconfig.get_path('platlib'))")
@@ -45,16 +49,16 @@ jobs:
       - name: Install needed tools
         run: |
           sudo apt update
-          sudo apt install clang-format python3-bpfcc
+          sudo apt install clang-format
 
       - name: Install development requirements
         run: python -m pip install -r requirements_dev.txt
 
-      - name: Run pylint
-        run: pylint src tests
-  
-      - name: Check code format with black
-        run: black --check --diff src tests
-      
+      - name: Run ruff linter
+        run: ruff check src tests
+
+      - name: Check code format with ruff
+        run: ruff format --check --diff src tests
+
       - name: Run clang-format
         run: clang-format --dry-run --Werror src/pg_lock_tracer/bpf/*.c

@@ -2,7 +2,7 @@
 
 import unittest
 
-from src.pg_lock_tracer.helper import PostgreSQLLockHelper
+from pg_lock_tracer.helper import PostgreSQLLockHelper
 
 
 class UNITTests(unittest.TestCase):
